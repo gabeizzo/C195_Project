@@ -6,15 +6,15 @@ public class Contact {
     private String contactEmail;
 
     /**
-     * Contact constructor, instantiates Contact object.
+     * Contact constructor, instantiates Contact objects.
      * @param contactID
      * @param contactName
-     * @param email
+     * @param contactEmail
      */
-    public Contact(int contactID, String contactName, String email) {
+    public Contact(int contactID, String contactName, String contactEmail) {
         this.contactID = contactID;
         this.contactName = contactName;
-        this.contactEmail = email;
+        this.contactEmail = contactEmail;
     }
 
     /**
@@ -59,9 +59,9 @@ public class Contact {
 
     /**
      * Sets the Contact's email.
-     * @param email The email to set.
+     * @param contactEmail The email to set.
      */
-    public void setContactEmail(String email) {
-        this.contactEmail = email;
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
     }
 }

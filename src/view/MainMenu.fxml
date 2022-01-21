@@ -31,11 +31,11 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                            <effect>
-                              <DropShadow />
+                              <Glow />
                            </effect>
                         </Label>
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#007faa" height="678.0" layoutY="47.0" stroke="#005883" strokeType="INSIDE" width="235.0" />
-                        <Button layoutX="16.0" layoutY="183.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="202.0" text="Delete Appointment">
+                        <Button fx:id="deleteApptButton" layoutX="12.0" layoutY="183.0" mnemonicParsing="false" onAction="#deleteAppointment" prefHeight="27.0" prefWidth="210.0" text="Delete Appointment">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
@@ -45,31 +45,31 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                            <effect>
-                              <DropShadow />
+                              <Glow />
                            </effect>
                         </Label>
-                        <Button layoutX="16.0" layoutY="96.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="202.0" text="Schedule An Appointment">
+                        <Button fx:id="scheduleApptButton" layoutX="12.0" layoutY="96.0" mnemonicParsing="false" onAction="#toScheduleAppointment" prefHeight="27.0" prefWidth="210.0" text="Schedule An Appointment">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="16.0" layoutY="139.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="202.0" text="Modify Appointment">
+                        <Button fx:id="modifyApptButton" layoutX="12.0" layoutY="139.0" mnemonicParsing="false" onAction="#toModifyAppointment" prefHeight="27.0" prefWidth="210.0" text="Modify Appointment">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="16.0" layoutY="336.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="202.0" text="View/Update Customers">
+                        <Button fx:id="customersMenuButton" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" onAction="#toCustomersMenu" prefHeight="27.0" prefWidth="210.0" text="View/Update Customers">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Button layoutX="16.0" layoutY="452.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="202.0" text="View Reports">
+                        <Button fx:id="reportsByMonthAndTypeButton" layoutX="12.0" layoutY="453.0" mnemonicParsing="false" onAction="#toReportsByMonthAndType" prefHeight="27.0" prefWidth="210.0" text="Reports By Month and Type">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="53.0" layoutY="621.0" stroke="#005883" strokeType="INSIDE" width="235.0" />
-                        <Button layoutX="36.0" layoutY="634.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="136.0" text="Exit Application">
+                        <Button fx:id="exitAppButton" layoutX="36.0" layoutY="634.0" mnemonicParsing="false" onAction="#exitApplication" prefHeight="27.0" prefWidth="136.0" text="Exit Application">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
@@ -79,7 +79,7 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                            <effect>
-                              <DropShadow />
+                              <Glow />
                            </effect>
                         </Label>
                         <Label layoutX="16.0" layoutY="419.0" text="Reports" textFill="#f8f3f3">
@@ -87,43 +87,50 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                            <effect>
-                              <Glow level="0.6">
-                                 <input>
-                                    <DropShadow />
-                                 </input></Glow>
+                              <Glow />
                            </effect>
                         </Label>
+                        <Button fx:id="contactScheduleButton" layoutX="12.0" layoutY="496.0" mnemonicParsing="false" onAction="#toContactSchedule" prefHeight="27.0" prefWidth="210.0" text="Contact Schedule">
+                           <font>
+                              <Font name="Arial Bold" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="userScheduleButton" layoutX="12.0" layoutY="539.0" mnemonicParsing="false" onAction="#toUserSchedule" prefHeight="27.0" prefWidth="210.0" text="User Schedule">
+                           <font>
+                              <Font name="Arial Bold" size="14.0" />
+                           </font>
+                        </Button>
                      </children>
                   </AnchorPane>
                 <AnchorPane focusTraversable="true" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
                         <TableView layoutX="5.0" layoutY="88.0" prefHeight="583.0" prefWidth="949.0">
                           <columns>
-                            <TableColumn prefWidth="107.1999683380127" text="Appointment ID" />
-                            <TableColumn prefWidth="75.99999237060547" text="Title" />
-                              <TableColumn minWidth="2.20001220703125" prefWidth="102.4000244140625" text="Description" />
-                              <TableColumn prefWidth="87.4000244140625" text="Location" />
-                              <TableColumn prefWidth="106.20001220703125" text="Contact" />
-                              <TableColumn prefWidth="89.80001831054688" text="Type" />
-                              <TableColumn prefWidth="91.0" text="Date" />
-                              <TableColumn prefWidth="92.39996337890625" text="Start Time" />
-                              <TableColumn prefWidth="88.39996337890625" text="End Time" />
-                              <TableColumn prefWidth="101.2000732421875" text="Customer ID" />
+                            <TableColumn fx:id="apptIDCol" prefWidth="107.1999683380127" text="Appointment ID" />
+                            <TableColumn fx:id="titleCol" prefWidth="75.99999237060547" text="Title" />
+                              <TableColumn fx:id="descriptionCol" minWidth="2.20001220703125" prefWidth="102.4000244140625" text="Description" />
+                              <TableColumn fx:id="locationCol" prefWidth="87.4000244140625" text="Location" />
+                              <TableColumn fx:id="contactCol" prefWidth="106.20001220703125" text="Contact" />
+                              <TableColumn fx:id="typeCol" prefWidth="89.80001831054688" text="Type" />
+                              <TableColumn fx:id="dateCol" prefWidth="91.0" text="Date" />
+                              <TableColumn fx:id="startTimeCol" prefWidth="92.39996337890625" text="Start Time" />
+                              <TableColumn fx:id="endTimeCol" prefWidth="88.39996337890625" text="End Time" />
+                              <TableColumn fx:id="customerIDCol" prefWidth="101.2000732421875" text="Customer ID" />
                           </columns>
                         </TableView>
-                        <RadioButton layoutX="556.0" layoutY="51.0" mnemonicParsing="false" text="View By Current Month">
+                        <RadioButton fx:id="currentMonthRadioBtn" layoutX="556.0" layoutY="51.0" mnemonicParsing="false" onAction="#viewCurrentMonthAppts" text="View By Current Month">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
-                        <RadioButton layoutX="357.0" layoutY="51.0" mnemonicParsing="false" text="View All Appointments">
+                        <RadioButton fx:id="allApptsRadioBtn" layoutX="357.0" layoutY="51.0" mnemonicParsing="false" onAction="#viewAllAppts" text="View All Appointments">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
-                        <RadioButton layoutX="754.0" layoutY="51.0" mnemonicParsing="false" text="View By Current Week">
+                        <RadioButton fx:id="currentWeekRadioBtn" layoutX="754.0" layoutY="51.0" mnemonicParsing="false" onAction="#viewCurrentWeekAppts" text="View By Current Week">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
-                        <Label layoutX="32.0" layoutY="46.0" text="Time Zone: ">
+                        <Label fx:id="timeZoneLbl" layoutX="32.0" layoutY="46.0" text="Time Zone: ">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

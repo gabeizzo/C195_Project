@@ -1,14 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.ModifyCustomerController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifyCustomerController">
+    <children>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#007faa" height="600.0" stroke="BLACK" strokeType="INSIDE" width="400.0" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="51.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="400.0" />
+        <Label layoutX="110.0" layoutY="22.0" text="Modify Customer" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+            <effect>
+                <Glow />
+            </effect>
+        </Label>
+        <FlowPane layoutX="21.0" layoutY="77.0" prefHeight="429.0" prefWidth="358.0">
+            <children>
+                <Label prefHeight="46.0" prefWidth="114.0" text="Customer Id" textFill="#f5f5f5">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font></Label>
+                <TextField editable="false" prefHeight="26.0" prefWidth="196.0" promptText="Auto-Generated" />
+                <Label layoutX="10.0" layoutY="10.0" prefHeight="46.0" prefWidth="113.0" text="Name" textFill="#f5f5f5">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font></Label>
+                <TextField layoutX="104.0" layoutY="20.0" prefHeight="26.0" prefWidth="196.0" />
+                <Label layoutX="10.0" layoutY="10.0" prefHeight="46.0" prefWidth="113.0" text="Phone Number" textFill="#f5f5f5">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font></Label>
+                <TextField layoutX="104.0" layoutY="20.0" prefHeight="26.0" prefWidth="196.0" />
+                <Label layoutX="10.0" layoutY="56.0" prefHeight="46.0" prefWidth="114.0" text="Street Address" textFill="#f5f5f5">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font></Label>
+                <TextField layoutX="104.0" layoutY="67.0" prefHeight="26.0" prefWidth="196.0" />
+                <Label layoutX="10.0" layoutY="103.0" prefHeight="46.0" prefWidth="114.0" text="City" textFill="#f5f5f5">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font></Label>
+                <TextField layoutX="104.0" layoutY="113.0" prefHeight="26.0" prefWidth="196.0" />
+                <Label layoutX="10.0" layoutY="149.0" prefHeight="46.0" prefWidth="113.0" text="Postal Code" textFill="#f5f5f5">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font></Label>
+                <TextField layoutX="104.0" layoutY="160.0" prefHeight="26.0" prefWidth="196.0" />
+                <Label layoutX="10.0" layoutY="242.0" prefHeight="46.0" prefWidth="114.0" text="State/Province" textFill="#f5f5f5">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font></Label>
+            <ComboBox layoutX="124.0" layoutY="344.0" prefHeight="26.0" prefWidth="144.0" />
+                <Label layoutX="10.0" layoutY="288.0" prefHeight="46.0" prefWidth="114.0" text="Country" textFill="#f5f5f5">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font></Label>
+                <ComboBox prefHeight="26.0" prefWidth="144.0" />
+                <Label layoutX="10.0" layoutY="335.0" prefHeight="46.0" prefWidth="114.0" text="Division ID" textFill="#f5f5f5">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <ComboBox layoutX="104.0" layoutY="344.0" prefHeight="26.0" prefWidth="145.0" />
+            </children>
+        </FlowPane>
+        <Button layoutX="136.0" layoutY="528.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="72.0" text="Save" />
+        <Button layoutX="219.0" layoutY="528.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="72.0" text="Cancel" />
+    </children>
 </AnchorPane>
