@@ -6,7 +6,7 @@ public class Contact {
     private String contactEmail;
 
     /**
-     * Contact constructor, instantiates Contact objects.
+     * Contact constructor, used for instantiating Contact objects.
      * @param contactID
      * @param contactName
      * @param contactEmail

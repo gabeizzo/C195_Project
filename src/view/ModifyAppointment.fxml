@@ -24,63 +24,63 @@
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font></Label>
-                <TextField disable="true" editable="false" prefHeight="26.0" prefWidth="196.0" promptText="Auto-Generated " />
+                <TextField fx:id="apptIDTxt" disable="true" editable="false" prefHeight="26.0" prefWidth="196.0" promptText="Auto-Generated " />
                 <Label layoutX="10.0" layoutY="10.0" prefHeight="46.0" prefWidth="113.0" text="Customer ID" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font></Label>
-                <ComboBox prefWidth="150.0" />
+                <ComboBox fx:id="customerIDCB" prefWidth="150.0" />
                 <Label layoutX="10.0" layoutY="10.0" prefHeight="46.0" prefWidth="113.0" text="User" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font></Label>
-                <ComboBox layoutX="124.0" layoutY="67.0" prefWidth="150.0" />
+                <ComboBox fx:id="userNameCB" layoutX="124.0" layoutY="67.0" prefWidth="150.0" />
                 <Label layoutX="10.0" layoutY="56.0" prefHeight="46.0" prefWidth="114.0" text="Title" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font></Label>
-                <TextField layoutX="104.0" layoutY="67.0" prefHeight="26.0" prefWidth="196.0" />
+                <TextField fx:id="apptTitleTxt" layoutX="104.0" layoutY="67.0" prefHeight="26.0" prefWidth="196.0" />
                 <Label layoutX="10.0" layoutY="103.0" prefHeight="46.0" prefWidth="114.0" text="Description" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font></Label>
-                <TextField layoutX="104.0" layoutY="113.0" prefHeight="26.0" prefWidth="196.0" />
+                <TextField fx:id="apptDescriptionTxt" layoutX="104.0" layoutY="113.0" prefHeight="26.0" prefWidth="196.0" />
                 <Label layoutX="10.0" layoutY="149.0" prefHeight="46.0" prefWidth="113.0" text="Location" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font></Label>
-                <TextField layoutX="104.0" layoutY="160.0" prefHeight="26.0" prefWidth="196.0" />
+                <TextField fx:id="apptLocationTxt" layoutX="104.0" layoutY="160.0" prefHeight="26.0" prefWidth="196.0" />
                 <Label layoutX="10.0" layoutY="242.0" prefHeight="46.0" prefWidth="114.0" text="Contact" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font></Label>
-                <ComboBox layoutX="124.0" layoutY="344.0" prefHeight="26.0" prefWidth="144.0" />
+                <ComboBox fx:id="contactCB" layoutX="124.0" layoutY="344.0" prefHeight="26.0" prefWidth="144.0" />
                 <Label layoutX="10.0" layoutY="288.0" prefHeight="46.0" prefWidth="114.0" text="Type" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font></Label>
-                <ComboBox prefHeight="26.0" prefWidth="144.0" />
+                <ComboBox fx:id="apptTypeCB" prefHeight="26.0" prefWidth="144.0" />
                 <Label layoutX="10.0" layoutY="335.0" prefHeight="46.0" prefWidth="114.0" text="Date" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <DatePicker />
+                <DatePicker fx:id="apptDatePicker" />
                 <Label layoutX="10.0" layoutY="335.0" prefHeight="46.0" prefWidth="114.0" text="Start Time" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <ComboBox layoutX="124.0" layoutY="344.0" prefHeight="26.0" prefWidth="102.0" />
+                <ComboBox fx:id="apptStartTimeCB" layoutX="124.0" layoutY="344.0" prefHeight="26.0" prefWidth="102.0" />
                 <Label layoutX="10.0" layoutY="428.0" prefHeight="46.0" prefWidth="114.0" text="End Time" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <ComboBox layoutX="124.0" layoutY="437.0" prefHeight="26.0" prefWidth="102.0" />
+                <ComboBox fx:id="apptEndTimeCB" layoutX="124.0" layoutY="437.0" prefHeight="26.0" prefWidth="102.0" />
             </children>
         </FlowPane>
-        <Button layoutX="141.0" layoutY="640.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="72.0" text="Save" />
-        <Button layoutX="224.0" layoutY="640.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="72.0" text="Cancel" />
+        <Button fx:id="saveApptButton" layoutX="141.0" layoutY="640.0" mnemonicParsing="false" onAction="#saveAppt" prefHeight="26.0" prefWidth="72.0" text="Save" />
+        <Button fx:id="cancelScheduleApptButton" layoutX="224.0" layoutY="640.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="26.0" prefWidth="72.0" text="Cancel" />
     </children>
 </AnchorPane>

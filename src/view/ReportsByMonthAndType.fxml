@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="00.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportsByMonthAndTypeController">
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportsByMonthAndTypeController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#007faa" height="500.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="63.0" layoutY="24.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
@@ -18,14 +18,14 @@
             <Glow />
          </effect>
       </Label>
-      <TableView layoutX="18.0" layoutY="120.0" prefHeight="302.0" prefWidth="563.0">
+      <TableView fx:id="reportsTable" layoutX="18.0" layoutY="120.0" prefHeight="302.0" prefWidth="563.0">
         <columns>
-          <TableColumn prefWidth="167.79999351501465" text="Month" />
-          <TableColumn prefWidth="200.20001220703125" text="Appointment Type" />
-            <TableColumn prefWidth="195.60000610351562" text="Number of Appointments" />
+          <TableColumn fx:id="reportMonthCol" prefWidth="167.79999351501465" text="Month" />
+          <TableColumn fx:id="reportApptTypeCol" prefWidth="200.20001220703125" text="Appointment Type" />
+            <TableColumn fx:id="reportNumApptsCol" prefWidth="195.60000610351562" text="Number of Appointments" />
         </columns>
       </TableView>
-      <Button layoutX="254.0" layoutY="455.0" mnemonicParsing="false" text="Main Menu">
+      <Button fx:id="mainMenuBtn" layoutX="224.0" layoutY="455.0" mnemonicParsing="false" onAction="#toMainMenu" text="Return to Main Menu">
          <font>
             <Font size="14.0" />
          </font>

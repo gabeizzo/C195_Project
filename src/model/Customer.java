@@ -3,7 +3,7 @@ package model;
 import Utilities.ConvertTime;
 import java.time.LocalDateTime;
 
-/** Customer model class. Customer POJO representation of the Customer table in the database */
+/** The Customer class*/
 public class Customer {
     private int customerID;
     private String customerName;
@@ -17,17 +17,17 @@ public class Customer {
     private int divisionID;
 
     /**
-     * Constructor for Customer Class
-     * @param customerID Integer
-     * @param customerName String
-     * @param address String
-     * @param postalCode String
-     * @param phone String
-     * @param createDateTime LocalDateTime
-     * @param createdBy String
-     * @param lastUpdate LocalDateTime
-     * @param lastUpdatedBy String
-     * @param divisionID Integer
+     * The constructor for the Customer Class
+     * @param customerID
+     * @param customerName
+     * @param address
+     * @param postalCode
+     * @param phone
+     * @param createDateTime
+     * @param createdBy
+     * @param lastUpdate
+     * @param lastUpdatedBy
+     * @param divisionID
      */
     public Customer(int customerID, String customerName, String address, String postalCode, String phone, LocalDateTime createDateTime, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int divisionID) {
         this.customerID = customerID;
@@ -107,7 +107,7 @@ public class Customer {
     }
 
     /**
-     * getPhone. Returns the phone number of the customer.
+     * Gets the customer's phone number.
      * @return phone String.
      */
     public String getPhone() {
@@ -115,7 +115,7 @@ public class Customer {
     }
 
     /**
-     * setPhone. Returns the phone number of the customer.
+     * Sets the customer's phone number.
      * @param phone String
      */
     public void setPhone(String phone) {
@@ -123,13 +123,14 @@ public class Customer {
     }
 
     /**
-     * getCreateDateTime. Returns the creation date and time of the customer.
+     * Gets the creation date/time of the customer in the system.
      * @return LocalDateTime createDateTime.
      */
     public LocalDateTime getCreateDateTime() {
         return createDateTime;
     }
 
+    //FIX ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /**
      * getFormattedCreateDate. Returns a formatted string representation of the creation date.
      * @return createDate String
@@ -147,7 +148,7 @@ public class Customer {
     }
 
     /**
-     * Gets the User that created the Appointment.
+     * Gets the User's name that created the appointment.
      * @return The User who created the Appointment.
      */
     public String getCreatedBy() {
@@ -155,23 +156,24 @@ public class Customer {
     }
 
     /**
-     * Sets the User who created the Customer.
-     * @param createdBy The User who created the Customer.
+     * Sets the User who created the customer.
+     * @param createdBy The User who created the customer.
      */
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
     /**
-     * Gets the local date and time of when the Customer was updated.
-     * @return The last time the Customer was updated.
+     * Gets the local date and time of when the customer was updated.
+     * @return The last time the customer was updated.
      */
     public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
+    //FIX ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /**
-     * Gets the last time the Customer was updated (formatted).
+     * Gets the last time the customer was updated (formatted).
      * @return The last time Customer was updated.
      */
     /*public String getFormattedLastUpdate() {
@@ -179,7 +181,7 @@ public class Customer {
     }*/
 
     /**
-     * Sets the local Date and Time of Customer's last update.
+     * Sets the local date/time of customer's last update.
      * @param lastUpdate LocalDateTime.
      */
     public void setLastUpdate(LocalDateTime lastUpdate) {
@@ -187,32 +189,32 @@ public class Customer {
     }
 
     /**
-     * Gets User who last updated the Customer's information.
-     * @return User who last updated the Customer info.
+     * Gets User who last updated the customer's data.
+     * @return The user who last updated the customer data.
      */
     public String getLastUpdatedBy() {
         return lastUpdatedBy;
     }
 
     /**
-     * Sets the Customer's lastUpdatedBy User information.
-     * @param lastUpdatedBy The User who last updated the Customer.
+     * Sets the customer's lastUpdatedBy user's information.
+     * @param lastUpdatedBy The user who last updated the Customer.
      */
     public void setLastUpdatedBy(String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
     /**
-     * Gets Customer's first-level division ID.
-     * @return Customer's first-level division ID.
+     * Gets the customer's first-level division ID.
+     * @return The customer's first-level division ID.
      */
     public int getDivisionID() {
         return divisionID;
     }
 
     /**
-     * Sets Customer's first-level division ID.
-     * @param divisionID The first-level division ID.
+     * Sets the customer's first-level division ID.
+     * @param divisionID The customer's first-level division ID.
      */
     public void setDivisionID(int divisionID) {
         this.divisionID = divisionID;
