@@ -7,45 +7,86 @@
 
 package controller;
 
+import DAO.AppointmentDAOImpl;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
+import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable {
-    public Button deleteApptButton;
-    public Button scheduleApptButton;
-    public Button modifyApptButton;
-    public Button customersMenuButton;
-    public Button reportsByMonthAndTypeButton;
-    public Button exitAppButton;
-    public Button contactScheduleButton;
-    public Button userScheduleButton;
-    public TableColumn apptIDCol;
-    public TableColumn titleCol;
-    public TableColumn descriptionCol;
-    public TableColumn locationCol;
-    public TableColumn contactCol;
-    public TableColumn typeCol;
-    public TableColumn dateCol;
-    public TableColumn startTimeCol;
-    public TableColumn endTimeCol;
-    public TableColumn customerIDCol;
-    public RadioButton currentMonthRadioBtn;
-    public RadioButton allApptsRadioBtn;
-    public RadioButton currentWeekRadioBtn;
-    public Label timeZoneLbl;
-    public TableView apptsTable;
+    @FXML
+    private RadioButton currentMonthRadioBtn;
+    @FXML
+    private RadioButton allApptsRadioBtn;
+    @FXML
+    private RadioButton currentWeekRadioBtn;
+    @FXML
+    private ToggleGroup apptsViewToggle;
+    @FXML
+    private Label timeZoneLbl;
+    @FXML
+    private Button deleteApptButton;
+    @FXML
+    private Button scheduleApptButton;
+    @FXML
+    private Button modifyApptButton;
+    @FXML
+    private Button customersMenuButton;
+    @FXML
+    private Button reportsByMonthAndTypeButton;
+    @FXML
+    private Button exitAppButton;
+    @FXML
+    private Button contactScheduleButton;
+    @FXML
+    private Button userScheduleButton;
+    @FXML
+    private TableColumn <Appointment, Integer> apptIDCol;
+    @FXML
+    private TableColumn <Appointment, String> titleCol;
+    @FXML
+    private TableColumn <Appointment, String> descriptionCol;
+    @FXML
+    private TableColumn <Appointment, String> locationCol;
+    @FXML
+    private TableColumn <Appointment, String> contactCol;
+    @FXML
+    private TableColumn <Appointment, String> typeCol;
+    @FXML
+    private TableColumn <Appointment, String> dateCol;
+    @FXML
+    private TableColumn <Appointment, LocalTime> startTimeCol;
+    @FXML
+    private TableColumn <Appointment, LocalTime> endTimeCol;
+    @FXML
+    private TableColumn <Appointment, Integer> customerIDCol;
+    @FXML
+    private TableView<Appointment> apptsTable;
+
+    private ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+    private  ObservableList<Appointment> currentWeekAppointments = FXCollections.observableArrayList();
+    private  ObservableList<Appointment> currentMonthAppointments = FXCollections.observableArrayList();
+    private AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+    public static Appointment apptToModify;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        apptsViewToggle = new ToggleGroup();
+        allApptsRadioBtn.setToggleGroup(apptsViewToggle);
+        currentMonthRadioBtn.setToggleGroup(apptsViewToggle);
+        currentWeekRadioBtn.setToggleGroup(apptsViewToggle);
+        allApptsRadioBtn.setSelected(true);
     }
 
     public void deleteAppointment(ActionEvent actionEvent) throws IOException{

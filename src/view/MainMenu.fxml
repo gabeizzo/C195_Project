@@ -121,12 +121,15 @@
                         <RadioButton fx:id="currentMonthRadioBtn" layoutX="556.0" layoutY="51.0" mnemonicParsing="false" onAction="#viewCurrentMonthAppts" text="View By Current Month">
                            <font>
                               <Font size="14.0" />
-                           </font></RadioButton>
-                        <RadioButton fx:id="allApptsRadioBtn" layoutX="357.0" layoutY="51.0" mnemonicParsing="false" onAction="#viewAllAppts" text="View All Appointments">
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="apptsViewToggle" />
+                           </toggleGroup></RadioButton>
+                        <RadioButton fx:id="allApptsRadioBtn" layoutX="357.0" layoutY="51.0" mnemonicParsing="false" onAction="#viewAllAppts" text="View All Appointments" toggleGroup="$apptsViewToggle">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
-                        <RadioButton fx:id="currentWeekRadioBtn" layoutX="754.0" layoutY="51.0" mnemonicParsing="false" onAction="#viewCurrentWeekAppts" text="View By Current Week">
+                        <RadioButton fx:id="currentWeekRadioBtn" layoutX="754.0" layoutY="51.0" mnemonicParsing="false" onAction="#viewCurrentWeekAppts" text="View By Current Week" toggleGroup="$apptsViewToggle">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>

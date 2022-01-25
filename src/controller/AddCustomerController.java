@@ -1,6 +1,8 @@
 package controller;
 
+import Utilities.DBQuery;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -9,23 +11,40 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import main.Main;
+
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 
-public class AddCustomerController implements Initializable {
 
-    public TextField customerIDTxt;
-    public TextField customerNameTxt;
-    public TextField customerPhoneTxt;
-    public TextField customerStreetAddressTxt;
-    public TextField customerCityTxt;
-    public TextField customerPostalCodeTxt;
-    public ComboBox customerStateCB;
-    public ComboBox customerCountryCB;
-    public ComboBox customerDivisionIDCB;
-    public Button saveCustomerBtn;
-    public Button cancelAddCustomerBtn;
+public class AddCustomerController implements Initializable {
+    @FXML
+    private TextField customerIDTxt;
+    @FXML
+    private TextField customerNameTxt;
+    @FXML
+    private TextField customerPhoneTxt;
+    @FXML
+    private TextField customerStreetAddressTxt;
+    @FXML
+    private TextField customerCityTxt;
+    @FXML
+    private TextField customerPostalCodeTxt;
+    @FXML
+    private ComboBox customerStateCB;
+    @FXML
+    private ComboBox customerCountryCB;
+    @FXML
+    private ComboBox customerDivisionIDCB;
+    @FXML
+    private Button saveCustomerBtn;
+    @FXML
+    private Button cancelAddCustomerBtn;
+
+    private Connection conn = Main.conn;
 
 
     @Override
@@ -34,6 +53,10 @@ public class AddCustomerController implements Initializable {
     }
 
     public void saveAddedCustomer(ActionEvent actionEvent) throws Exception{
+        DBQuery.setStatement(conn);
+        Statement statement = DBQuery.getStatement();
+        //Raw SQL insertStatement
+        String insertStatement = "INSERT INTO customers()";
         //throw in an if else here with lots of exceptions
         Parent root = FXMLLoader.load(getClass().getResource("/view/CustomersMenu.fxml"));
         Stage stage = (Stage) (saveCustomerBtn.getScene().getWindow());

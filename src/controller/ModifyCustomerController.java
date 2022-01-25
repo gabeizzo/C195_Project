@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -9,23 +10,33 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ModifyCustomerController implements Initializable {
-    public TextField customerIDTxt;
-    public TextField customerNameTxt;
-    public TextField customerPhoneTxt;
-    public TextField customerStreetAddressTxt;
-    public TextField customerCityTxt;
-    public TextField customerPostalCodeTxt;
-    public ComboBox customerStateCB;
-    public ComboBox customerCountryCB;
-    public ComboBox customerDivisionIDCB;
-    public Button saveCustomerBtn;
-    public Button cancelModifyCustomerBtn;
+    @FXML
+    private TextField customerIDTxt;
+    @FXML
+    private TextField customerNameTxt;
+    @FXML
+    private TextField customerPhoneTxt;
+    @FXML
+    private TextField customerStreetAddressTxt;
+    @FXML
+    private TextField customerCityTxt;
+    @FXML
+    private TextField customerPostalCodeTxt;
+    @FXML
+    private ComboBox customerStateCB;
+    @FXML
+    private ComboBox customerCountryCB;
+    @FXML
+    private ComboBox customerDivisionIDCB;
+    @FXML
+    private Button saveCustomerBtn;
+    @FXML
+    private Button cancelModifyCustomerBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

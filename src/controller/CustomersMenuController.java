@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -14,21 +15,36 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CustomersMenuController implements Initializable {
-    public Button deleteCustomerBtn;
-    public Button addCustomerBtn;
-    public Button modifyCustomerBtn;
-    public Button mainMenuButton;
-    public TableColumn customerIDCol;
-    public TableColumn customerNameCol;
-    public TableColumn addressCol;
-    public TableColumn postalCodeCol;
-    public TableColumn phoneCol;
-    public TableColumn createDateCol;
-    public TableColumn createdByCol;
-    public TableColumn lastUpdatedCol;
-    public TableColumn lastUpdatedByCol;
-    public TableColumn divisionIDCol;
-    public TableView customerDataTable;
+    @FXML
+    private Button deleteCustomerBtn;
+    @FXML
+    private Button addCustomerBtn;
+    @FXML
+    private Button modifyCustomerBtn;
+    @FXML
+    private Button mainMenuButton;
+    @FXML
+    private TableColumn customerIDCol;
+    @FXML
+    private TableColumn customerNameCol;
+    @FXML
+    private TableColumn addressCol;
+    @FXML
+    private TableColumn postalCodeCol;
+    @FXML
+    private TableColumn phoneCol;
+    @FXML
+    private TableColumn createDateCol;
+    @FXML
+    private TableColumn createdByCol;
+    @FXML
+    private TableColumn lastUpdatedCol;
+    @FXML
+    private TableColumn lastUpdatedByCol;
+    @FXML
+    private TableColumn divisionIDCol;
+    @FXML
+    private TableView customerDataTable;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -9,17 +10,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ReportsByMonthAndTypeController implements Initializable {
-    public TableColumn reportMonthCol;
-    public TableColumn reportApptTypeCol;
-    public TableColumn reportNumApptsCol;
-    public Button mainMenuBtn;
-    public TableView reportsTable;
+    @FXML
+    private TableColumn reportMonthCol;
+    @FXML
+    private TableColumn reportApptTypeCol;
+    @FXML
+    private TableColumn reportNumApptsCol;
+    @FXML
+    private Button mainMenuBtn;
+    @FXML
+    private TableView reportsTable;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

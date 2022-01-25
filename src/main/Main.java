@@ -6,11 +6,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import Utilities.DBQuery;
+import java.sql.Connection;
+
 
 public class Main extends Application {
+    public static Connection conn;
 
-    /** This method displays the Main Menu screen when the application is started.
-     MainMenu.fxml gets loaded and shows the Appointments main menu.
+    /** This method displays the app's Login screen when the application is started.
+     LoginScreen.fxml gets loaded and shows the login window.
      @param stage The stage to display.
      */
     @Override
@@ -20,11 +24,17 @@ public class Main extends Application {
         stage.setScene(new Scene(root,600 ,400));
         stage.show();
     }
-
-
-
+    /** This method is the starting point for the application and launches the application.
+     * The main method establishes the MySQL database connection, launches the application, and closes the connection on exit.
+     * @param args
+     */
     public static void main(String[] args) {
-        DBConnection.openConnection();
+
+        Connection conn = DBConnection.openConnection();
+
+        DBQuery.setStatement(conn); //Create Statement Object
+
         launch(args);
+        DBConnection.closeConnection();
     }
 }

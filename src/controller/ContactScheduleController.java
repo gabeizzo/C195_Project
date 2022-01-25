@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -9,23 +10,33 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ContactScheduleController implements Initializable {
-    public Button mainMenuBtn;
-    public TableColumn customerIDCol;
-    public TableColumn endTimeCol;
-    public TableColumn startTimeCol;
-    public TableColumn apptDateCol;
-    public TableColumn descriptionCol;
-    public TableColumn typeCol;
-    public TableColumn titleCol;
-    public TableColumn apptIDCol;
-    public TableColumn contactNameCol;
-    public TableView contactScheduleTable;
+    @FXML
+    private Button mainMenuBtn;
+    @FXML
+    private TableColumn customerIDCol;
+    @FXML
+    private TableColumn endTimeCol;
+    @FXML
+    private TableColumn startTimeCol;
+    @FXML
+    private TableColumn apptDateCol;
+    @FXML
+    private TableColumn descriptionCol;
+    @FXML
+    private TableColumn typeCol;
+    @FXML
+    private TableColumn titleCol;
+    @FXML
+    private TableColumn apptIDCol;
+    @FXML
+    private TableColumn contactNameCol;
+    @FXML
+    private TableView contactScheduleTable;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

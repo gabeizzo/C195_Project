@@ -1,4 +1,10 @@
 package DAO;
 
-public class ContactDAO {
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import model.Contact;
+import java.sql.SQLException;
+
+public interface ContactDAO {
+
 }
