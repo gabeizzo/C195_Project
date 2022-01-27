@@ -3,7 +3,9 @@ package model;
 import Utilities.ConvertTime;
 import java.time.LocalDateTime;
 
-/** The Customer class*/
+/** This is the Customer class.
+ * This class acts as the blueprint for Customer objects in the database.
+ */
 public class Customer {
     private int customerID;
     private String customerName;
@@ -17,16 +19,16 @@ public class Customer {
     private int divisionID;
 
     /** The constructor for the Customer Class.
-     * @param customerID
-     * @param customerName
-     * @param address
-     * @param postalCode
-     * @param phone
-     * @param createDateTime
-     * @param createdBy
-     * @param lastUpdate
-     * @param lastUpdatedBy
-     * @param divisionID
+     * @param customerID The customer's ID.
+     * @param customerName The customer's name.
+     * @param address The customer's address.
+     * @param postalCode The customer's postal code.
+     * @param phone The customer's phone number.
+     * @param createDateTime The date and time that the customer data was created.
+     * @param createdBy The person who created the customer data in the database.
+     * @param lastUpdate The time that the customer data was last updated.
+     * @param lastUpdatedBy The person who last updated the customer data.
+     * @param divisionID The customer's first level division ID.
      */
     public Customer(int customerID, String customerName, String address, String postalCode, String phone, LocalDateTime createDateTime, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int divisionID) {
         this.customerID = customerID;

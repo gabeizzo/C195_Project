@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.Main;
 import model.Customer;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +16,7 @@ public class CustomerDAOImpl implements CustomerDAO{
     private String getCustomerStatement = "SELECT * from customers where Customer_ID=";
     private PreparedStatement preparedStatement;
     private ResultSet rs;
-    private Connection conn = Main.conn;
+    private Connection connection = Main.connection;
 
     ObservableList<Customer> customers = FXCollections.observableArrayList();
     public CustomerDAOImpl() throws SQLException {

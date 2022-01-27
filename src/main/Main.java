@@ -8,10 +8,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import Utilities.DBQuery;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 
 public class Main extends Application {
-    public static Connection conn;
+    public static Connection connection;
 
     /** This method displays the app's Login screen when the application is started.
      LoginScreen.fxml gets loaded and shows the login window.
@@ -28,13 +29,12 @@ public class Main extends Application {
      * The main method establishes the MySQL database connection, launches the application, and closes the connection on exit.
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
-        Connection conn = DBConnection.openConnection();
-
-        DBQuery.setStatement(conn); //Create Statement Object
+        connection = DBConnection.getConnection();
 
         launch(args);
+
         DBConnection.closeConnection();
     }
 }

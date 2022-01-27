@@ -3,6 +3,7 @@ package controller;
 import DAO.AppointmentDAOImpl;
 import DAO.UserDAOImpl;
 import Utilities.DBConnection;
+import Utilities.DBQuery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,6 +31,18 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 public class LoginScreenController implements Initializable {
+    private AppointmentDAOImpl AppointmentDAO;
+    private UserDAOImpl UserDAO;
+    private String passwordInput;
+    private String usernameInput;
+    public static String userName;
+    private final String filename = "login_activity.txt";
+    private final ArrayList<String> allUserNames = new ArrayList<>();
+    private final ArrayList<String> allPasswords = new ArrayList<>();
+    private final ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+    private final Connection connection = Main.connection;
+    private final String selectFromDB = "SELECT User_Name, Password FROM users";
+
     @FXML
     private PasswordField passwordTxt;
     @FXML
@@ -50,15 +63,6 @@ public class LoginScreenController implements Initializable {
     private Label appTitleLabel;
     @FXML
     private Label timeZoneID;
-    private String passwordInput;
-    private String usernameInput;
-    private ArrayList<String> allUserNames = new ArrayList<>();
-    private ArrayList<String> allPasswords = new ArrayList<>();
-    private String selectFromDB = "SELECT User_Name, Password FROM users";
-    private final String filename = "login_activity.txt";
-    private AppointmentDAOImpl AppointmentDAO;
-    private UserDAOImpl UserDAO;
-    private ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
 
     @Override
@@ -66,13 +70,13 @@ public class LoginScreenController implements Initializable {
         userNameTxt.clear();
         passwordTxt.clear();
 
-        ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
-        timeZoneID.setText(localZoneID.toString());
+        ZoneId localTimezone = ZoneId.of(TimeZone.getDefault().getID());
+        timeZoneID.setText(localTimezone.toString());
 
-        // Translates login screen if system default is French
+        // Translates login screen to French if OS's Language Pack is set to French
         try {
-            rb = ResourceBundle.getBundle("Utilities/Nationality_fr", Locale.getDefault());
-            //Check to figure out what language the machine is using
+            rb = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
+            //Check if system is using the French language
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 appTitleLabel.setText(rb.getString("appTitle"));
                 localTimeZoneLabel.setText(rb.getString("localTimeZoneLabel"));
@@ -87,7 +91,7 @@ public class LoginScreenController implements Initializable {
                 // set userDAOImpl
             }
         } catch(Exception e) {
-            // Leave this blank so english warning doesn't convey
+            // Ignore to maintain French language
         }
     }
 
@@ -100,12 +104,61 @@ public class LoginScreenController implements Initializable {
         usernameInput = userNameTxt.getText().toLowerCase().trim();
         passwordInput = passwordTxt.getText().trim();
 
-        Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-        Stage stage = (Stage) (loginButton.getScene().getWindow());
-        stage.setTitle("Appointment Scheduler Main Menu");
-        stage.setScene(new Scene(root,1200 ,700));
-        stage.show();
+        if(validateLogin()){
+           System.out.println("Login successful!");
+           userName = usernameInput;
+
+           Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+           Stage stage = (Stage) (loginButton.getScene().getWindow());
+           stage.setTitle("Appointment Scheduler Main Menu");
+           stage.setScene(new Scene(root, 1200, 700));
+           stage.show();
+       }
     }
+
+    /** Validates the login info with what is in the database.
+     * @return True if login info is correct. False if incorrect.
+     * @throws SQLException
+     */
+    private boolean validateLogin() throws SQLException{
+
+        try {
+            DBQuery.setPreparedStatement(connection, selectFromDB);
+            PreparedStatement pst = DBQuery.getPreparedStatement();
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                allUserNames.add(rs.getString("User_Name"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error authenticating username: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        try{
+            PreparedStatement pst = DBQuery.getPreparedStatement();
+            DBQuery.setPreparedStatement(connection, selectFromDB);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                allPasswords.add(rs.getString("Password"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error authenticating password: " + e.getMessage());
+            e.printStackTrace();
+        }
+        usernameInput = userNameTxt.getText().toLowerCase().trim();
+        passwordInput = passwordTxt.getText().trim();
+
+        if(usernameInput.equals(allUserNames.get(0)) && passwordInput.equals(allPasswords.get(0))
+                || usernameInput.equals(allUserNames.get(1)) && passwordInput.equals(allPasswords.get(1))) {
+            return true;
+        }
+        return false;
+    }
+
+    /** Exits the application.
+     * @param actionEvent When the Exit button is selected.
+     * @throws IOException
+     */
     public void exitApplication(ActionEvent actionEvent) throws IOException{
         System.exit(0);
     }

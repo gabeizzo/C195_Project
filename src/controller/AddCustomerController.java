@@ -12,7 +12,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.Main;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -44,7 +43,7 @@ public class AddCustomerController implements Initializable {
     @FXML
     private Button cancelAddCustomerBtn;
 
-    private Connection conn = Main.conn;
+    private Connection connection = Main.connection;
 
 
     @Override
@@ -53,11 +52,7 @@ public class AddCustomerController implements Initializable {
     }
 
     public void saveAddedCustomer(ActionEvent actionEvent) throws Exception{
-        DBQuery.setStatement(conn);
-        Statement statement = DBQuery.getStatement();
-        //Raw SQL insertStatement
-        String insertStatement = "INSERT INTO customers()";
-        //throw in an if else here with lots of exceptions
+
         Parent root = FXMLLoader.load(getClass().getResource("/view/CustomersMenu.fxml"));
         Stage stage = (Stage) (saveCustomerBtn.getScene().getWindow());
         stage.setTitle("Customers Menu");
