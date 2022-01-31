@@ -17,14 +17,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable {
+    @FXML
+    private Label timeZoneID;
     @FXML
     private RadioButton currentMonthRadioBtn;
     @FXML
@@ -74,11 +78,15 @@ public class MainMenuController implements Initializable {
     @FXML
     private TableView<Appointment> apptsTable;
 
-    private ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
-    private  ObservableList<Appointment> currentWeekAppointments = FXCollections.observableArrayList();
-    private  ObservableList<Appointment> currentMonthAppointments = FXCollections.observableArrayList();
+    private ObservableList<Appointment> allAppts = FXCollections.observableArrayList();
+    private  ObservableList<Appointment> currWeekAppts = FXCollections.observableArrayList();
+    private  ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
     private AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
     public static Appointment apptToModify;
+
+    public MainMenuController() throws SQLException{
+        allAppts = apptDAO.getAllAppts();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -87,9 +95,16 @@ public class MainMenuController implements Initializable {
         currentMonthRadioBtn.setToggleGroup(apptsViewToggle);
         currentWeekRadioBtn.setToggleGroup(apptsViewToggle);
         allApptsRadioBtn.setSelected(true);
+
+        try {
+            viewAllAppts();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteAppointment(ActionEvent actionEvent) throws IOException{
+
     }
 
     public void toScheduleAppointment(ActionEvent actionEvent) throws IOException{
@@ -144,7 +159,26 @@ public class MainMenuController implements Initializable {
     public void viewCurrentMonthAppts(ActionEvent actionEvent) throws IOException{
     }
 
-    public void viewAllAppts(ActionEvent actionEvent) throws IOException{
+    private void viewAllAppts() throws SQLException {
+        apptsTable.setItems(allAppts);
+        apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        contactCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("startDateFormatted"));
+        startTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, LocalTime>("startTimeFormatted"));
+        endTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, LocalTime>("endTimeFormatted"));
+        customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        apptsTable.getSelectionModel().selectFirst();
+    }
+    public void onActionViewAllAppts(ActionEvent actionEvent){
+        try{
+            viewAllAppts();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void viewCurrentWeekAppts(ActionEvent actionEvent) throws IOException{

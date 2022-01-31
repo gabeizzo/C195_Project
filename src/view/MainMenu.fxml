@@ -125,7 +125,7 @@
                            <toggleGroup>
                               <ToggleGroup fx:id="apptsViewToggle" />
                            </toggleGroup></RadioButton>
-                        <RadioButton fx:id="allApptsRadioBtn" layoutX="357.0" layoutY="51.0" mnemonicParsing="false" onAction="#viewAllAppts" text="View All Appointments" toggleGroup="$apptsViewToggle">
+                        <RadioButton fx:id="allApptsRadioBtn" layoutX="357.0" layoutY="51.0" mnemonicParsing="false" onAction="#onActionViewAllAppts" text="View All Appointments" toggleGroup="$apptsViewToggle">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
@@ -134,6 +134,11 @@
                               <Font size="14.0" />
                            </font></RadioButton>
                         <Label fx:id="timeZoneLbl" layoutX="32.0" layoutY="46.0" text="Time Zone: ">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="timeZoneID" layoutX="133.0" layoutY="47.0" text="timeZoneID">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

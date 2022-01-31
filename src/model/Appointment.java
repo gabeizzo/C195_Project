@@ -27,22 +27,22 @@ public class Appointment {
         private Contact contact;
         private User user;
 
-        /** Appointment constructor. Responsible for instancing an object of the Appointment model representation.
-         *  Holds information for a single appointment.
-         *  @param appointmentID String id of appointment
-         *  @param title String title of appointment
-         *  @param description String description of appointment
-         *  @param location String location of appointment
-         *  @param type String type of appointment
-         *  @param startDateTime LocalDateTime startDateTime of appointment
-         *  @param endDateTime LocalDateTime endDateTime of appointment
-         *  @param createDate LocalDateType of appointment
-         *  @param createdBy String documenting how created the appointment
-         *  @param lastUpdate LocalDateTime of lastUpdate of appointment
+        /** The appointment constructor, used to construct Appointment objects.
+         *  @param appointmentID The id of the appointment.
+         *  @param title The title of the appointment.
+         *  @param description The description of appointment.
+         *  @param location The location of the appointment.
+         *  @param type The type of appointment.
+         *  @param startDateTime The start date/time of the appointment.
+         *  @param endDateTime The end date/time of the appointment.
+         *  @param createDate The create date of the appointment.
+         *  @param createdBy The user who created the appointment.
+         *  @param lastUpdate The date/time that the appointment was last updated.
          *  @param lastUpdatedBy String of who lastUpdated this appointment
-         *  @param customerID Integer customerID
-         *  @param contactID Integer contactID
-         *  @param userID Integer userId */
+         *  @param customerID The customer's ID that the appointment is with.
+         *  @param contactID The contact ID for the appointment.
+         *  @param userID The user ID who created the appointment.
+         *  */
         public Appointment(int appointmentID, String title, String description, String location, String type,
                            LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createDate, String createdBy,
                            LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) {
@@ -139,12 +139,12 @@ public class Appointment {
             return startDateTime;
         }
 
-        /** getStartDateFormatted. Returns formatted string of startDateTime.
+        /** Gets the startDateTime String(formatted).
          * @return String startDateTime
          */
-        /*public String getStartDateFormatted() {
-            return ConvertTime.formatDate(startDateTime);
-        }*/
+        public String getStartDateFormatted() {
+            return ConvertTime.dateFormatted(startDateTime);
+        }
 
         /** Gets the start time of the appointment.
          * @return The start time of the appointment.
@@ -153,13 +153,13 @@ public class Appointment {
             return startDateTime.toLocalTime();
         }
 
-        /** getStartTimeFormatted. Get formatted String representation of start time.
+        /** Gets the start time String(formatted).
          * @return String formatted start time.
          */
-        /*public String getStartTimeFormatted() {
-            return ConvertTime.formatTime(startDateTime);
+        public String getStartTimeFormatted() {
+            return ConvertTime.timeFormatted(startDateTime);
         }
-        */
+
 
         /** Sets the start date and time of the appointment.
          * @param startDateTime LocalDateTime startDateTime.
@@ -189,53 +189,50 @@ public class Appointment {
             return endDateTime.toLocalTime();
         }
 
-        /** getEndTimeFormatted. Returns formatted String of appointment end time.
+        /** Gets the appointment's end time(formatted).
          * @return String endDateTime.
          */
-       /*
           public String getEndTimeFormatted() {
-            return ConvertTime.formatTime(endDateTime);
+            return ConvertTime.timeFormatted(endDateTime);
          }
-         */
 
-        /** setEndDateTime. Set endDate and time for appointment.
+        /** Sets the appointment's end date and time.
          * @param endDateTime LocalDateTime endDateTime.
          */
         public void setEndDateTime(LocalDateTime endDateTime) {
             this.endDateTime = endDateTime;
         }
 
-        /** getCreateDate. Returns Creation Date of appointment.
+        /** Gets the appointment's creation date.
          * @return LocalDateTime createDate.
          */
         public LocalDateTime getCreateDate() {
             return createDate;
         }
 
-        /** setCreateDate. Sets createDate of appointment.
-         * @param createDate LocalDateTime createDate.
+        /** Sets the appointment's creation date.
+         * @param createDate The date the appointment was created.
          */
         public void setCreateDate(LocalDateTime createDate) {
             this.createDate = createDate;
         }
 
-        /** getCreatedBy. Returns appointment's created by string.
-         * @return String createdBy
+        /** Gets the user who created the appointment.
+         * @return The user who created the appointment.
          */
         public String getCreatedBy() {
             return createdBy;
         }
 
-        /**
-         * setCreatedBy. Sets appointments created by member.
-         * @param createdBy String createdBy
+        /** Sets user who created the appointment.
+         * @param createdBy The user who created the appointment.
          */
         public void setCreatedBy(String createdBy) {
             this.createdBy = createdBy;
         }
 
         /** Sets the date and time of the most recent update to the appointment information.
-         * @return LocalDateTime lastUpdate
+         * @return The date and time of the appointments last update.
          */
         public LocalDateTime getLastUpdate() {
             return lastUpdate;
@@ -284,7 +281,7 @@ public class Appointment {
         }
 
         /** Sets the appointment's user ID.
-         * @param userID Integer.
+         * @param userID The user ID to set.
          */
         public void setUserID(int userID) {
             this.userID = userID;
@@ -298,7 +295,7 @@ public class Appointment {
         }
 
         /** Sets the appointment's contact ID.
-         * @param contactID Integer.
+         * @param contactID The contact ID to set.
          */
         public void setContactID(int contactID) {
             this.contactID = contactID;

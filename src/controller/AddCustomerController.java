@@ -12,6 +12,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.Main;
+import model.Country;
+import model.FirstLvlDivision;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -35,9 +38,9 @@ public class AddCustomerController implements Initializable {
     @FXML
     private ComboBox customerStateCB;
     @FXML
-    private ComboBox customerCountryCB;
+    private ComboBox<Country> customerCountryCB;
     @FXML
-    private ComboBox customerDivisionIDCB;
+    private ComboBox<FirstLvlDivision> customerDivisionIDCB;
     @FXML
     private Button saveCustomerBtn;
     @FXML

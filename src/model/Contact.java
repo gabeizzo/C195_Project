@@ -31,21 +31,21 @@ public class Contact {
     }
 
     /** Gets the Contact's name.
-     * @return contactName
+     * @return The contact's name.
      */
     public String getContactName() {
         return contactName;
     }
 
     /** Sets the Contact's name.
-     * @param contactName String
+     * @param contactName The contact's name
      */
     public void setContactName(String contactName) {
         this.contactName = contactName;
     }
 
     /** Gets the Contact's email.
-     * @return contactEmail
+     * @return The contact's email.
      */
     public String getContactEmail() {
         return contactEmail;
