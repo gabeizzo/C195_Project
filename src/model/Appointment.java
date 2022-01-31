@@ -3,7 +3,6 @@ package model;
 import DAO.ContactDAOImpl;
 import DAO.UserDAOImpl;
 import Utilities.ConvertTime;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -301,4 +300,35 @@ public class Appointment {
             this.contactID = contactID;
         }
 
+    /** Gets the contact associated with the appointment.
+     * @return The appointment's associated contact.
+     * @throws SQLException
+     */
+    public Contact getContact() throws SQLException {
+        ContactDAOImpl contactDAO = new ContactDAOImpl();
+        this.contact = contactDAO.getContact(getContactID());
+        return this.contact;
+    }
+
+    /**
+     * getContactName. Returns the name of the contact associated with the appointment.
+     * @return String contactName.
+     * @throws SQLException throws SQLException if database error occurs.
+     */
+    public String getContactName() throws SQLException {
+        Contact contact = getContact();
+        String name = contact.getContactName();
+        return name;
+    }
+
+    /**
+     * getUser. Returns user model object of user associated with the appointment.
+     * @return User.
+     * @throws SQLException throws SQLException if database error occurs.
+     */
+    public User getUser() throws SQLException {
+        UserDAOImpl userDAO = new UserDAOImpl();
+        this.user = userDAO.getUser(getUserID());
+        return this.user;
+    }
 }

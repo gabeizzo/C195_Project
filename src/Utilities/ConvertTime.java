@@ -1,7 +1,6 @@
 package Utilities;
 
 import javafx.scene.control.ComboBox;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -21,7 +20,6 @@ public class ConvertTime {
         return displayDate.format(localDT);
 
     }
-
     /** Formats localDateTime to 12 hour AM/PM time.
      * @param localDT LocalDateTime
      * @return String localDT
@@ -30,7 +28,6 @@ public class ConvertTime {
         DateTimeFormatter displayTime = DateTimeFormatter.ofPattern("h:mm a");
         return displayTime.format(localDT);
     }
-
     /** Formats LocalTime to 12 hour AM/PM time.
      * @param localTime LocalTime
      * @return String formatted localTime
@@ -39,7 +36,6 @@ public class ConvertTime {
         DateTimeFormatter displayLT = DateTimeFormatter.ofPattern("hh:mm a");
         return displayLT.format(localTime);
     }
-
     /** Formats ZonedDateTime to 12 hour AM/PM time.
      * @param zonedDT zonedDateTime
      * @return String formatted zonedDateTime
@@ -48,7 +44,6 @@ public class ConvertTime {
         DateTimeFormatter displayZonedDT = DateTimeFormatter.ofPattern("hh:mm a");
         return displayZonedDT.format(zonedDT);
     }
-
     /** Fills combo box with times.
      * @param localTimeCB
      * @param apptStartTime
@@ -71,9 +66,8 @@ public class ConvertTime {
         // Eastern Time Zone
         ZoneId EST = ZoneId.of("America/Boston");
         ZoneId localZoneID = ZoneId.systemDefault();
-        LocalDateTime localTime = convertTime;
         // convert to eastern time
-        ZonedDateTime currLocalTime = localTime.atZone(localZoneID);
+        ZonedDateTime currLocalTime = convertTime.atZone(localZoneID);
         ZonedDateTime currEST = currLocalTime.withZoneSameInstant(EST);
 
         return currEST.toLocalDateTime();
