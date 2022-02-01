@@ -120,13 +120,12 @@ public class Customer {
         return createDateTime;
     }
 
-    //FIX ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    /** getFormattedCreateDate. Returns a formatted string representation of the creation date.
+    /** Gets the Customer creation date in the format of MMMM,DD YYYY.
      * @return createDate String
      */
-    /*public String getFormattedCreateDate() {
-        return ConvertTime.formatDate(getCreateDateTime());
-    }*/
+    public String getCreateDateFormatted() {
+        return ConvertTime.dateFormatted(getCreateDateTime());
+    }
 
     /** Sets the date and time that the Customer was created.
      * @param createDateTime LocalDateTime
@@ -156,13 +155,12 @@ public class Customer {
         return lastUpdate;
     }
 
-    //FIX ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /** Gets the last time the customer was updated (formatted).
      * @return The last time Customer was updated.
      */
-    /*public String getFormattedLastUpdate() {
-        return ConvertTime.formatDate(getLastUpdate());
-    }*/
+    public String getLastUpdateFormatted() {
+        return ConvertTime.dateFormatted(getLastUpdate());
+    }
 
     /** Sets the local date/time of customer's last update.
      * @param lastUpdate LocalDateTime

@@ -16,14 +16,14 @@ import java.sql.SQLException;
 
         /** Gets a user from the database based on their user ID.
          * @param userID The ID of the user.
-         * @return The user whose ID matches.
+         * @return The user whose ID matches what is queried.
          * @throws SQLException
          */
         public User getUser(int userID) throws SQLException;
 
         /** Gets a user from the database based on their username.
          * @param userName the name of the user.
-         * @return The name of the user.
+         * @return The name of the user whose name matches what is queried.
          * @throws SQLException
          */
         public User getUser(String userName) throws SQLException;

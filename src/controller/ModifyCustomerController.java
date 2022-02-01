@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Country;
+import model.FirstLvlDivision;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,11 +30,9 @@ public class ModifyCustomerController implements Initializable {
     @FXML
     private TextField customerPostalCodeTxt;
     @FXML
-    private ComboBox customerStateCB;
+    private ComboBox<Country> customerCountryCB;
     @FXML
-    private ComboBox customerCountryCB;
-    @FXML
-    private ComboBox customerDivisionIDCB;
+    private ComboBox<FirstLvlDivision> customerDivisionIDCB;
     @FXML
     private Button saveCustomerBtn;
     @FXML

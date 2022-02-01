@@ -1,29 +1,24 @@
 
 package DAO;
 
-
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import model.Contact;
-
 import java.sql.SQLException;
 
-/** Interface between the database and the POJO representation of the Contact table */
+/** This is the ContactDAO interface.
+ * This interface gets implemented by ContactDAOImpl and holds the methods for accessing Contact data in the database
+ */
 public interface ContactDAO {
 
-    /**
-     * getAllContacts. Return an observable list of all contacts from the database.
-     * @return ObservableList<Contact>
+    /** Gets the list of all contacts in the database.
+     * @return The list of contacts stored in the db.
      */
-    @FXML
     public ObservableList<Contact> getAllContacts() ;
 
-    /**
-     * getContact. Returns specific contact.
-     * @param contactId Integer
-     * @return Contact
-     * @throws SQLException throws SQLException in case a database error occurs.
+    /** Gets a contact based on their contact ID.
+     * @param contactId The contact's unique ID.
+     * @return The contact whose ID is a match in the database.
+     * @throws SQLException
      */
-    @FXML
     public Contact getContact(int contactId) throws SQLException;
 }

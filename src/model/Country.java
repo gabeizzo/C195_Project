@@ -10,8 +10,6 @@ public class Country {
     private Timestamp lastUpdate;
     private String lastUpdateBy;
 
-
-
     public Country(int countryID, String countryName, LocalDate createDate, Timestamp lastUpdate, String lastUpdateBy){
         this.countryID = countryID;
         this.countryName = countryName;

@@ -38,7 +38,7 @@ public class UserDAOImpl implements UserDAO{
         String createdBy;
         Timestamp lastUpdate;
         String lastUpdatedBy;
-        // Get result set data and create a user object, then add the user to the allUsers ObservableList.
+        // Gets the result set data and creates a user object, then add the user to the allUsers ObservableList.
         try {
             while(rs.next()) {
                 userID = rs.getInt("User_ID");

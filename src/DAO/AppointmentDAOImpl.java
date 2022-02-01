@@ -12,11 +12,11 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class AppointmentDAOImpl implements AppointmentDAO{
-    private Connection connection = Main.connection;
+    private String allApptsFromDB = "SELECT * FROM appointments";
     private PreparedStatement pst;
     private ResultSet rs;
-    private String allApptsFromDB = "SELECT * FROM appointments";
-    ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    private Connection connection = Main.connection;
+    ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
     public AppointmentDAOImpl() throws SQLException {
     }
@@ -30,24 +30,24 @@ public class AppointmentDAOImpl implements AppointmentDAO{
         try {
             while(rs.next()) {
                 Appointment appointment = getAppointmentInformation();
-                appointments.add(appointment);
+                allAppointments.add(appointment);
             }
         } catch (SQLException e ) {
             System.out.println("There was an error: " + e.getMessage());
             e.printStackTrace();
         }
-        return appointments;
+        return allAppointments;
     }
 
     private Appointment getAppointmentInformation() throws SQLException{
         int appointmentID = rs.getInt("Appointment_ID");
-        String title = rs.getString("Title");
+        String apptTitle = rs.getString("Title");
         String description = rs.getString("Description");
         String location = rs.getString("Location");
-        String type = rs.getString("Type");
-        LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
-        LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
-        LocalDateTime creatDate = rs.getTimestamp("Create_Date").toLocalDateTime();
+        String apptType = rs.getString("Type");
+        LocalDateTime startTime = rs.getTimestamp("Start").toLocalDateTime();
+        LocalDateTime endTime = rs.getTimestamp("End").toLocalDateTime();
+        LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
         String createdBy = rs.getString("Created_By");
         LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
         String lastUpdatedBy = rs.getString("Last_Updated_By");
@@ -55,9 +55,8 @@ public class AppointmentDAOImpl implements AppointmentDAO{
         int userID = rs.getInt("User_ID");
         int contactID = rs.getInt("Contact_ID");
 
-        Appointment appointment = new Appointment(appointmentID, title, description, location, type,
-                start, end, creatDate, createdBy, lastUpdate, lastUpdatedBy, customerID, userID, contactID);
-        return appointment;
+        return new Appointment(appointmentID, apptTitle, description, location, apptType,
+                startTime, endTime, createDate, createdBy, lastUpdate, lastUpdatedBy, customerID, userID, contactID);
     }
 
 }

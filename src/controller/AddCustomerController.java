@@ -36,8 +36,6 @@ public class AddCustomerController implements Initializable {
     @FXML
     private TextField customerPostalCodeTxt;
     @FXML
-    private ComboBox customerStateCB;
-    @FXML
     private ComboBox<Country> customerCountryCB;
     @FXML
     private ComboBox<FirstLvlDivision> customerDivisionIDCB;
