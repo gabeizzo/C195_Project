@@ -12,11 +12,11 @@ public class Appointment {
         private int customerID;
         private int userID;
         private int contactID;
-        private int appointmentID;
-        private String title;
+        private int apptID;
+        private String apptTitle;
         private String description;
         private String location;
-        private String type;
+        private String apptType;
         private String createdBy;
         private String lastUpdatedBy;
         private LocalDateTime startDateTime;
@@ -27,11 +27,11 @@ public class Appointment {
         private User user;
 
         /** The appointment constructor, used to construct Appointment objects.
-         *  @param appointmentID The id of the appointment.
-         *  @param title The title of the appointment.
+         *  @param apptID The id of the appointment.
+         *  @param apptTitle The title of the appointment.
          *  @param description The description of the appointment.
          *  @param location The location of the appointment.
-         *  @param type The type of the appointment.
+         *  @param apptType The type of the appointment.
          *  @param startDateTime The start date/time of the appointment.
          *  @param endDateTime The end date/time of the appointment.
          *  @param createDate The date the appointment was created.
@@ -42,14 +42,14 @@ public class Appointment {
          *  @param contactID The contact ID for the appointment.
          *  @param userID The user ID who created the appointment.
          *  */
-        public Appointment(int appointmentID, String title, String description, String location, String type,
+        public Appointment(int apptID, String apptTitle, String description, String location, String apptType,
                            LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createDate, String createdBy,
                            LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) {
-            this.appointmentID = appointmentID;
-            this.title = title;
+            this.apptID = apptID;
+            this.apptTitle = apptTitle;
             this.description = description;
             this.location = location;
-            this.type = type;
+            this.apptType = apptType;
             this.startDateTime = startDateTime;
             this.endDateTime = endDateTime;
             this.createDate = createDate;
@@ -64,29 +64,29 @@ public class Appointment {
         /** Gets the appointment ID.
          * @return The appointment ID.
          */
-        public int getAppointmentID() {
-            return appointmentID;
+        public int getApptID() {
+            return apptID;
         }
 
         /** Sets the appointment ID.
-         * @param appointmentID The appointment ID to set.
+         * @param apptID The appointment ID to set.
          */
-        public void setAppointmentID(int appointmentID) {
-            this.appointmentID = appointmentID;
+        public void setApptID(int apptID) {
+            this.apptID = apptID;
         }
 
         /** Gets the appointment title.
          * @return The appointment's title.
          */
-        public String getTitle() {
-            return title;
+        public String getApptTitle() {
+            return apptTitle;
         }
 
         /** Sets the appointment title.
-         * @param title The appointment title to set.
+         * @param apptTitle The appointment title to set.
          */
-        public void setTitle(String title) {
-            this.title = title;
+        public void setApptTitle(String apptTitle) {
+            this.apptTitle = apptTitle;
         }
 
         /** Gets the appointment's description.
@@ -120,15 +120,15 @@ public class Appointment {
         /** Gets the appointment type.
          * @return The appointment's type.
          */
-        public String getType() {
-            return type;
+        public String getApptType() {
+            return apptType;
         }
 
         /** Sets the appointment type.
-         * @param type The appointment's type to set.
+         * @param apptType The appointment's type to set.
          */
-        public void setType(String type) {
-            this.type = type;
+        public void setApptType(String apptType) {
+            this.apptType = apptType;
         }
 
         /** Gets the start date and time of the appointment.
@@ -286,6 +286,16 @@ public class Appointment {
             this.userID = userID;
         }
 
+    /** Gets the user who is associated with the appointment.
+     * @return The user associated with the appointment.
+     * @throws SQLException
+     */
+    public User getUser() throws SQLException {
+        UserDAOImpl userDAO = new UserDAOImpl();
+        this.user = userDAO.getUser(getUserID());
+        return this.user;
+    }
+
         /** Gets the appointment's contact ID.
          * @return The contact ID associated with the appointment.
          */
@@ -319,13 +329,4 @@ public class Appointment {
         return contact.getContactName();
     }
 
-    /** Gets the user who is associated with the appointment.
-     * @return The user associated with the appointment.
-     * @throws SQLException
-     */
-    public User getUser() throws SQLException {
-        UserDAOImpl userDAO = new UserDAOImpl();
-        this.user = userDAO.getUser(getUserID());
-        return this.user;
-    }
 }

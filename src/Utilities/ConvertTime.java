@@ -50,7 +50,7 @@ public class ConvertTime {
      * @param apptEndTime
      * @return ComboBox<LocalTime>
      */
-    public static ComboBox<LocalTime> allTimes(ComboBox<LocalTime> localTimeCB, LocalTime apptStartTime, LocalTime apptEndTime) {
+    public static ComboBox<LocalTime> displayValidTimes(ComboBox<LocalTime> localTimeCB, LocalTime apptStartTime, LocalTime apptEndTime) {
         while(apptStartTime.isBefore(apptEndTime.plusSeconds(1))) {
             localTimeCB.getItems().add(apptStartTime);
             apptStartTime = apptEndTime.plusMinutes(15);

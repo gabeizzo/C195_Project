@@ -64,6 +64,16 @@ public class User {
         this.userName = userName;
     }
 
+    /** This method is used to override the default Object class's toString method.
+     * This resolves the display issues in the combo boxes when pulling up user names.
+     * Instead of it displaying the package.class.hashcode it will display the user's name.
+     * @return The user's username.
+     */
+    @Override
+    public String toString() {
+        return userName;
+    }
+
     /** Gets the user's password.
      * @return The user's password.
      */
@@ -134,11 +144,4 @@ public class User {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
-    /** Overrides the toString method to display the user's username.
-     * @return The user's username.
-     */
-    @Override
-    public String toString() {
-        return userName;
-    }
 }

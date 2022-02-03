@@ -50,6 +50,16 @@ public class Customer {
         return customerID;
     }
 
+    /** This method overrides the Object class's default toString method.
+     * If not used, the combo box for Customer ID will populate with the package.class.hashcode.
+     * This method fixes this issue and returns the customer's ID and name instead.
+     * @return The customer's ID and name as a string to be displayed in the combo box.
+     */
+    @Override
+    public String toString() {
+        return customerID +": " + customerName;
+    }
+
     /** Sets the ID of the customer.
      * @param customerID Integer
      */

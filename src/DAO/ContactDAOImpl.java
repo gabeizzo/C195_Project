@@ -14,14 +14,13 @@ import java.sql.SQLException;
  * This class implements the ContactDAO interface for accessing contact data from the database to be used in the application.
  */
 public class ContactDAOImpl {
-
     private final String selectAllContacts = "SELECT * FROM contacts";
     private final PreparedStatement pst;
     private final ResultSet rs;
-    private final ObservableList<Contact> contacts = FXCollections.observableArrayList();
+    private final ObservableList<Contact> allContacts = FXCollections.observableArrayList();
     Connection connection = Main.connection;
 
-    /** This is the ContactDAOImpl constructor which is used to create instances of UserDAOImpl(user data access object implementations).
+    /** This is the ContactDAOImpl constructor which is used to create user data access object implementations.
      * @throws SQLException
      */
     public ContactDAOImpl() throws SQLException {
@@ -45,13 +44,13 @@ public class ContactDAOImpl {
                 contactEmail = rs.getString("Email");
 
                 Contact contact = new Contact(contactID, contactName, contactEmail);
-                contacts.add(contact);
+                allContacts.add(contact);
             }
         } catch(SQLException e) {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
-        return contacts;
+        return allContacts;
     }
     /** Gets the contact from the database based on their contact ID.
      * @param contactId The contact's ID.
@@ -63,7 +62,6 @@ public class ContactDAOImpl {
         DBQuery.setPreparedStatement(connection,selectContact);
         PreparedStatement pst = DBQuery.getPreparedStatement();
         ResultSet rs = pst.executeQuery();
-
 
         while(rs.next()) {
             int contactID = rs.getInt("Contact_ID");

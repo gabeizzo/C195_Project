@@ -9,7 +9,7 @@ import java.time.LocalTime;
  */
 public class FirstLvlDivision {
     private int divisionID;
-    private String division;
+    private String divisionName;
     private LocalDate createDate;
     private LocalTime createTime;
     private String createdBy;
@@ -19,7 +19,7 @@ public class FirstLvlDivision {
 
     /** This is the FirstLvlDivision constructor.
      * @param divisionID The first level division's ID.
-     * @param division The division's name.
+     * @param divisionName The division's name.
      * @param createDate The division's create date.
      * @param createTime The division's create time.
      * @param createdBy The person who created the division data.
@@ -27,9 +27,9 @@ public class FirstLvlDivision {
      * @param lastUpdateBy The person who last updated the division data.
      * @param countryID Integer
      */
-    public FirstLvlDivision(int divisionID, String division, LocalDate createDate, LocalTime createTime, String createdBy, Timestamp lastUpdate, String lastUpdateBy, int countryID) {
+    public FirstLvlDivision(int divisionID, String divisionName, LocalDate createDate, LocalTime createTime, String createdBy, Timestamp lastUpdate, String lastUpdateBy, int countryID) {
         this.divisionID = divisionID;
-        this.division = division;
+        this.divisionName = divisionName;
         this.createDate = createDate;
         this.createTime = createTime;
         this.createdBy = createdBy;
@@ -38,140 +38,125 @@ public class FirstLvlDivision {
         this.countryID = countryID;
     }
 
-    /**
-     * getDivisionID. Returns division ID associated with the division.
-     * @return divisionID Integer
+    /** Gets the first level division's ID.
+     * @return The division ID.
      */
     public int getDivisionID() {
         return divisionID;
     }
 
-    /**
-     * setDivisionID. Sets the divisionID of the division.
-     * @param divisionID Integer.
+    /** Sets the first level division's ID.
+     * @param divisionID The division ID to set.
      */
     public void setDivisionID(int divisionID) {
         this.divisionID = divisionID;
     }
 
-    /**
-     * getDivision. Returns the division name.
-     * @return String division.
+    /** Gets the first level division's name.
+     * @return The division's name.
      */
-    public String getDivision() {
-        return division;
+    public String getDivisionName() {
+        return divisionName;
     }
 
-    /**
-     * setDivision. Sets the division name of the division.
-     * @param division String
+    /** This method overrides the Object class's default toString method.
+     * This fixes the issue of displaying the package.class.hashcode instead of division name in combo boxes throughout the application.
+     * @return division String
      */
-    public void setDivision(String division) {
-        this.division = division;
+    @Override
+    public String toString() {
+        return divisionName;
     }
 
-    /**
-     * getCreateDate. Returns creation date of the divison.
-     * @return LocalDate createDate
+    /** Sets the first level division's name.
+     * @param divisionName The division's name to set.
+     */
+    public void setDivisionName(String divisionName) {
+        this.divisionName = divisionName;
+    }
+
+    /** Gets the first level division's create date.
+     * @return The date that the fld info was created.
      */
     public LocalDate getCreateDate() {
         return createDate;
     }
 
-    /**
-     * setCreateDate. Sets the creation date of the division.
+    /** Sets the first level division's creation date.
      * @param createDate LocalDate
      */
     public void setCreateDate(LocalDate createDate) {
         this.createDate = createDate;
     }
 
-    /**
-     * getCreateTime. Returns the creation time of the division.
-     * @return LocalTime createTime.
+    /** Gets the first level division's creation time.
+     * @return The time that the fld info was created.
      */
     public LocalTime getCreateTime() {
         return createTime;
     }
 
-    /**
-     * setCreateTime. Sets the creation time of the division.
-     * @param createTime LocalTime createTime.
+    /** Sets the first level division's creation time.
+     * @param createTime The time that the fld info was created.
      */
     public void setCreateTime(LocalTime createTime) {
         this.createTime = createTime;
     }
 
-    /**
-     * getCreatedBy. Returns who created the division.
-     * @return String createdBy.
+    /** Gets the first level division's created by user info.
+     * @return The user who created the fld info.
      */
     public String getCreatedBy() {
         return createdBy;
     }
 
-    /**
-     * setCreatedBy. Sets who created the division.
-     * @param createdBy String
+    /** Sets the first level division's created by info.
+     * @param createdBy The user who created the fld info.
      */
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
-    /**
-     * getLastUpdate. Returns the timestamp of the last update of the division.
-     * @return Timestamp lastUpdate.
+    /** Gets the timestamp of the first level division's last update.
+     * @return The time that the fld info was last updated.
      */
     public Timestamp getLastUpdate() {
         return lastUpdate;
     }
 
-    /**
-     * setLastUpdate. Sets the time of the last update of the division.
-     * @param lastUpdate Timestamp.
+    /** Sets the first level division's last update info.
+     * @param lastUpdate The time that the fld info was last updated.
      */
     public void setLastUpdate(Timestamp lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
-    /**
-     * getLastUpdatedBy. Returns the user who last updated the division.
-     * @return lastUpdatedBy String.
+    /** Gets the first level division's last updated by user info.
+     * @return The user who last updated the division data.
      */
     public String getLastUpdateBy() {
         return lastUpdateBy;
     }
 
-    /**
-     * setLastUpdatedBy. Sets the lastUpdateBy field.
-     * @param lastUpdateBy String.
+    /** Sets the first level division's last updated by info.
+     * @param lastUpdateBy The user who last updated the division data.
      */
     public void setLastUpdateBy(String lastUpdateBy) {
         this.lastUpdateBy = lastUpdateBy;
     }
 
-    /**
-     * getCountryID. Returns the country ID associated with the division.
-     * @return countryID Integer.
+    /** Gets the first level division's corresponding country ID.
+     * @return The country ID of the division.
      */
     public int getCountryID() {
         return countryID;
     }
 
-    /**
-     * setCountryID. Sets the country ID of the division.
-     * @param countryID Integer
+    /** Sets the first level division's corresponding countryID.
+     * @param countryID The country ID for the division.
      */
     public void setCountryID(int countryID) {
         this.countryID = countryID;
     }
 
-    /**
-     * toString. Overrides the default toString method. Returns the division name.
-     * @return division String
-     */
-    @Override
-    public String toString() {
-        return division;
-    }
 }

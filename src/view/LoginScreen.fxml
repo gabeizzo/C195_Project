@@ -27,7 +27,7 @@
             <ColorAdjust />
          </effect>
       </Label>
-      <Label fx:id="appTitleLabel" layoutX="132.0" layoutY="42.0" text="Appointment Scheduler" textFill="WHITE">
+      <Label fx:id="appTitleLabel" layoutX="90.0" layoutY="47.0" text="Appointment Scheduler Login" textFill="WHITE">
          <font>
             <Font name="System Bold" size="30.0" />
          </font>
@@ -35,7 +35,7 @@
             <DropShadow />
          </effect>
       </Label>
-      <Label fx:id="localTimeZoneLabel" layoutX="140.0" layoutY="108.0" text="Local Timezone:" textFill="WHITE">
+      <Label fx:id="localTimeZoneLabel" layoutX="167.0" layoutY="108.0" text="Local Timezone:" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -43,7 +43,7 @@
       <Button fx:id="resetButton" layoutX="408.0" layoutY="200.0" mnemonicParsing="false" onAction="#resetFields" prefHeight="26.0" prefWidth="58.0" text="Reset" />
       <Button fx:id="loginButton" layoutX="408.0" layoutY="248.0" mnemonicParsing="false" onAction="#onActionLogin" prefHeight="26.0" prefWidth="58.0" text="Login" />
       <Button fx:id="exitButton" layoutX="527.0" layoutY="357.0" mnemonicParsing="false" onAction="#exitApplication" prefHeight="26.0" prefWidth="58.0" text="Exit" />
-      <Label fx:id="timeZoneID" layoutX="283.0" layoutY="108.0" text="timeZoneID" textFill="WHITE">
+      <Label fx:id="timeZoneID" layoutX="310.0" layoutY="108.0" text="timeZoneID" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

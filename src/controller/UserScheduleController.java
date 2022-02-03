@@ -1,5 +1,8 @@
 package controller;
 
+import DAO.AppointmentDAOImpl;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,42 +12,82 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class UserScheduleController implements Initializable {
+    private AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
+    private ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+    private ObservableList<Appointment> testUser;
+    private ObservableList<Appointment> adminUser;
     @FXML
     private Button mainMenuButton;
     @FXML
-    private TableColumn userNameCol;
+    private TableColumn<Appointment, String> userNameCol;
     @FXML
-    private TableColumn apptIDCol;
+    private TableColumn<Appointment, Integer> apptIDCol;
     @FXML
-    private TableColumn titleCol;
+    private TableColumn<Appointment, String> titleCol;
     @FXML
-    private TableColumn typeCol;
+    private TableColumn<Appointment, String> typeCol;
     @FXML
-    private TableColumn descriptionCol;
+    private TableColumn<Appointment, String> descriptionCol;
     @FXML
-    private TableColumn apptDateCol;
+    private TableColumn<Appointment, String> apptDateCol;
     @FXML
-    private TableColumn startTimeCol;
+    private TableColumn<Appointment, String> startTimeCol;
     @FXML
-    private TableColumn endTimeCol;
+    private TableColumn<Appointment, String> endTimeCol;
     @FXML
-    private TableColumn customerIDCol;
+    private TableColumn<Appointment, Integer> customerIDCol;
     @FXML
-    private TableView userScheduleTable;
+    private TableView<Appointment> userScheduleTable;
+
+    /** This is the constructor for the UserScheduleController.
+     * @throws SQLException
+     */
+    public UserScheduleController() throws SQLException {
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+     //   try {
+
+            // Grab all user specific users appointments
+          //  testUser = appointmentDAO.getUserSpecificAppointment(1);
+         //   adminUser = appointmentDAO.getUserSpecificAppointment(2);
+            // add each user's list to overall list
+         //   addListToAllContactAppointments(firstUser);
+          //  addListToAllContactAppointments(secondUser);
+            // set up table view
+            userScheduleTable.setItems(allAppointments);
+            userNameCol.setCellValueFactory(new PropertyValueFactory<>("user"));
+            apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+            titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+            descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+
+            apptDateCol.setCellValueFactory(new PropertyValueFactory<>("startDateFormatted"));
+            startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTimeFormatted"));
+            endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTimeFormatted"));
+            customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+
+       /* } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }*/
+
 
     }
 
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
         Stage stage = (Stage) (mainMenuButton.getScene().getWindow());
         stage.setTitle("Appointment Scheduler Main Menu");
         stage.setScene(new Scene(root,1200 ,700));

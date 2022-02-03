@@ -25,10 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.TimeZone;
+import java.util.*;
 
 public class LoginScreenController implements Initializable {
     private AppointmentDAOImpl AppointmentDAO;
@@ -108,7 +105,7 @@ public class LoginScreenController implements Initializable {
            System.out.println("Login successful!");
            userName = usernameInput;
 
-           Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+           Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
            Stage stage = (Stage) (loginButton.getScene().getWindow());
            stage.setTitle("Appointment Scheduler Main Menu");
            stage.setScene(new Scene(root, 1200, 700));

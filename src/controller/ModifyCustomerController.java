@@ -14,6 +14,7 @@ import model.Country;
 import model.FirstLvlDivision;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ModifyCustomerController implements Initializable {
@@ -45,7 +46,7 @@ public class ModifyCustomerController implements Initializable {
 
     public void saveModifiedCustomer(ActionEvent actionEvent) throws IOException{
         //if else here with exceptions and try catch block
-        Parent root = FXMLLoader.load(getClass().getResource("/view/CustomersMenu.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/CustomersMenu.fxml")));
         Stage stage = (Stage) (saveCustomerBtn.getScene().getWindow());
         stage.setTitle("Customers Menu");
         stage.setScene(new Scene(root,1200 ,700));
@@ -53,7 +54,7 @@ public class ModifyCustomerController implements Initializable {
     }
 
     public void toCustomersMenu(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/CustomersMenu.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/CustomersMenu.fxml")));
         Stage stage = (Stage) (cancelModifyCustomerBtn.getScene().getWindow());
         stage.setTitle("Customers Menu");
         stage.setScene(new Scene(root,1200 ,700));

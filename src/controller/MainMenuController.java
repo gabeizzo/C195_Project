@@ -4,7 +4,6 @@
  * @Javadoc Javadoc located in the project folder in a separate folder titled javadoc. Example file path: \C195_Project\javadoc<b/>
  */
 
-
 package controller;
 
 import DAO.AppointmentDAOImpl;
@@ -24,7 +23,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class MainMenuController implements Initializable {
     @FXML
@@ -90,6 +92,9 @@ public class MainMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ZoneId localTimezone = ZoneId.of(TimeZone.getDefault().getID());
+        timeZoneID.setText(localTimezone.toString());
+
         apptsViewToggle = new ToggleGroup();
         allApptsRadioBtn.setToggleGroup(apptsViewToggle);
         currentMonthRadioBtn.setToggleGroup(apptsViewToggle);
@@ -108,7 +113,7 @@ public class MainMenuController implements Initializable {
     }
 
     public void toScheduleAppointment(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/ScheduleAppointment.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ScheduleAppointment.fxml")));
         Stage stage = (Stage) (scheduleApptButton.getScene().getWindow());
         stage.setTitle("Schedule Appointment");
         stage.setScene(new Scene(root,400 ,700));
@@ -116,7 +121,8 @@ public class MainMenuController implements Initializable {
     }
 
     public void toModifyAppointment(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/ModifyAppointment.fxml"));
+        apptToModify = apptsTable.getSelectionModel().getSelectedItem();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyAppointment.fxml")));
         Stage stage = (Stage) (modifyApptButton.getScene().getWindow());
         stage.setTitle("Modify Appointment");
         stage.setScene(new Scene(root,400 ,700));
@@ -124,7 +130,7 @@ public class MainMenuController implements Initializable {
     }
 
     public void toCustomersMenu(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/CustomersMenu.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/CustomersMenu.fxml")));
         Stage stage = (Stage) (customersMenuButton.getScene().getWindow());
         stage.setTitle("Customers Menu");
         stage.setScene(new Scene(root,1200 ,700));
@@ -133,7 +139,7 @@ public class MainMenuController implements Initializable {
     }
 
     public void toReportsByMonthAndType(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/ReportsByMonthAndType.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ReportsByMonthAndType.fxml")));
         Stage stage = (Stage) (reportsByMonthAndTypeButton.getScene().getWindow());
         stage.setTitle("Reports By Month and Type");
         stage.setScene(new Scene(root,600 ,500));
@@ -141,7 +147,7 @@ public class MainMenuController implements Initializable {
     }
 
     public void toContactSchedule(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/ContactSchedule.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ContactSchedule.fxml")));
         Stage stage = (Stage) (contactScheduleButton.getScene().getWindow());
         stage.setTitle("Contact Schedule");
         stage.setScene(new Scene(root,1200 ,700));
@@ -149,7 +155,7 @@ public class MainMenuController implements Initializable {
     }
 
     public void toUserSchedule(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/UserSchedule.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/UserSchedule.fxml")));
         Stage stage = (Stage) (userScheduleButton.getScene().getWindow());
         stage.setTitle("User Schedule");
         stage.setScene(new Scene(root,1200 ,700));
@@ -161,12 +167,12 @@ public class MainMenuController implements Initializable {
 
     private void viewAllAppts() throws SQLException {
         apptsTable.setItems(allAppts);
-        apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
-        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        apptIDCol.setCellValueFactory(new PropertyValueFactory<>("apptID"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         contactCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
         dateCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("startDateFormatted"));
         startTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, LocalTime>("startTimeFormatted"));
         endTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, LocalTime>("endTimeFormatted"));

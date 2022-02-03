@@ -17,29 +17,44 @@ public class AppointmentDAOImpl implements AppointmentDAO{
     private ResultSet rs;
     private Connection connection = Main.connection;
     ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+    ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
 
+    /** The AppointmentDAOImpl constructor.
+     * @throws SQLException
+     */
     public AppointmentDAOImpl() throws SQLException {
     }
+
     @Override
     public ObservableList<Appointment> getAllAppts() throws SQLException {
-        // set up a query to the database and get results
+        //Query DB
         DBQuery.setPreparedStatement(connection, allApptsFromDB);
         pst = DBQuery.getPreparedStatement();
         rs = pst.executeQuery();
-        // create an appointment from the information and add to an overall list
+
         try {
             while(rs.next()) {
-                Appointment appointment = getAppointmentInformation();
-                allAppointments.add(appointment);
+                Appointment appt = getApptData();
+                allAppointments.add(appt);
             }
         } catch (SQLException e ) {
-            System.out.println("There was an error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return allAppointments;
     }
 
-    private Appointment getAppointmentInformation() throws SQLException{
+    @Override
+    public Appointment getAppt(int appointmentID) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public ObservableList<Appointment> getApptByType(String apptType) throws SQLException {
+        return null;
+    }
+
+    private Appointment getApptData() throws SQLException{
         int appointmentID = rs.getInt("Appointment_ID");
         String apptTitle = rs.getString("Title");
         String description = rs.getString("Description");
@@ -58,5 +73,60 @@ public class AppointmentDAOImpl implements AppointmentDAO{
         return new Appointment(appointmentID, apptTitle, description, location, apptType,
                 startTime, endTime, createDate, createdBy, lastUpdate, lastUpdatedBy, customerID, userID, contactID);
     }
+
+    /** Gets the list of current month's appts to be displayed when the View Current Month radio button is selected.
+     * @return The list of all current month's appointment to be displayed.
+     * @throws SQLException
+     */
+    @Override
+    public ObservableList<Appointment> getCurrMonthAppts() throws SQLException {
+        // Query DB for current month's appointments to be displayed when the corresponding radio button is selected.
+        String selectCurrMonthAppts = "Select * from appointments WHERE MONTH(start)=MONTH(current_date()) AND YEAR(start)=year(current_date())";
+        DBQuery.setPreparedStatement(connection, selectCurrMonthAppts);
+        pst = DBQuery.getPreparedStatement();
+        rs = pst.executeQuery();
+
+        try {
+            while(rs.next()) {
+                Appointment appt = getApptData();
+                currMonthAppts.add(appt);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return currMonthAppts;
+    }
+
+    @Override
+    public ObservableList<Appointment> getApptByContactID(int contactID) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public ObservableList<Appointment> getApptByUserID(int userID) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void addAppt(String apptTitle, String description, String location, String apptType, LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) throws SQLException {
+
+    }
+
+    @Override
+    public void modifyAppt(int apptID, String apptTitle, String description, String location, String apptType, LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) throws SQLException {
+
+    }
+
+    @Override
+    public void deleteAppt(int appointmentID) throws SQLException {
+
+    }
+
+    @Override
+    public void deleteCustLinkedAppts(int customerID) throws SQLException {
+
+    }
+
 
 }

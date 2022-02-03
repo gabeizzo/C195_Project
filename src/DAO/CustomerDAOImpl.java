@@ -14,7 +14,7 @@ public class CustomerDAOImpl implements CustomerDAO{
     private final String selectAllCustomers = "SELECT * FROM customers";
     private String insertStatement = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, Division_ID) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private String getCustomerStatement = "SELECT * from customers where Customer_ID=";
-    private PreparedStatement preparedStatement;
+    private PreparedStatement pst;
     private ResultSet rs;
     private Connection connection = Main.connection;
 
@@ -23,9 +23,9 @@ public class CustomerDAOImpl implements CustomerDAO{
 
     }
 
-    /** Creates a customer object.
-     * @return Customer object.
-     * @throws SQLException Throws SQLException if there is a MySQL database error.
+    /** Creates a new customer object and associates the related table columns with the customer data.
+     * @return A new Customer object.
+     * @throws SQLException
      */
     private Customer createCustomer() throws SQLException {
         int customerID = rs.getInt("Customer_ID");
@@ -39,8 +39,33 @@ public class CustomerDAOImpl implements CustomerDAO{
         String lastUpdatedBy = rs.getString("Last_Updated_By");
         int divisionID = rs.getInt("Division_ID");
 
-        Customer customer = new Customer(customerID, customerName, customerAddress, postalCode, phone,
+        return new Customer(customerID, customerName, customerAddress, postalCode, phone,
                 createDateTime, createdBy, lastUpdate, lastUpdatedBy, divisionID);
-        return customer;
     }
+
+    @Override
+    public Customer getCustomer(int customerID) throws SQLException {
+        return null;
+    }
+    @Override
+    public ObservableList<Customer> allCustomers() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void addCustomer(String customerName, String address, String postalCode, String phone, String createdBy, String lastUpdatedBy, int divisionID) throws SQLException {
+
+    }
+
+    @Override
+    public void modifyCustomer(int customerID, String customerName, String address, String postalCode, String phone, int divisionID, String lastUpdatedBy) throws SQLException {
+
+    }
+
+    @Override
+    public void deleteCustomer(int customerID) throws SQLException {
+
+    }
+
+
 }
