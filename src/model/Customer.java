@@ -44,10 +44,24 @@ public class Customer {
     }
 
     /** Gets the ID of the customer.
-     * @return customerID Integer
+     * @return The customer's ID.
      */
     public int getCustomerID() {
         return customerID;
+    }
+
+    /** Sets the ID of the customer.
+     * @param customerID The customer's unique id.
+     */
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
+
+    /** Gets the customer's name.
+     * @return The customer's name.
+     */
+    public String getCustomerName() {
+        return customerName;
     }
 
     /** This method overrides the Object class's default toString method.
@@ -57,88 +71,74 @@ public class Customer {
      */
     @Override
     public String toString() {
-        return customerID +": " + customerName;
-    }
-
-    /** Sets the ID of the customer.
-     * @param customerID Integer
-     */
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
-    }
-
-    /** Gets the customer's name.
-     * @return customerName String
-     */
-    public String getCustomerName() {
-        return customerName;
+        return customerName + "[" + customerID + "]";
     }
 
     /** Sets the name of the customer.
-     * @param customerName String
+     * @param customerName The customer's name to set.
      */
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
 
     /** Gets the address of the customer.
-     * @return address String
+     * @return The customer's address.
      */
     public String getAddress() {
         return address;
     }
 
     /** Sets the address of the customer.
-     * @param address String
+     * @param address The customer's address.
      */
     public void setAddress(String address) {
         this.address = address;
     }
 
     /** Gets the postalCode of the customer.
-     * @return postalCode String
+     * @return The customer's postal code.
      */
     public String getPostalCode() {
         return postalCode;
     }
 
-    /** Sets the customer postalCode.
-     * @param postalCode String
+    /** Sets the customer's postalCode.
+     * @param postalCode The customer's postal code.
      */
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
     /** Gets the customer's phone number.
-     * @return phone String
+     * @return The customer's phone number.
      */
     public String getPhone() {
         return phone;
     }
 
     /** Sets the customer's phone number.
-     * @param phone String
+     * @param phone The customer's phone number.
      */
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    /** Gets the creation date/time of the customer in the system.
-     * @return LocalDateTime createDateTime
+    /** Gets the creation date/time of the customer in the database.
+     * @return The date and time the customer was added to the database.
      */
     public LocalDateTime getCreateDateTime() {
         return createDateTime;
     }
 
     /** Gets the Customer creation date in the format of MMMM,DD YYYY.
-     * @return createDate String
+     * @return The date that the customer was created.
      */
     public String getCreateDateFormatted() {
         return ConvertTime.dateFormatted(getCreateDateTime());
     }
 
-    /** Sets the date and time that the Customer was created.
-     * @param createDateTime LocalDateTime
+    /** Sets the date and time that the customer was created.
+     * @param createDateTime The date and time the customer was created.
      */
     public void setCreateDateTime(LocalDateTime createDateTime) {
         this.createDateTime = createDateTime;
@@ -166,14 +166,14 @@ public class Customer {
     }
 
     /** Gets the last time the customer was updated (formatted).
-     * @return The last time Customer was updated.
+     * @return The last time the customer info was updated.
      */
     public String getLastUpdateFormatted() {
         return ConvertTime.dateFormatted(getLastUpdate());
     }
 
     /** Sets the local date/time of customer's last update.
-     * @param lastUpdate LocalDateTime
+     * @param lastUpdate The time that customer info was last updated.
      */
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;

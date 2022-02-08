@@ -5,10 +5,10 @@ public class Contact {
     private String contactName;
     private String contactEmail;
 
-    /** Contact constructor, used for instantiating Contact objects.
-     * @param contactID
-     * @param contactName
-     * @param contactEmail
+    /** Contact constructor, used for instantiating Contact model objects.
+     * @param contactID The contact's id.
+     * @param contactName The contact's name.
+     * @param contactEmail The contact's email.
      */
     public Contact(int contactID, String contactName, String contactEmail) {
         this.contactID = contactID;

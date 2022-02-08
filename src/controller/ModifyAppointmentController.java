@@ -83,17 +83,21 @@ public class ModifyAppointmentController implements Initializable {
     private Appointment apptToModify = MainMenuController.apptToModify;
 
 
-    /** This is the ModifyAppointmentController constructor.
+    /** The ModifyAppointmentController constructor.
      */
     public ModifyAppointmentController() throws SQLException {
     }
 
+    /** Initializes the Modify Appointment screen with the selected appointment data.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             // populate customer combo box and select current customer
-            customerIDCB.setItems(customerDAO.allCustomers());
-            customerIDCB.getSelectionModel().select(customerDAO.getCustomer(apptToModify.getCustomerID()));
+            customerIDCB.setItems(customerDAO.getAllCustomers());
+            customerIDCB.getSelectionModel().select(customerDAO.getCustomerByID(apptToModify.getCustomerID()));
 
             //  populate user combo box and select current user
             userNameCB.setItems(userDAO.getAllUsers());
@@ -101,7 +105,8 @@ public class ModifyAppointmentController implements Initializable {
             // populate contact combo box
             contactCB.setItems(contactDAO.getAllContacts());
             contactCB.getSelectionModel().select(contactDAO.getContact(apptToModify.getContactID()));
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }

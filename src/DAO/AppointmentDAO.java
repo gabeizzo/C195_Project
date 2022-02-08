@@ -1,59 +1,27 @@
 package DAO;
 
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import model.Appointment;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 /** This is the AppointmentDAO interface.
- * This interface holds the methods for accessing specific Appointment object data in the database.
+ * This interface defines the standard operations to be performed on Appointment model objects.
  */
 public interface AppointmentDAO {
 
-    /** Gets all appointments from the db to be displayed in the schedule table.
-     * @return ObservableList<Appointment>
-     * @throws SQLException throws SQLException in case a database error occurs.
+    /** Gets all appointments from the database to be displayed in the schedule table.
+     * @return The list of all appointments from the database.
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    @FXML
     public ObservableList<Appointment> getAllAppts() throws SQLException;
 
     /** Gets appointment based on the user id.
      * @param appointmentID The appointment's id that corresponds to the user's id.
      * @return The appointment associated with the user id.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public Appointment getAppt(int appointmentID) throws SQLException;
-
-    /** Gets a list of appts by type.
-     * Used as part of displaying the reports screen showing appts by Month and Type.
-     * @param apptType The appointment's type.
-     * @return The list of all appointments by type.
-     * @throws SQLException
-     */
-    public ObservableList<Appointment> getApptByType(String apptType) throws SQLException;
-
-    /** Gets the list of current month's appointments.
-     * This method is used when View Current Month's radio button is selected.
-     * @return The list of the current month's appointments.
-     * @throws SQLException
-     */
-    public ObservableList<Appointment> getCurrMonthAppts() throws SQLException;
-
-    /** Gets a list of appointments for a contact id.
-     * @param contactID The contact id associated with the appointment(s).
-     * @return The list of appointments for a contact id.
-     * @throws SQLException
-     */
-    public ObservableList<Appointment> getApptByContactID(int contactID) throws SQLException;
-
-    /** Gets the list of appointments for a user id.
-     * @param userID The user ID associated with the appointment(s).
-     * @return The list of appointments for a user id.
-     * @throws SQLException
-     */
-    public ObservableList<Appointment> getApptByUserID(int userID) throws SQLException;
-
 
     /** Adds an appointment to the schedule and stores it in the database.
      * @param apptTitle The appt title to add.
@@ -69,7 +37,7 @@ public interface AppointmentDAO {
      * @param customerID The customer ID the appointment is with.
      * @param userID The user ID associated with the appt.
      * @param contactID The contact ID associated with the appt.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public void addAppt(String apptTitle, String description, String location, String apptType,
                         LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createDate, String createdBy,
@@ -86,20 +54,50 @@ public interface AppointmentDAO {
      * @param customerID The customer ID to modify.
      * @param userID The user ID to modify.
      * @param contactID The ID of the contact to modify.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    void modifyAppt(int apptID, String apptTitle, String description, String location, String apptType,
-                    LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) throws SQLException;
+    public void modifyAppt(int apptID, String apptTitle, String description, String location, String apptType,
+                           LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) throws SQLException;
 
     /** Deletes an appointment based on the appointment ID.
      * @param appointmentID The ID of the appointment being deleted.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public void deleteAppt(int appointmentID) throws SQLException;
 
     /** Deletes appointments that match the customer ID being deleted.
      * @param customerID The customer ID associated with the appt.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public void deleteCustLinkedAppts(int customerID) throws SQLException;
+
+    /** Gets a list of appts by type.
+     * Used as part of displaying the reports screen showing appts by Month and Type.
+     * @param apptType The appointment's type.
+     * @return The list of all appointments by type.
+     * @throws SQLException Thrown if there is a MySQL database access error.
+     */
+    public ObservableList<Appointment> getApptsByType(String apptType) throws SQLException;
+
+    /** Gets the list of current month's appointments.
+     * This method is used when View Current Month's radio button is selected.
+     * @return The list of the current month's appointments.
+     * @throws SQLException Thrown if there is a MySQL database access error.
+     */
+    public ObservableList<Appointment> getCurrMonthAppts() throws SQLException;
+
+    /** Gets a list of appointments for a contact id.
+     * @param contactID The contact id associated with the appointment(s).
+     * @return The list of appointments for a contact id.
+     * @throws SQLException Thrown if there is a MySQL database access error.
+     */
+    public ObservableList<Appointment> getApptsByContactID(int contactID) throws SQLException;
+
+    /** Gets the list of appointments for a user id.
+     * @param userID The user ID associated with the appointment(s).
+     * @return The list of appointments for a user id.
+     * @throws SQLException Thrown if there is a MySQL database access error.
+     */
+    public ObservableList<Appointment> getApptsByUserID(int userID) throws SQLException;
+
 }

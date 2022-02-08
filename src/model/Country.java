@@ -69,21 +69,30 @@ public class Country {
         this.createDate = createDate;
     }
 
-    /** Gets the timestamp of
-     * @return
+    /** Gets the timestamp of the country's last update.
+     * @return The time of the country's last update.
      */
     public Timestamp getLastUpdate() {
         return lastUpdate;
     }
 
+    /** Sets the timestamp of the country's last update.
+     * @param lastUpdate The time of the country's last update.
+     */
     public void setLastUpdate(Timestamp lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
+    /** Gets the user who last updated the country info.
+     * @return The user who last updated the country's info.
+     */
     public String getLastUpdateBy() {
         return lastUpdateBy;
     }
 
+    /** Sets the user who last updated the country info.
+     * @param lastUpdateBy The user who last updated the country's info.
+     */
     public void setLastUpdateBy(String lastUpdateBy) {
         this.lastUpdateBy = lastUpdateBy;
     }

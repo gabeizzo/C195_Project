@@ -26,7 +26,7 @@ public class Main extends Application {
     }
     /** This method is the starting point for the application and launches the application.
      * The main method establishes the MySQL database connection, launches the application, and closes the connection on exit.
-     * @param args
+     * @param args The arguments for the main method.
      */
     public static void main(String[] args) throws SQLException {
 

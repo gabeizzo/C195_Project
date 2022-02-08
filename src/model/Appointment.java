@@ -288,7 +288,7 @@ public class Appointment {
 
     /** Gets the user who is associated with the appointment.
      * @return The user associated with the appointment.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public User getUser() throws SQLException {
         UserDAOImpl userDAO = new UserDAOImpl();
@@ -312,7 +312,7 @@ public class Appointment {
 
     /** Gets the contact associated with the appointment.
      * @return The contact associated with the appointment.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public Contact getContact() throws SQLException {
         ContactDAOImpl contactDAO = new ContactDAOImpl();
@@ -322,7 +322,7 @@ public class Appointment {
 
     /** Gets the appointment's contact name.
      * @return The contact name the appointment is with.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public String getContactName() throws SQLException {
         Contact contact = getContact();

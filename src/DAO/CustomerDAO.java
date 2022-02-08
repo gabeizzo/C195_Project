@@ -13,13 +13,13 @@ public interface CustomerDAO {
      * @return The customer whose ID is a match in the db.
      * @throws SQLException
      */
-    public Customer getCustomer(int customerID) throws SQLException;
+    public Customer getCustomerByID(int customerID) throws SQLException;
 
     /** Gets the list of all customers stored in the database.
      * @return The list of all customers stored in the database.
      * @throws SQLException
      */
-    public ObservableList<Customer> allCustomers() throws SQLException;
+    public ObservableList<Customer> getAllCustomers() throws SQLException;
 
     /** This method is used to add customers to the database once their information has been gathered in the Add Customer Menu form.
      * @param customerName The customer's name.
