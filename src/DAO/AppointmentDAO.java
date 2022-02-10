@@ -14,14 +14,14 @@ public interface AppointmentDAO {
      * @return The list of all appointments from the database.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public ObservableList<Appointment> getAllAppts() throws SQLException;
+    public ObservableList<Appointment> getAllApptsFromDB() throws SQLException;
 
     /** Gets appointment based on the user id.
      * @param appointmentID The appointment's id that corresponds to the user's id.
      * @return The appointment associated with the user id.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public Appointment getAppt(int appointmentID) throws SQLException;
+    public Appointment getApptByID(int appointmentID) throws SQLException;
 
     /** Adds an appointment to the schedule and stores it in the database.
      * @param apptTitle The appt title to add.
@@ -63,7 +63,7 @@ public interface AppointmentDAO {
      * @param appointmentID The ID of the appointment being deleted.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public void deleteAppt(int appointmentID) throws SQLException;
+    public void deleteApptFromDB(int appointmentID) throws SQLException;
 
     /** Deletes appointments that match the customer ID being deleted.
      * @param customerID The customer ID associated with the appt.

@@ -87,7 +87,7 @@ public class MainMenuController implements Initializable {
     public static Appointment apptToModify;
 
     public MainMenuController() throws SQLException{
-        allAppts = apptDAO.getAllAppts();
+        allAppts = apptDAO.getAllApptsFromDB();
     }
 
     @Override

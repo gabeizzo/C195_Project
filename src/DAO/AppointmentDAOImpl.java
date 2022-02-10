@@ -34,9 +34,9 @@ public class AppointmentDAOImpl implements AppointmentDAO{
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public ObservableList<Appointment> getAllAppts() throws SQLException {
+    public ObservableList<Appointment> getAllApptsFromDB() throws SQLException {
 
-        //Query the database to get all appointments, used with the View All radio button.
+        //Query the database to get all appointments (used with the View All radio button).
         String allApptsFromDB = "SELECT * FROM appointments";
         DBQuery.setPreparedStatement(connection, allApptsFromDB);
         pst = DBQuery.getPreparedStatement();
@@ -60,7 +60,7 @@ public class AppointmentDAOImpl implements AppointmentDAO{
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public Appointment getAppt(int appointmentID) throws SQLException {
+    public Appointment getApptByID(int appointmentID) throws SQLException {
 
         // Queries the MySQL database and selects all appointments that match a specified appointment ID.
         String selectByApptIDFromDB = "SELECT * FROM appointments WHERE Appointment_ID =" + appointmentID;
@@ -295,7 +295,7 @@ public class AppointmentDAOImpl implements AppointmentDAO{
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public void deleteAppt(int appointmentID) throws SQLException {
+    public void deleteApptFromDB(int appointmentID) throws SQLException {
         String deleteApptInDB = "DELETE FROM appointments WHERE Appointment_ID=" + appointmentID;
         DBQuery.setPreparedStatement(connection, deleteApptInDB);
 

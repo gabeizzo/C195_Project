@@ -14,28 +14,31 @@ import java.sql.SQLException;
  * This class implements the ContactDAO interface for accessing contact data from the database to be used in the application.
  */
 public class ContactDAOImpl {
-    private final String selectAllContacts = "SELECT * FROM contacts";
-    private final PreparedStatement pst;
-    private final ResultSet rs;
-    private final ObservableList<Contact> allContacts = FXCollections.observableArrayList();
     Connection connection = Main.connection;
+    private PreparedStatement pst;
+    private ResultSet rs;
 
-    /** This is the ContactDAOImpl constructor which is used to create user data access object implementations.
-     * @throws SQLException
+    ObservableList<Contact> allContacts = FXCollections.observableArrayList();
+
+
+    /** This is the ContactDAOImpl constructor for Contact data access object implementations.
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public ContactDAOImpl() throws SQLException {
-        DBQuery.setPreparedStatement(connection, selectAllContacts);
-        pst = DBQuery.getPreparedStatement();
-        rs = pst.executeQuery();
     }
 
     /** Gets the ObservableList of all Contact objects.
-     * @return All contacts in the list.
+     * @return All contacts in the database.
      */
-    public ObservableList<Contact> getAllContacts() {
+    public ObservableList<Contact> getAllContactsFromDB() throws SQLException {
+        int contactID;
         String contactName;
         String contactEmail;
-        int contactID;
+
+        String allContactsFromDB = "SELECT * FROM contacts";
+        DBQuery.setPreparedStatement(connection, allContactsFromDB);
+        pst = DBQuery.getPreparedStatement();
+        rs = pst.executeQuery();
 
         try {
             while(rs.next()) {
@@ -46,7 +49,8 @@ public class ContactDAOImpl {
                 Contact contact = new Contact(contactID, contactName, contactEmail);
                 allContacts.add(contact);
             }
-        } catch(SQLException e) {
+        }
+        catch(SQLException e) {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
@@ -55,11 +59,11 @@ public class ContactDAOImpl {
     /** Gets the contact from the database based on their contact ID.
      * @param contactId The contact's ID.
      * @return The contact whose ID matches the query.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public Contact getContact(int contactId) throws SQLException {
-        String selectContact = "SELECT * FROM contacts WHERE Contact_ID=" + contactId;
-        DBQuery.setPreparedStatement(connection,selectContact);
+    public Contact getContactByID(int contactId) throws SQLException {
+        String getContactByIDFromDB = "SELECT * FROM contacts WHERE Contact_ID=" + contactId;
+        DBQuery.setPreparedStatement(connection,getContactByIDFromDB);
         PreparedStatement pst = DBQuery.getPreparedStatement();
         ResultSet rs = pst.executeQuery();
 

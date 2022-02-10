@@ -316,7 +316,7 @@ public class Appointment {
      */
     public Contact getContact() throws SQLException {
         ContactDAOImpl contactDAO = new ContactDAOImpl();
-        this.contact = contactDAO.getContact(getContactID());
+        this.contact = contactDAO.getContactByID(getContactID());
         return this.contact;
     }
 

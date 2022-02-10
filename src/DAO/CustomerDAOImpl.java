@@ -74,7 +74,7 @@ public class CustomerDAOImpl implements CustomerDAO{
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public ObservableList<Customer> getAllCustomers() throws SQLException {
+    public ObservableList<Customer> getAllDBCustomers() throws SQLException {
         //Query database to get all customers listed.
         String getAllCustomersFromDB = "SELECT * FROM customers";
         DBQuery.setPreparedStatement(connection, getAllCustomersFromDB);

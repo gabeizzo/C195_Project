@@ -64,7 +64,7 @@ public class CustomersMenuController implements Initializable {
         try {
             // Grab all customers from the database and populate the table view.
             CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-            customerDataTable.setItems(customerDAO.getAllCustomers());
+            customerDataTable.setItems(customerDAO.getAllDBCustomers());
             customerIDCol.setCellValueFactory( new PropertyValueFactory<>("customerID"));
             customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
             addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));

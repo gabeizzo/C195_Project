@@ -96,15 +96,15 @@ public class ModifyAppointmentController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             // populate customer combo box and select current customer
-            customerIDCB.setItems(customerDAO.getAllCustomers());
+            customerIDCB.setItems(customerDAO.getAllDBCustomers());
             customerIDCB.getSelectionModel().select(customerDAO.getCustomerByID(apptToModify.getCustomerID()));
 
             //  populate user combo box and select current user
             userNameCB.setItems(userDAO.getAllUsers());
             userNameCB.getSelectionModel().select(userDAO.getUser(apptToModify.getUserID()));
             // populate contact combo box
-            contactCB.setItems(contactDAO.getAllContacts());
-            contactCB.getSelectionModel().select(contactDAO.getContact(apptToModify.getContactID()));
+            contactCB.setItems(contactDAO.getAllContactsFromDB());
+            contactCB.getSelectionModel().select(contactDAO.getContactByID(apptToModify.getContactID()));
         }
         catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
