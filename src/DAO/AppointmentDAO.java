@@ -69,7 +69,7 @@ public interface AppointmentDAO {
      * @param customerID The customer ID associated with the appt.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public void deleteCustLinkedAppts(int customerID) throws SQLException;
+    public void deleteCustomerAppts(int customerID) throws SQLException;
 
     /** Gets a list of appts by type.
      * Used as part of displaying the reports screen showing appts by Month and Type.

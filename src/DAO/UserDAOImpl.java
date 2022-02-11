@@ -61,10 +61,10 @@ public class UserDAOImpl implements UserDAO{
     /** Gets a user from the database based on their ID.
      * @param userID The ID of the user to be queried.
      * @return The user whose ID matches what is stored in the database.
-     * @throws SQLException If there is an issue accessing the database.
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public User getUser(int userID) throws SQLException {
+    public User getUserByID(int userID) throws SQLException {
         // Query the database for users based on their ID.
         String findUserByID = "SELECT * FROM users WHERE User_ID=" + userID;
         DBQuery.setPreparedStatement(connection, findUserByID);
@@ -84,13 +84,13 @@ public class UserDAOImpl implements UserDAO{
     }
     /** Gets a user from the database based on their name.
      * @param userName The name of the user.
-     * @return The user whose name matches the user names in the database.
-     * @throws SQLException throws SQLException in case a database error occurs.
+     * @return The user whose name matches the usernames in the database.
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public User getUser(String userName) throws SQLException {
-        String findUserByName = "SELECT * FROM users WHERE User_Name=" + userName;
-        DBQuery.setPreparedStatement(connection, findUserByName);
+    public User getUserByName(String userName) throws SQLException {
+        String getUserByNameFromDB = "SELECT * FROM users WHERE User_Name=" + userName;
+        DBQuery.setPreparedStatement(connection, getUserByNameFromDB);
         PreparedStatement pst = DBQuery.getPreparedStatement();
         ResultSet rs = pst.executeQuery();
 

@@ -164,7 +164,7 @@ public class CustomerDAOImpl implements CustomerDAO{
         DBQuery.setPreparedStatement(connection, deleteCustomerFromDB);
         try {
             PreparedStatement pst = DBQuery.getPreparedStatement();
-            apptDAO.deleteCustLinkedAppts(customerID);
+            apptDAO.deleteCustomerAppts(customerID);
             pst.execute();
         }
         catch (SQLException e) {

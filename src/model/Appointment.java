@@ -292,7 +292,7 @@ public class Appointment {
      */
     public User getUser() throws SQLException {
         UserDAOImpl userDAO = new UserDAOImpl();
-        this.user = userDAO.getUser(getUserID());
+        this.user = userDAO.getUserByID(getUserID());
         return this.user;
     }
 

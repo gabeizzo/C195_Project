@@ -5,7 +5,7 @@ import model.User;
 import java.sql.SQLException;
 
     /** This is the UserDAO interface.
-     * This class holds the methods for accessing the User objects stored in the MySQL database.
+     * This class holds the methods for accessing the User data stored in the MySQL database.
      */
     public interface UserDAO {
 
@@ -19,13 +19,13 @@ import java.sql.SQLException;
          * @return The user whose ID matches what is queried.
          * @throws SQLException
          */
-        public User getUser(int userID) throws SQLException;
+        public User getUserByID(int userID) throws SQLException;
 
         /** Gets a user from the database based on their username.
          * @param userName the name of the user.
          * @return The name of the user whose name matches what is queried.
          * @throws SQLException
          */
-        public User getUser(String userName) throws SQLException;
+        public User getUserByName(String userName) throws SQLException;
 
 }

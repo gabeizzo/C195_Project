@@ -321,19 +321,19 @@ public class AppointmentDAOImpl implements AppointmentDAO{
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public void deleteCustLinkedAppts(int customerID) throws SQLException {
-        String deleteCustomerAssocAppts = "DELETE FROM appointments WHERE Customer_ID=" + customerID;
-        DBQuery.setPreparedStatement(connection, deleteCustomerAssocAppts);
+    public void deleteCustomerAppts(int customerID) throws SQLException {
+        String deleteCustomerApptsFromDB = "DELETE FROM appointments WHERE Customer_ID=" + customerID;
+        DBQuery.setPreparedStatement(connection, deleteCustomerApptsFromDB);
 
         try{
             PreparedStatement pst = DBQuery.getPreparedStatement();
             pst.execute();
 
             if (pst.getUpdateCount() > 0) {
-                System.out.println("Deleted customer's associated appointments from database successfully!");
+                System.out.println("Deleted customer's associated appointments from the database successfully!");
             }
             else {
-                System.out.println("Attempt to delete customer associated appointments failed.");
+                System.out.println("Attempt to delete customer associated appointments from the database failed.");
             }
         }
         catch (Exception e) {
