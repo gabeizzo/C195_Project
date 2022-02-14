@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /** This is the User class.
- * This class acts as the blueprint for User objects in the database.
+ * This class holds the methods for building User objects and getting and setting User attributes.
  */
 public class User {
     private int userID;
@@ -16,6 +16,7 @@ public class User {
     private String lastUpdatedBy;
 
     /** This is the User object constructor.
+     * The User constructor is used to initialize User objects prior to use.
      * @param userID The user's ID.
      * @param userName The user's username.
      * @param password The user's password.

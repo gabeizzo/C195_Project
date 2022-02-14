@@ -70,9 +70,9 @@ public class CustomersMenuController implements Initializable {
             addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
             postalCodeCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
             phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
-            createDateCol.setCellValueFactory(new PropertyValueFactory<>("formattedCreateDate"));
+            createDateCol.setCellValueFactory(new PropertyValueFactory<>("createDateFormatted"));
             createdByCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-            lastUpdatedCol.setCellValueFactory(new PropertyValueFactory<>("formattedLastUpdate"));
+            lastUpdatedCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdateFormatted"));
             lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
             divisionIDCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
 

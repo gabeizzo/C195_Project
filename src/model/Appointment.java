@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+/** This is the Appointment class.
+ * This class holds the methods for building Appointment objects and getting and setting Appointment attributes.
+ */
 public class Appointment {
         private int customerID;
         private int userID;
@@ -26,7 +29,8 @@ public class Appointment {
         private Contact contact;
         private User user;
 
-        /** The appointment constructor, used to construct Appointment objects.
+        /** This is the Appointment constructor.
+         * The Appointment constructor is used to initialize Appointment objects.
          *  @param apptID The id of the appointment.
          *  @param apptTitle The title of the appointment.
          *  @param description The description of the appointment.
@@ -61,29 +65,29 @@ public class Appointment {
             this.contactID = contactID;
         }
 
-        /** Gets the appointment ID.
-         * @return The appointment ID.
+        /** Gets the appointment's ID.
+         * @return The appointment's ID.
          */
         public int getApptID() {
             return apptID;
         }
 
-        /** Sets the appointment ID.
-         * @param apptID The appointment ID to set.
+        /** Sets the appointment's ID.
+         * @param apptID The appointment's ID to set.
          */
         public void setApptID(int apptID) {
             this.apptID = apptID;
         }
 
-        /** Gets the appointment title.
+        /** Gets the appointment's title.
          * @return The appointment's title.
          */
         public String getApptTitle() {
             return apptTitle;
         }
 
-        /** Sets the appointment title.
-         * @param apptTitle The appointment title to set.
+        /** Sets the appointment's title.
+         * @param apptTitle The appointment's title to set.
          */
         public void setApptTitle(String apptTitle) {
             this.apptTitle = apptTitle;
@@ -97,34 +101,34 @@ public class Appointment {
         }
 
         /** Sets the appointment's description.
-         * @param description The appointment description to set.
+         * @param description The appointment's description to set.
          */
         public void setDescription(String description) {
             this.description = description;
         }
 
-        /** Gets the appointment location.
+        /** Gets the appointment's location.
          * @return The appointment's location.
          */
         public String getLocation() {
             return location;
         }
 
-        /** Sets the appointment location.
+        /** Sets the appointment's location.
          * @param location The appointment's location to set.
          */
         public void setLocation(String location) {
             this.location = location;
         }
 
-        /** Gets the appointment type.
+        /** Gets the appointment's type.
          * @return The appointment's type.
          */
         public String getApptType() {
             return apptType;
         }
 
-        /** Sets the appointment type.
+        /** Sets the appointment's type.
          * @param apptType The appointment's type to set.
          */
         public void setApptType(String apptType) {
@@ -139,7 +143,7 @@ public class Appointment {
         }
 
         /** Gets the appointment's start date and formats it to MMMM/DD/YYYY.
-         * @return The appointment's start date.
+         * @return The appointment's start date formatted in a more easy to read format.
          */
         public String getStartDateFormatted() {
             return ConvertTime.dateFormatted(startDateTime);
@@ -153,7 +157,7 @@ public class Appointment {
         }
 
         /** Gets the start time of the appointment and formats it to hh:mm AM/PM.
-         * @return String formatted start time.
+         * @return The start time of the appointment formatted.
          */
         public String getStartTimeFormatted() {
             return ConvertTime.timeFormatted(startDateTime);

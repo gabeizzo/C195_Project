@@ -139,7 +139,7 @@ public class MainMenuController implements Initializable {
     }
 
     public void toReportsByMonthAndType(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ReportsByMonthAndType.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AppointmentsByMonthAndType.fxml")));
         Stage stage = (Stage) (reportsByMonthAndTypeButton.getScene().getWindow());
         stage.setTitle("Reports By Month and Type");
         stage.setScene(new Scene(root,600 ,500));

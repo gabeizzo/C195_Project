@@ -4,8 +4,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-/** This is the first level division class.
- * This class acts as the blueprint for FirstLvlDivision objects in the database.
+/** This is the FirstLvlDivision(FLD for short) class.
+ * This class holds the methods for building FLD objects and getting and setting FLD attributes.
  */
 public class FirstLvlDivision {
     private int divisionID;
@@ -18,6 +18,7 @@ public class FirstLvlDivision {
     private int countryID;
 
     /** This is the FirstLvlDivision constructor.
+     * The FirstLvlDivision constructor is used to initialize FirstLvlDivision objects.
      * @param divisionID The first level division's ID.
      * @param divisionName The division's name.
      * @param createDate The division's create date.
@@ -25,7 +26,7 @@ public class FirstLvlDivision {
      * @param createdBy The person who created the division data.
      * @param lastUpdate The division's last update time.
      * @param lastUpdateBy The person who last updated the division data.
-     * @param countryID Integer
+     * @param countryID The country ID the FLD belongs to.
      */
     public FirstLvlDivision(int divisionID, String divisionName, LocalDate createDate, LocalTime createTime, String createdBy, Timestamp lastUpdate, String lastUpdateBy, int countryID) {
         this.divisionID = divisionID;
@@ -61,7 +62,7 @@ public class FirstLvlDivision {
 
     /** This method overrides the Object class's default toString method.
      * This fixes the issue of displaying the package.class.hashcode instead of division name in combo boxes throughout the application.
-     * @return division String
+     * @return The division's name.
      */
     @Override
     public String toString() {
@@ -83,7 +84,7 @@ public class FirstLvlDivision {
     }
 
     /** Sets the first level division's creation date.
-     * @param createDate LocalDate
+     * @param createDate The FLD's create date.
      */
     public void setCreateDate(LocalDate createDate) {
         this.createDate = createDate;

@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/** This is the Country class.
+ * This class holds the methods for building Country objects and getting and setting Country attributes.
+ */
 public class Country {
     private int countryID;
     private String countryName;
@@ -12,6 +15,15 @@ public class Country {
     private Timestamp lastUpdate;
     private String lastUpdateBy;
 
+    /** This is the Country constructor.
+     * The Country constructor is used to initialize Country objects.
+     * @param countryID The country's ID.
+     * @param countryName The country's name.
+     * @param createDate The country's create date.
+     * @param createTime The country's create time.
+     * @param lastUpdate The date and time the country was last updated.
+     * @param lastUpdateBy The user who last updated the country data.
+     */
     public Country(int countryID, String countryName, LocalDate createDate, LocalTime createTime, Timestamp lastUpdate, String lastUpdateBy){
         this.countryID = countryID;
         this.countryName = countryName;

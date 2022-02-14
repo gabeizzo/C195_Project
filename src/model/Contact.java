@@ -1,11 +1,14 @@
 package model;
 
+/** This is the Contact class.
+ * This class holds the methods for building Contact objects and getting and setting Contact attributes.
+ */
 public class Contact {
     private int contactID;
     private String contactName;
     private String contactEmail;
 
-    /** Contact constructor, used for instantiating Contact model objects.
+    /** This is the Contact constructor which is used to initialize Contact objects.
      * @param contactID The contact's id.
      * @param contactName The contact's name.
      * @param contactEmail The contact's email.
@@ -16,29 +19,29 @@ public class Contact {
         this.contactEmail = contactEmail;
     }
 
-    /** Gets the Contact's ID.
-     * @return contactID Integer.
+    /** Gets the contact's ID.
+     * @return The contact's ID.
      */
     public int getContactID() {
         return contactID;
     }
 
-    /** Sets Contact's ID
-     * @param contactID
+    /** Sets the contact's ID.
+     * @param contactID The contact's ID to set.
      */
     public void setContactID(int contactID) {
         this.contactID = contactID;
     }
 
-    /** Gets the Contact's name.
+    /** Gets the contact's name.
      * @return The contact's name.
      */
     public String getContactName() {
         return contactName;
     }
 
-    /** Sets the Contact's name.
-     * @param contactName The contact's name
+    /** Sets the contact's name.
+     * @param contactName The contact's name to set.
      */
     public void setContactName(String contactName) {
         this.contactName = contactName;
@@ -54,15 +57,15 @@ public class Contact {
         return this.getContactName();
     }
 
-    /** Gets the Contact's email.
-     * @return The contact's email.
+    /** Gets the contact's email address.
+     * @return The contact's email address.
      */
     public String getContactEmail() {
         return contactEmail;
     }
 
-    /** Sets the Contact's email.
-     * @param contactEmail The email to set.
+    /** Sets the Contact's email address.
+     * @param contactEmail The contact's email address to set.
      */
     public void setContactEmail(String contactEmail) {
         this.contactEmail = contactEmail;

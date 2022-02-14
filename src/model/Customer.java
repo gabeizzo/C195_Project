@@ -4,7 +4,7 @@ import Utilities.ConvertTime;
 import java.time.LocalDateTime;
 
 /** This is the Customer class.
- * This class acts as the blueprint for Customer objects in the database.
+ * This class holds the methods for building Customer objects and getting and setting Customer attributes.
  */
 public class Customer {
     private int customerID;
@@ -18,7 +18,8 @@ public class Customer {
     private String lastUpdatedBy;
     private int divisionID;
 
-    /** The constructor for the Customer Class.
+    /** This is the constructor for the Customer Class.
+     * The Customer constructor is used to initialize Customer objects.
      * @param customerID The customer's ID.
      * @param customerName The customer's name.
      * @param address The customer's address.
