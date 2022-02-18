@@ -16,11 +16,11 @@ public class AppointmentDAOImpl implements AppointmentDAO{
     private PreparedStatement pst;
     private ResultSet rs;
     private Connection connection = Main.connection;
-    public static ObservableList<Appointment> allAppts = FXCollections.observableArrayList();
-    public static ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
-    public static ObservableList<Appointment> apptsByType = FXCollections.observableArrayList();
-    public static ObservableList<Appointment> apptsByContactID = FXCollections.observableArrayList();
-    public static ObservableList<Appointment> apptsByUserID = FXCollections.observableArrayList();
+    ObservableList<Appointment> appts = FXCollections.observableArrayList();
+    ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
+    ObservableList<Appointment> apptsByType = FXCollections.observableArrayList();
+    ObservableList<Appointment> apptsByContactID = FXCollections.observableArrayList();
+    ObservableList<Appointment> apptsByUserID = FXCollections.observableArrayList();
 
     /** The AppointmentDAOImpl constructor.
      * @throws SQLException Thrown if there is a MySQL database access error.
@@ -45,13 +45,13 @@ public class AppointmentDAOImpl implements AppointmentDAO{
         try {
             while(rs.next()) {
                 Appointment appt = getApptData();
-                allAppts.add(appt);
+                appts.add(appt);
             }
         } catch (SQLException e ) {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
-        return allAppts;
+        return appts;
     }
 
     /** Gets an appointment based on the appointment's ID.

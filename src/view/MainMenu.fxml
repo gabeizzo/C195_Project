@@ -63,7 +63,7 @@
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="reportsByMonthAndTypeButton" layoutX="12.0" layoutY="453.0" mnemonicParsing="false" onAction="#toReportsByMonthAndType" prefHeight="27.0" prefWidth="210.0" text="Appts By Month and Type">
+                        <Button fx:id="reportsByMonthAndTypeButton" layoutX="12.0" layoutY="453.0" mnemonicParsing="false" onAction="#toApptsByMonthAndType" prefHeight="27.0" prefWidth="210.0" text="Appts By Month and Type">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>

@@ -138,8 +138,8 @@ public class MainMenuController implements Initializable {
 
     }
 
-    public void toReportsByMonthAndType(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AppointmentsByMonthAndType.fxml")));
+    public void toApptsByMonthAndType(ActionEvent actionEvent) throws IOException{
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByMonthAndType.fxml")));
         Stage stage = (Stage) (reportsByMonthAndTypeButton.getScene().getWindow());
         stage.setTitle("Reports By Month and Type");
         stage.setScene(new Scene(root,600 ,500));
@@ -178,6 +178,7 @@ public class MainMenuController implements Initializable {
         endTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, LocalTime>("endTimeFormatted"));
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         apptsTable.getSelectionModel().selectFirst();
+
     }
     public void onActionViewAllAppts(ActionEvent actionEvent){
         try{

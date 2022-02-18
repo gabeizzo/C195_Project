@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Objects;
 
 
 public class Main extends Application {
@@ -19,8 +20,8 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/LoginScreen.fxml"));
-        stage.setTitle("Appointment Scheduler Login Screen");
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/LoginScreen.fxml")));
+        stage.setTitle("Appointment Scheduler+ Login Screen");
         stage.setScene(new Scene(root,600 ,400));
         stage.show();
     }
