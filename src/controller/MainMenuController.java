@@ -30,6 +30,10 @@ import java.util.TimeZone;
 
 public class MainMenuController implements Initializable {
     @FXML
+    private Label usernameLbl;
+    @FXML
+    private Label welcomeLbl;
+    @FXML
     private Label timeZoneID;
     @FXML
     private RadioButton currentMonthRadioBtn;

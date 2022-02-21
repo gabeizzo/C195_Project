@@ -118,27 +118,37 @@
                               <TableColumn fx:id="customerIDCol" prefWidth="101.2000732421875" text="Customer ID" />
                           </columns>
                         </TableView>
-                        <RadioButton fx:id="currentMonthRadioBtn" layoutX="556.0" layoutY="48.0" mnemonicParsing="false" onAction="#viewCurrentMonthAppts" text="View By Current Month">
+                        <RadioButton fx:id="currentMonthRadioBtn" layoutX="573.0" layoutY="58.0" mnemonicParsing="false" onAction="#viewCurrentMonthAppts" text="View By Current Month">
                            <font>
                               <Font size="14.0" />
                            </font>
                            <toggleGroup>
                               <ToggleGroup fx:id="apptsViewToggle" />
                            </toggleGroup></RadioButton>
-                        <RadioButton fx:id="allApptsRadioBtn" layoutX="357.0" layoutY="48.0" mnemonicParsing="false" onAction="#onActionViewAllAppts" text="View All Appointments" toggleGroup="$apptsViewToggle">
+                        <RadioButton fx:id="allApptsRadioBtn" layoutX="27.0" layoutY="58.0" mnemonicParsing="false" onAction="#onActionViewAllAppts" text="View All Appointments" toggleGroup="$apptsViewToggle">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
-                        <RadioButton fx:id="currentWeekRadioBtn" layoutX="754.0" layoutY="48.0" mnemonicParsing="false" onAction="#viewCurrentWeekAppts" text="View By Current Week" toggleGroup="$apptsViewToggle">
+                        <RadioButton fx:id="currentWeekRadioBtn" layoutX="780.0" layoutY="58.0" mnemonicParsing="false" onAction="#viewCurrentWeekAppts" text="View By Current Week" toggleGroup="$apptsViewToggle">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
-                        <Label fx:id="timeZoneLbl" layoutX="14.0" layoutY="32.0" text="Time Zone: ">
+                        <Label fx:id="timeZoneLbl" layoutX="596.0" layoutY="14.0" text="Current Time Zone: ">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="timeZoneID" layoutX="115.0" layoutY="33.0" text="timeZoneID">
+                        <Label fx:id="timeZoneID" layoutX="765.0" layoutY="14.0" text="timeZoneID">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="welcomeLbl" layoutX="14.0" layoutY="14.0" text="Welcome back, ">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="usernameLbl" layoutX="148.0" layoutY="14.0" prefHeight="27.0" prefWidth="170.0" text="Username!">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

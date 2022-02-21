@@ -284,18 +284,18 @@ public class LoginScreenController implements Initializable {
      */
     private void recordLoginActivity(boolean loginSuccessful, String user) throws IOException {
         String loginRecord = "login_activity.txt";
-        FileWriter fileWriter = new FileWriter(loginRecord, true);
-        PrintWriter printWriter = new PrintWriter(fileWriter);
-        ZoneId localTimeZone = ZoneId.of(TimeZone.getDefault().getID());
+        FileWriter fw = new FileWriter(loginRecord, true);
+        PrintWriter pw = new PrintWriter(fw);
+        ZoneId loginZone = ZoneId.of(TimeZone.getDefault().getID());
 
         if(loginSuccessful) {
-            printWriter.println("Login Actvity: Valid user:" + user + " login attempt successful: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ": Location: " + localTimeZone);
+            pw.println("Login Activity | Valid Username and Password: (" + user + ") | Login attempt SUCCESSFUL at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " | Network IP Location: (" + loginZone + ")");
         } else if(user.isBlank()) {
-            printWriter.println("Login Activity: Invalid Username: " + user + " login attempt failed: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ": Location: " + localTimeZone);
+            pw.println("Login Activity | Invalid/Blank Username: (" + user + ") | Login attempt FAILED at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " | Network IP Location: (" + loginZone + ")");
         } else {
-            printWriter.println("Login Activity: Username or Password incorrect: " + user + " login attempt failed: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ": Location: " + localTimeZone);
+            pw.println("Login Activity | Invalid Username or Password: (" + user + ") | Login attempt FAILED at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " | Network IP Location: (" + loginZone + ")");
         }
-        printWriter.close();
+        pw.close();
     }
 
     /** This method handles the login button and on successful login, then loads the Main Menu.
@@ -333,36 +333,40 @@ public class LoginScreenController implements Initializable {
         }
     }
 
-    /** This method exits the application.
-     * @param actionEvent When the Exit button is selected.
+    /** This method exits the application when the Exit button is clicked.
+     * If the user's system is set to French, a confirmation dialog box displays a confirmation in French.
+     * Otherwise, the confirmation pop-up will display in English.
+     * If "OK" is selected, the application closes, if "Cancel/Annuler(if French)" the dialog box closes and application remains open.
+     * @param actionEvent When the Exit/Sortir button is selected.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void exitApplication(ActionEvent actionEvent) throws IOException{
+    public void exitApplication(ActionEvent actionEvent) throws IOException {
 
         try {
             ResourceBundle rb = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
-            // If system default is in French, alerts will appear in French
+
+            //Displays the Exit/Sortir confirmation box in French if operating system is set to French.
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 Alert alertFrench = new Alert(Alert.AlertType.CONFIRMATION);
                 alertFrench.setTitle(rb.getString("exitTitle"));
                 alertFrench.setContentText(rb.getString("exitMessage"));
-                alertFrench.showAndWait();
 
+                //If user selects OK the application quits. If Annuler(Cancel), the dialog box closes and application stays open.
                 Optional<ButtonType> result = alertFrench.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     System.exit(0);
                 }
             }
         }
+        //If not set to French, resource bundle defaults and the confirmation box displays in English.
         catch (MissingResourceException e) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit?");
-            alert.setTitle("Exit Application");
+            Alert alertEnglish = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit?");
+            alertEnglish.setTitle("Exit Application");
 
-            Optional<ButtonType> result = alert.showAndWait();
+            Optional<ButtonType> result = alertEnglish.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 System.exit(0);
             }
         }
     }
-
 }
