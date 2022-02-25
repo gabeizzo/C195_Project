@@ -2,6 +2,9 @@
 package controller;
 
 import DAO.AppointmentDAOImpl;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,18 +16,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
-import java.time.ZoneId;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.TimeZone;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.*;
 
 /** This is the controller for the Main Menu screen.
  * This class is responsible for providing the functionality to the Main Menu and all labels and buttons users interact with.
@@ -33,9 +34,9 @@ public class MainMenuController implements Initializable {
     public static Appointment apptToModify;
     private AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
     @FXML
-    private TextField apptSearchBar;
+    private Label dateTimeLbl;
     @FXML
-    private Label usernameLbl;
+    private TextField apptSearchBar;
     @FXML
     private Label welcomeLbl;
     @FXML
@@ -103,15 +104,15 @@ public class MainMenuController implements Initializable {
         allAppts = apptDAO.getAllApptsFromDB();
     }
 
-    /**
-     *
-     * @param url
-     * @param resourceBundle
+    /** Initializes the Main Menu and its features i.e. the clock, time zone, welcome message and displays all appointments.
+     * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ZoneId localTimezone = ZoneId.of(TimeZone.getDefault().getID());
         timeZoneID.setText(localTimezone.toString());
+        initClock();
 
         apptsViewToggle = new ToggleGroup();
         allApptsRadioBtn.setToggleGroup(apptsViewToggle);
@@ -120,10 +121,22 @@ public class MainMenuController implements Initializable {
         allApptsRadioBtn.setSelected(true);
 
         try {
-            viewAllAppts();
+            viewAllApptsFromDB();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /** This method displays the
+     */
+    private void initClock() {
+
+        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            dateTimeLbl.setText(LocalDateTime.now().format(formatter));
+        }), new KeyFrame(javafx.util.Duration.seconds(1)));
+        clock.setCycleCount(Animation.INDEFINITE);
+        clock.play();
     }
 
     /** This method deletes a selected appointment from the database and updates the apptsTable.
@@ -251,7 +264,7 @@ public class MainMenuController implements Initializable {
      * viewAllAppts populates the apptsTable with all appointments from the database.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    private void viewAllAppts() throws SQLException {
+    private void viewAllApptsFromDB() throws SQLException {
         apptsTable.setItems(allAppts);
         apptIDCol.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         titleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
@@ -270,9 +283,9 @@ public class MainMenuController implements Initializable {
     /** This method displays all appointments from the database into the apptsTable.
      * @param actionEvent When the allApptsRadioBtn is selected.
      */
-    public void onActionViewAllAppts(ActionEvent actionEvent){
+    public void viewAllAppointments(ActionEvent actionEvent){
         try{
-            viewAllAppts();
+            viewAllApptsFromDB();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -284,8 +297,41 @@ public class MainMenuController implements Initializable {
      */
     public void viewCurrentWeekAppts(ActionEvent actionEvent) throws IOException{
 
+        //Establishes current date, week and year and gets the week number of the year to compare to the appointment start date.
+        LocalDate currDate = LocalDate.now(); //Today's date
+        TemporalField currWeek = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+        int currYear = LocalDate.now().getYear();
+        int numOfCurrWeek = currDate.get(currWeek);
+
+        //Resets currWeekAppts if currWeekAppts is not empty.
+        if(!currWeekAppts.isEmpty()) {
+            currWeekAppts.clear();
+        }
+
+        //Checks if any appointments start this week and if so, adds them to currWeekAppts ObservableList
+        for (Appointment appt : allAppts) {
+            TemporalField apptWeek = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+            int numOfApptWeek = appt.getStartDateTime().toLocalDate().get(apptWeek);
+            if (numOfApptWeek == numOfCurrWeek && appt.getStartDateTime().getYear() == currYear) {
+                currWeekAppts.add(appt);
+            }
+        }
+
+        apptsTable.setItems(currWeekAppts);
+        apptsTable.getSelectionModel().selectFirst();
+        // If there are no weekly appointments show alert
+        if (currWeekAppts.isEmpty()) {
+            Alert noWeeklyAppts = new Alert(Alert.AlertType.INFORMATION);
+            noWeeklyAppts.setTitle("No Appointments");
+            noWeeklyAppts.setContentText("Currently, there are no appointments this week.\n" + currDate + " | Week: " + numOfCurrWeek + " | Year: " + currYear+ ".");
+            noWeeklyAppts.showAndWait();
+        }
     }
 
+    /** This method searches the appointment table for any appointments that have either an Appointment ID or Title that match the text input.
+     * @param actionEvent When data is entered into the search bar on the main menu.
+     * @throws SQLException
+     */
     public void searchAppts(ActionEvent actionEvent) throws SQLException {
 
         String searchInput = apptSearchBar.getText();
@@ -304,7 +350,7 @@ public class MainMenuController implements Initializable {
 
         if(apptSearchBar.getText().isBlank()){
             try{
-                viewAllAppts();
+                viewAllApptsFromDB();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -318,7 +364,7 @@ public class MainMenuController implements Initializable {
 
             apptSearchBar.clear();
             try{
-                viewAllAppts();
+                viewAllApptsFromDB();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -335,7 +381,7 @@ public class MainMenuController implements Initializable {
         ObservableList<Appointment> resultsSearch = FXCollections.observableArrayList();
 
         try{
-            viewAllAppts();
+            viewAllApptsFromDB();
         } catch (SQLException e) {
             e.printStackTrace();
         }

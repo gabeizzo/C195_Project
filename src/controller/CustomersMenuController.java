@@ -13,7 +13,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Customer;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -21,6 +20,8 @@ import java.time.LocalTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/** This is the CustomersMenuController class which defines the methods to be used for adding, deleting, modifying and displaying Customers from the database.
+ */
 public class CustomersMenuController implements Initializable {
     @FXML
     private Button deleteCustomerBtn;
@@ -54,15 +55,18 @@ public class CustomersMenuController implements Initializable {
     private TableView<Customer> customerDataTable;
 
     /** This is the CustomersMenuController constructor.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public CustomersMenuController() throws SQLException{
     }
 
+    /** This method initializes the Customers Menu and sets up the customerDataTable with database data.
+     * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            // Grab all customers from the database and populate the table view.
             CustomerDAOImpl customerDAO = new CustomerDAOImpl();
             customerDataTable.setItems(customerDAO.getAllDBCustomers());
             customerIDCol.setCellValueFactory( new PropertyValueFactory<>("customerID"));
@@ -82,14 +86,19 @@ public class CustomersMenuController implements Initializable {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
-
-
-
     }
 
+    /** This method deletes a selected customer from the database.
+     * @param actionEvent When the Delete Customer button is activated.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
+     */
     public void deleteCustomer(ActionEvent actionEvent) throws IOException{
     }
 
+    /** This method loads the Add Customer screen.
+     * @param actionEvent When the Add Customer button is activated.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
+     */
     public void toAddCustomer(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddCustomer.fxml")));
         Stage stage = (Stage) (addCustomerBtn.getScene().getWindow());
@@ -98,6 +107,10 @@ public class CustomersMenuController implements Initializable {
         stage.show();
     }
 
+    /** This method loads the Modify Customer screen.
+     * @param actionEvent When the Modify Customer button is activated.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
+     */
     public void toModifyCustomer(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyCustomer.fxml")));
         Stage stage = (Stage) (modifyCustomerBtn.getScene().getWindow());
@@ -106,6 +119,10 @@ public class CustomersMenuController implements Initializable {
         stage.show();
     }
 
+    /** This method returns the user to the Main Menu from the Customers Menu screen.
+     * @param actionEvent When the Main Menu button is activated from the Customers Menu.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
+     */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
         Stage stage = (Stage) (mainMenuButton.getScene().getWindow());

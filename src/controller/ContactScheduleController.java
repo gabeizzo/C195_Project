@@ -18,8 +18,12 @@ import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
+/** This is the ContactScheduleController class.
+ * This class defines the methods used to display the Contact Schedule GUI report.
+ */
 public class ContactScheduleController implements Initializable {
     @FXML
     private Button mainMenuBtn;
@@ -49,16 +53,23 @@ public class ContactScheduleController implements Initializable {
     private ObservableList<Appointment> contact3Appts;
     private ObservableList<Appointment> allContactsAppts = FXCollections.observableArrayList();
 
+    /** This is the ContactScheduleController constructor.
+     * @throws SQLException Thrown if there is a MySQL database access error.
+     */
     public ContactScheduleController() throws SQLException{
     }
 
+    /** This method initializes the Contact Schedule screen and loads the appointments for contacts.
+     * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         contactScheduleTable.setItems(allContactsAppts);
         contactNameCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
-        apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
-        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        apptIDCol.setCellValueFactory(new PropertyValueFactory<>("apptID"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         apptDateCol.setCellValueFactory(new PropertyValueFactory<>("startDateFormatted"));
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTimeFormatted"));
@@ -66,8 +77,12 @@ public class ContactScheduleController implements Initializable {
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
     }
 
+    /** This method returns to the main menu if the Main Menu button gets selected.
+     * @param actionEvent When the Main Menu button is selected.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
+     */
     public void toMainMenu(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
         Stage stage = (Stage) (mainMenuBtn.getScene().getWindow());
         stage.setTitle("Appointment Scheduler Main Menu");
         stage.setScene(new Scene(root,1200 ,700));

@@ -22,7 +22,12 @@ public class MonthAndTypeReport {
     public MonthAndTypeReport() throws SQLException {
     }
 
-    public ObservableList<MonthAndTypeData> monthTypeInformation(String apptType) {
+    /** This method queries the MySQL database for appointments based on their month and type and returns an ObservabeList with the results.
+     *  This list is then displayed in the Appointments By Month And Type screen's tableview.
+     * @param apptType The type of the appointment.
+     * @return An ObservableList of the
+     */
+    public ObservableList<MonthAndTypeData> apptMonthAndTypeData(String apptType) {
         String getApptTypeFromDB = "SELECT MONTHNAME(Start) as MONTH, type, COUNT(*) as COUNT FROM appointments WHERE TYPE=? GROUP BY MONTHNAME(Start)";
         ObservableList<MonthAndTypeData> apptMonthTypeData = FXCollections.observableArrayList();
 
@@ -43,7 +48,6 @@ public class MonthAndTypeReport {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
-
         return apptMonthTypeData;
     }
 

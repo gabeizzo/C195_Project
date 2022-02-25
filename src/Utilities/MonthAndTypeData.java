@@ -20,14 +20,14 @@ public class MonthAndTypeData {
         this.numOfAppts = numOfAppts;
     }
 
-    /** Gets the month the appointment occurred during.
+    /** Gets the appointment's month.
      * @return The month the appointment occurred during.
      */
     public String getApptMonth() {
         return apptMonth;
     }
 
-    /** Sets the month the appointment occurred during.
+    /** Sets the appointment's month.
      * @param apptMonth The appointment month to set.
      */
     public void setApptMonth(String apptMonth) {
@@ -48,14 +48,14 @@ public class MonthAndTypeData {
         this.apptType = apptType;
     }
 
-    /** Gets the number of appointments for a given month and type.
+    /** Gets the number of appointments for a month and type.
      * @return The number of appointments for a given month and type.
      */
     public int getNumOfAppts() {
         return numOfAppts;
     }
 
-    /** Sets the number of appointments for a given month and type.
+    /** Sets the number of appointments for a month and type.
      * @param numOfAppts The number of appointments to set.
      */
     public void setNumOfAppts(int numOfAppts) {

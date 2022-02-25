@@ -64,7 +64,7 @@ public class ConvertTime {
      * @return The local time converted to EST.
      */
     public static LocalDateTime localToEST(LocalDateTime convertTime) {
-        //Establish EST(Eastern) timezone. Can use America/Eastern also.
+        //Establish EST(Eastern) timezone. Can also use America/Eastern if desired.
         ZoneId EST = ZoneId.of("America/New_York");
         ZoneId localZoneID = ZoneId.systemDefault();
 
@@ -84,16 +84,13 @@ public class ConvertTime {
         LocalTime startTime = LocalTime.of(7,59);
         ZoneId ESTZoneID = ZoneId.of("America/New_York");
         ZonedDateTime ESTStartTime = ZonedDateTime.of(compareTime.toLocalDate(), startTime, ESTZoneID);
-
         System.out.println("EST start time " + ESTStartTime + " " + ESTStartTime.toLocalDateTime());
 
         LocalTime endTime = LocalTime.of(22, 0);
         ZonedDateTime ESTEndTime = ZonedDateTime.of(compareTime.toLocalDate(), endTime, ESTZoneID);
-
         System.out.println("EST end time " + ESTEndTime + " " + ESTEndTime.toLocalDateTime());
 
         LocalDateTime ESTtoCompare = localToEST(compareTime);
-
         return ESTtoCompare.isAfter(ChronoLocalDateTime.from(ESTStartTime)) && ESTtoCompare.isBefore(ChronoLocalDateTime.from(ESTEndTime));
     }
 }

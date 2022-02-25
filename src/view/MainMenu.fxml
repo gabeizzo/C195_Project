@@ -26,7 +26,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="599.0" prefWidth="235.0">
                      <children>
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="53.0" stroke="#005883" strokeType="INSIDE" width="235.0" />
-                        <Label layoutX="17.0" layoutY="13.0" text="Appointment Scheduler" textFill="#f8f3f3">
+                        <Label layoutX="17.0" layoutY="13.0" text="Appointments Manager" textFill="#f8f3f3">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -104,7 +104,7 @@
                   </AnchorPane>
                 <AnchorPane focusTraversable="true" minHeight="0.0" minWidth="0.0" prefHeight="676.0" prefWidth="946.0">
                      <children>
-                        <TableView fx:id="apptsTable" layoutX="9.0" layoutY="94.0" prefHeight="571.0" prefWidth="938.0">
+                        <TableView fx:id="apptsTable" layoutX="9.0" layoutY="105.0" prefHeight="542.0" prefWidth="938.0">
                           <columns>
                             <TableColumn fx:id="apptIDCol" prefWidth="107.1999683380127" text="Appointment ID" />
                             <TableColumn fx:id="titleCol" prefWidth="75.99999237060547" text="Title" />
@@ -118,42 +118,42 @@
                               <TableColumn fx:id="customerIDCol" prefWidth="101.2000732421875" text="Customer ID" />
                           </columns>
                         </TableView>
-                        <RadioButton fx:id="currentMonthRadioBtn" layoutX="213.0" layoutY="58.0" mnemonicParsing="false" onAction="#viewCurrentMonthAppts" text="View By Current Month">
+                        <RadioButton fx:id="currentMonthRadioBtn" layoutX="213.0" layoutY="70.0" mnemonicParsing="false" onAction="#viewCurrentMonthAppts" text="View By Current Month">
                            <font>
                               <Font size="14.0" />
                            </font>
                            <toggleGroup>
                               <ToggleGroup fx:id="apptsViewToggle" />
                            </toggleGroup></RadioButton>
-                        <RadioButton fx:id="allApptsRadioBtn" layoutX="27.0" layoutY="58.0" mnemonicParsing="false" onAction="#onActionViewAllAppts" text="View All Appointments" toggleGroup="$apptsViewToggle">
+                        <RadioButton fx:id="allApptsRadioBtn" layoutX="14.0" layoutY="70.0" mnemonicParsing="false" onAction="#viewAllAppointments" text="View All Appointments" toggleGroup="$apptsViewToggle">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
-                        <RadioButton fx:id="currentWeekRadioBtn" layoutX="420.0" layoutY="58.0" mnemonicParsing="false" onAction="#viewCurrentWeekAppts" text="View By Current Week" toggleGroup="$apptsViewToggle">
+                        <RadioButton fx:id="currentWeekRadioBtn" layoutX="420.0" layoutY="70.0" mnemonicParsing="false" onAction="#viewCurrentWeekAppts" text="View By Current Week" toggleGroup="$apptsViewToggle">
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
-                        <Label fx:id="timeZoneLbl" layoutX="582.0" layoutY="14.0" text="Current Time Zone: ">
+                        <Label fx:id="timeZoneLbl" layoutX="10.0" layoutY="648.0" prefHeight="27.0" prefWidth="100.0" text="Time Zone: ">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="timeZoneID" layoutX="110.0" layoutY="648.0" text="timeZoneID">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="welcomeLbl" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="259.0" text="Welcome, Username! ">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="timeZoneID" layoutX="751.0" layoutY="14.0" text="timeZoneID">
+                        <TextField fx:id="apptSearchBar" layoutX="753.0" layoutY="67.0" onAction="#searchAppts" prefHeight="26.0" prefWidth="194.0" promptText="Search by Appointment ID or Title" />
+                        <Label fx:id="dateTimeLbl" layoutX="783.0" layoutY="648.0" text="dateTimeLbl">
                            <font>
-                              <Font name="System Bold" size="18.0" />
+                              <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="welcomeLbl" layoutX="14.0" layoutY="14.0" text="Welcome, ">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="usernameLbl" layoutX="103.0" layoutY="14.0" prefHeight="27.0" prefWidth="220.0" text="Username!">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="apptSearchBar" layoutX="752.0" layoutY="55.0" onAction="#searchAppts" prefHeight="26.0" prefWidth="195.0" promptText="Search by Title or Appointment ID" />
                      </children></AnchorPane>
               </items>
             </SplitPane>

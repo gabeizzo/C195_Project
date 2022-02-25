@@ -29,6 +29,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+/** This is the LoginScreenController class.
+ * This class defines the methods used for login related actions and validation.
+ * It also is responsible for displaying login content in French or English depending on the system's current Language settings.
+ */
 public class LoginScreenController implements Initializable {
     private String passwordInput;
     private String usernameInput;
@@ -92,6 +96,10 @@ public class LoginScreenController implements Initializable {
         }
     }
 
+    /** This method resets the Username and Password fields and clears any existing input.
+     * @param actionEvent When the Reset button on the login screen is activated.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
+     */
     public void resetFields(ActionEvent actionEvent) throws IOException{
         userNameTxt.clear();
         passwordTxt.clear();
@@ -113,11 +121,13 @@ public class LoginScreenController implements Initializable {
 
             // check to see if an appointment occurs within 15 minutes of current time
             LocalTime currentTime = LocalTime.now();
+
             // search through all appointments in the database to see if an appointment is within 15 minutes
             for(Appointment appt : allAppts) {
                 LocalTime startTime = appt.getStartDateTime().toLocalTime();
                 long minutesBetweenNowAndAppt = ChronoUnit.MINUTES.between(currentTime, startTime);
-                //if the current day matches today and the time is within 15 minutes
+
+                //if the current day matches today and the time is within 0-15 minutes apptWithin15mins is true.
                 if (appt.getStartDateTime().toLocalDate().equals(LocalDate.now())) {
                     if(minutesBetweenNowAndAppt > -1 && minutesBetweenNowAndAppt <= 15) {
                         apptWithin15mins = true;
@@ -130,7 +140,8 @@ public class LoginScreenController implements Initializable {
             }
             // If there is an appointment set an alert with the appointment information, otherwise alert says no appointments
             if(apptWithin15mins) {
-                //Add french alert notifying of upcoming appointment
+
+                //Checks if system is in French or not and displays alert notifying of upcoming appointment
                 try {
                     ResourceBundle resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
                     // If system is in French
@@ -140,7 +151,7 @@ public class LoginScreenController implements Initializable {
                             apptAlertFrench.setContentText(resourceBundle.getString("apptIn15MinsMessage") +"\n" + apptID + "\n" + resourceBundle.getString("date") + apptDate + " " + resourceBundle.getString("time") + apptTime);
                             apptAlertFrench.showAndWait();
                     }
-                    // If language is not in french show english alert of upcoming appointment
+                    // If language is not in French show English alert of upcoming appointment
                 } catch (MissingResourceException e){
                     Alert apptAlertEnglish = new Alert(Alert.AlertType.INFORMATION);
                     apptAlertEnglish.setTitle("Appointments");
@@ -149,7 +160,7 @@ public class LoginScreenController implements Initializable {
                 }
             }
             else {
-                // check if the system language is in French if it is set a no upcoming appointments alert, if not show it in English
+                // checks if the system language is in French or English and displays a no upcoming appointments alert
                 try {
                     ResourceBundle resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
                     if (Locale.getDefault().getLanguage().equals("fr")) {
@@ -183,6 +194,7 @@ public class LoginScreenController implements Initializable {
 
             // If system default is in French, alerts will appear in French
             if (Locale.getDefault().getLanguage().equals("fr")) {
+                System.out.println("| Erreur : Le nom d'utilisateur est vide. Veuillez saisir un nom d'utilisateur valide et réessayer. |");
                 Alert alertFrench = new Alert(Alert.AlertType.ERROR);
                 alertFrench.setTitle(resourceBundle.getString("blankUsernameTitle"));
                 alertFrench.setContentText(resourceBundle.getString("blankUsernameMessage"));
@@ -190,6 +202,7 @@ public class LoginScreenController implements Initializable {
             }
         }
         catch (MissingResourceException e) {
+            System.out.println("| Error: Username is blank. Please enter a valid username and try again. |");
             Alert alertEnglish = new Alert(Alert.AlertType.ERROR);
             alertEnglish.setTitle("Blank Username Error");
             alertEnglish.setContentText("Username must not be left blank.");
@@ -205,13 +218,16 @@ public class LoginScreenController implements Initializable {
             ResourceBundle resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
             // If operating system is set to French language
             if (Locale.getDefault().getLanguage().equals("fr")) {
+                System.out.println("| Erreur : Le mot de passe est vide. Veuillez saisir un mot de passe valide et réessayer. |");
                 Alert alertFrench = new Alert(Alert.AlertType.ERROR);
                 alertFrench.setTitle(resourceBundle.getString("blankPasswordTitle"));
                 alertFrench.setContentText(resourceBundle.getString("blankPasswordMessage"));
                 alertFrench.showAndWait();
             }
-            // If French resource bundle is not in use, Alert displays in English by default
-        } catch (MissingResourceException e) {
+        }
+        // If French resource bundle is not in use, Alert displays in English by default
+        catch (MissingResourceException e) {
+            System.out.println("| Error: Password is blank. Please enter a valid password and try again. |");
             Alert alertEnglish = new Alert(Alert.AlertType.ERROR);
             alertEnglish.setTitle("Blank Password Error");
             alertEnglish.setContentText("Password must not be left blank.");
@@ -219,35 +235,41 @@ public class LoginScreenController implements Initializable {
         }
     }
 
-    /** This method checks if the entered Username and/or Password are invalid. If the system is in French it displays a warning in french
+    /** This method checks if the entered Username and/or Password are invalid.
      * If the system settings are set to French language pack, the error message will display in French, otherwise English.
      * @param  actionEvent The event of when a user enters an invalid login.
      */
     private void invalidLogin(ActionEvent actionEvent) throws IOException {
         try {
-            // If operating system is set to French language
+            // If operating system is set to French language, displays error dialog in French.
             ResourceBundle resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
             if (Locale.getDefault().getLanguage().equals("fr")) {
+                System.out.println("| Erreur : Nom d'utilisateur/Mot de passe saisi incorrect. Veuillez saisir un nom d'utilisateur/mot de passe valide et réessayer. |");
                 Alert alertFrench = new Alert(Alert.AlertType.ERROR);
                 alertFrench.setTitle(resourceBundle.getString("invalidLoginTitle"));
                 alertFrench.setContentText(resourceBundle.getString("invalidLoginMessage"));
                 alertFrench.showAndWait();
             }
-        } catch (MissingResourceException e) {
+        }
+        // If system is not set to French, displays error dialog in English.
+        catch (MissingResourceException e) {
+            System.out.println("| Error: Invalid Username/Password entered. Please enter a valid username/password and try again. |");
             Alert alertEnglish = new Alert(Alert.AlertType.ERROR);
             alertEnglish.setTitle("Invalid Login");
             alertEnglish.setContentText("Username and/or Password are invalid.");
             alertEnglish.showAndWait();
         }
     }
+
     /** Validates the login info with what is in the database.
-     * @return True if login info is correct. False if incorrect.
+     * @return validLogin is true if login info is correct, false if incorrect.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     private boolean validLogin() throws SQLException{
         String getUserNameAndPWFromDB = "SELECT User_Name, Password FROM users";
 
-        try { //Checks to validate the entered username matches a username stored in the database.
+        //Checks to validate the entered username matches a username stored in the database.
+        try {
             DBQuery.setPreparedStatement(connection, getUserNameAndPWFromDB);
             PreparedStatement pst = DBQuery.getPreparedStatement();
             ResultSet rs = pst.executeQuery();
@@ -255,12 +277,14 @@ public class LoginScreenController implements Initializable {
                 allUserNames.add(rs.getString("User_Name"));
             }
         }
-        catch (SQLException e) { //If there is an error accessing the database
+        //If there is an error accessing the database prints error message to the console.
+        catch (SQLException e) {
             System.out.println("Error authenticating username: " + e.getMessage());
             e.printStackTrace();
         }
 
-        try{ //Checks to validate the entered username matches a username stored in the database.
+        //Checks to validate the entered username matches a username stored in the database.
+        try{
             PreparedStatement pst = DBQuery.getPreparedStatement();
             DBQuery.setPreparedStatement(connection, getUserNameAndPWFromDB);
             ResultSet rs = pst.executeQuery();
@@ -268,16 +292,17 @@ public class LoginScreenController implements Initializable {
                 allPasswords.add(rs.getString("Password"));
             }
         }
-        catch (SQLException e) { //If there is an error accessing the database
+        //If there is an error accessing the database print error message to the console.
+        catch (SQLException e) {
             System.out.println("Error authenticating password: " + e.getMessage());
             e.printStackTrace();
         }
 
-        //Gathers the text input into the Username and Password text fields and trims off any additional blank space
+        //Gathers the text input from the Username and Password text fields and trims off any additional blank space
         usernameInput = userNameTxt.getText().toLowerCase().trim();
         passwordInput = passwordTxt.getText().trim();
 
-        //Checks the input against the only two users in the database, test(0) and admin(1)
+        //Checks the input against the only two users currently in the database, test(0) and admin(1)
         return usernameInput.equals(allUserNames.get(0)) && passwordInput.equals(allPasswords.get(0))
                 || usernameInput.equals(allUserNames.get(1)) && passwordInput.equals(allPasswords.get(1));
 
@@ -293,7 +318,7 @@ public class LoginScreenController implements Initializable {
         PrintWriter pw = new PrintWriter(fw);
         ZoneId loginZone = ZoneId.of(TimeZone.getDefault().getID());
 
-        //Prints a message to the file depending on the circumstance.
+        //Prints a message to the login_activity.txt file depending on the login activity circumstance.
         if(loginSuccessful) {
             pw.println("Login Activity | Valid Username and Password: (" + user + ") | Login attempt SUCCESSFUL at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " | Network IP Location: (" + loginZone + ")");
         } else if(user.isBlank()) {
@@ -309,35 +334,42 @@ public class LoginScreenController implements Initializable {
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public void onActionLogin(ActionEvent actionEvent) throws IOException, SQLException{
+    public void loginToMainMenu(ActionEvent actionEvent) throws IOException, SQLException{
+
+        //Gets the username and password entered into the text-fields and trims any additional blank space off of the username to assist with validation.
         usernameInput = userNameTxt.getText().toLowerCase().trim();
         passwordInput = passwordTxt.getText().trim();
 
-        //If login is valid, prints to the console, logs the activity and loads the main menu.
+        //If login is valid, prints a success message to the console, logs the activity and loads the main menu.
         if(validLogin()) {
-            System.out.println("Login successful!");
+            //Records the login activity to login_activity.txt
             recordLoginActivity(true, usernameInput);
             userName = usernameInput;
+
+            //Prints success message to the console.
+            System.out.println("| Login successful. Welcome to Appointment+," + userName +"! |");
+
+            //Test to see if there are any appointments within 15mins of login
             testForApptsIn15mins(actionEvent);
 
-            //Loads the Main Menu
+            //Loads the Main Menu screen
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
             Stage stage = (Stage) (loginButton.getScene().getWindow());
             stage.setTitle("Appointment+ Main Menu");
             stage.setScene(new Scene(root, 1200, 700));
             stage.show();
         }
-        //If username is blank, displays an error message and logs the activity.
+        //If username is blank, prints to error message the console, displays an error message and logs the activity.
         else if(usernameInput.isBlank()){
             blankUsernameError(actionEvent);
             recordLoginActivity(false, usernameInput);
         }
-        //If password is blank, displays an error message and logs the activity.
+        //If password is blank, prints error message to the console, displays an error message and logs the activity.
         else if(passwordInput.isBlank()){
             blankPasswordError(actionEvent);
             recordLoginActivity(false,usernameInput);
         }
-        //If login is invalid, displays an error message and logs the activity.
+        //If login is invalid, prints error message to the console, displays an error message and logs the activity.
         else{
             invalidLogin(actionEvent);
             recordLoginActivity(false, usernameInput);
