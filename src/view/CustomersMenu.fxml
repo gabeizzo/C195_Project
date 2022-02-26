@@ -26,7 +26,7 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="599.0" prefWidth="235.0">
                             <children>
                                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="53.0" stroke="#005883" strokeType="INSIDE" width="235.0" />
-                                <Label layoutX="17.0" layoutY="13.0" text="Appointment Scheduler" textFill="#f8f3f3">
+                                <Label layoutX="35.0" layoutY="13.0" text="Customers Menu" textFill="#f8f3f3">
                                     <font>
                                         <Font name="System Bold" size="18.0" />
                                     </font>
@@ -40,7 +40,7 @@
                                         <Font name="Arial Bold" size="14.0" />
                                     </font>
                                 </Button>
-                                <Label layoutX="17.0" layoutY="68.0" text="Customer Options" textFill="#f8f3f3">
+                                <Label layoutX="17.0" layoutY="68.0" text="Options" textFill="#f8f3f3">
                                     <font>
                                         <Font name="System Bold" size="18.0" />
                                     </font>
@@ -53,7 +53,7 @@
                                         <Font name="Arial Bold" size="14.0" />
                                     </font>
                                 </Button>
-                                <Button fx:id="modifyCustomerBtn" layoutX="16.0" layoutY="148.0" mnemonicParsing="false" onAction="#toModifyCustomer" prefHeight="27.0" prefWidth="202.0" text="Modify Existing Customer">
+                                <Button fx:id="modifyCustomerBtn" layoutX="16.0" layoutY="148.0" mnemonicParsing="false" onAction="#toModifyCustomer" prefHeight="27.0" prefWidth="202.0" text="Modify Customer">
                                     <font>
                                         <Font name="Arial Bold" size="14.0" />
                                     </font>
@@ -68,7 +68,7 @@
                         </AnchorPane>
                         <AnchorPane focusTraversable="true" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                             <children>
-                                <TableView fx:id="customerDataTable" layoutX="5.0" layoutY="88.0" prefHeight="584.0" prefWidth="950.0">
+                                <TableView fx:id="customerDataTable" layoutX="8.0" layoutY="88.0" prefHeight="552.0" prefWidth="940.0">
                                     <columns>
                                         <TableColumn fx:id="customerIDCol" prefWidth="81.6000075340271" text="Customer ID" />
                                         <TableColumn fx:id="customerNameCol" prefWidth="109.20000457763672" text="Customer Name" />

@@ -3,6 +3,9 @@ package controller;
 import DAO.AppointmentDAOImpl;
 import DAO.UserDAOImpl;
 import Utilities.DBQuery;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,9 +16,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import main.Main;
 import model.Appointment;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -41,7 +44,8 @@ public class LoginScreenController implements Initializable {
     private final ArrayList<String> allPasswords = new ArrayList<>();
     private ObservableList<Appointment> allAppts = FXCollections.observableArrayList();
     private final Connection connection = Main.connection;
-
+    @FXML
+    private Label dateTimeLbl;
     @FXML
     private PasswordField passwordTxt;
     @FXML
@@ -73,6 +77,8 @@ public class LoginScreenController implements Initializable {
         userNameTxt.clear();
         passwordTxt.clear();
 
+        initClock();
+
         ZoneId localTimezone = ZoneId.of(TimeZone.getDefault().getID());
         timeZoneID.setText(localTimezone.toString());
 
@@ -94,6 +100,15 @@ public class LoginScreenController implements Initializable {
         } catch(Exception e) {
             // Ignore to continue displaying in French language
         }
+    }
+
+    private void initClock() {
+        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            dateTimeLbl.setText(LocalDateTime.now().format(formatter));
+        }), new KeyFrame(javafx.util.Duration.seconds(1)));
+        clock.setCycleCount(Animation.INDEFINITE);
+        clock.play();
     }
 
     /** This method resets the Username and Password fields and clears any existing input.

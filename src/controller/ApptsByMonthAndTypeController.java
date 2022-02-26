@@ -1,6 +1,8 @@
 package controller;
 
+import DAO.AppointmentDAOImpl;
 import Utilities.MonthAndTypeData;
+import Utilities.MonthAndTypeReport;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +19,7 @@ import model.Appointment;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -34,7 +37,16 @@ public class ApptsByMonthAndTypeController implements Initializable {
     private Button mainMenuBtn;
     @FXML
     private TableView<MonthAndTypeData> apptsByMonthAndTypeTable;
+
+    private MonthAndTypeReport monthAndTypeReport = new MonthAndTypeReport();
+    private AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
     private ObservableList<Appointment> allApptData = FXCollections.observableArrayList();
+
+    /** This is the ApptsByMonthAndTypeController constructor for initializing objects of this type.
+     * @throws SQLException Thrown if there is a MySQL database access error.
+     */
+    public ApptsByMonthAndTypeController() throws SQLException {
+    }
 
     /** Gathers appointment data by their month and types and displays them in the reportsTable tableview.
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.

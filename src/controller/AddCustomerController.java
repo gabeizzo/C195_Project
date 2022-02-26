@@ -1,24 +1,28 @@
 package controller;
 
-import Utilities.DBQuery;
+import DAO.CountryDAOImpl;
+import DAO.CustomerDAOImpl;
+import DAO.FirstLvlDivisionDAOImpl;
+import Utilities.DivisionsByCountryID;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import main.Main;
 import model.Country;
 import model.FirstLvlDivision;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -26,6 +30,23 @@ import java.util.ResourceBundle;
  * This class defines the methods used to add customers to the database.
  */
 public class AddCustomerController implements Initializable {
+    private String customerName;
+    private String phone;
+    private String street;
+    private String city;
+    private String postalCode;
+    private String state;
+    private String address;
+    private Country country;
+    private FirstLvlDivision division;
+    private FirstLvlDivisionDAOImpl fldDAO = new FirstLvlDivisionDAOImpl();
+    private DivisionsByCountryID divisionsByCountryID = new DivisionsByCountryID();
+    private CountryDAOImpl countryDAO = new CountryDAOImpl();
+    private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+    private ObservableList<FirstLvlDivision> flds = fldDAO.getAllFLDs();
+    private ObservableList<FirstLvlDivision> fldByCountry = FXCollections.observableArrayList();
+    private ObservableList<Country> countryList = countryDAO.getAllCountriesFromDB();
+
     @FXML
     private TextField customerIDTxt;
     @FXML
@@ -33,9 +54,11 @@ public class AddCustomerController implements Initializable {
     @FXML
     private TextField customerPhoneTxt;
     @FXML
-    private TextField customerStreetAddressTxt;
+    private TextField customerStreetTxt;
     @FXML
     private TextField customerCityTxt;
+    @FXML
+    private TextField customerStateTxt;
     @FXML
     private TextField customerPostalCodeTxt;
     @FXML
@@ -46,7 +69,14 @@ public class AddCustomerController implements Initializable {
     private Button saveCustomerBtn;
     @FXML
     private Button cancelAddCustomerBtn;
-    private Connection connection = Main.connection;
+
+
+    /** This is the AddCustomerController constructor which initializes objects of this type.
+     * @throws SQLException Thrown if there is a MySQL database access error.
+     */
+    public AddCustomerController() throws SQLException {
+    }
+
 
     /** This method initializes the Add Customer screen.
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
@@ -54,7 +84,49 @@ public class AddCustomerController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        customerCountryCB.setPromptText("Select your Country");
+        customerCountryCB.setItems(countryList);
+        customerDivisionIDCB.setPromptText("Select Division after Country");
+        customerDivisionIDCB.setItems(null);
+    }
 
+    /** This method gets all customer data entered into the Add Customer form.
+     */
+    private void getCustomerData() {
+        customerName = customerNameTxt.getText().trim();
+        phone = customerPhoneTxt.getText().trim();
+        street = customerStreetTxt.getText().trim();
+        city = customerCityTxt.getText().trim();
+        postalCode = customerPostalCodeTxt.getText().trim();
+        state = customerStateTxt.getText().toUpperCase().trim();
+        country = customerCountryCB.getSelectionModel().getSelectedItem();
+        division = customerDivisionIDCB.getSelectionModel().getSelectedItem();
+    }
+
+    /** This method validates the customer data entered into the Add Customer form.
+     * @param actionEvent When the Save button is activated on the Add Customer screen.
+     * @return Returns true if customer data is complete, otherwise returns false.
+     */
+    private boolean validateCustomerData(ActionEvent actionEvent) {
+        getCustomerData();
+        if(customerName.isBlank() || phone.isBlank() || street.isBlank() || city.isBlank() || postalCode.isBlank() || state.isBlank()
+                || country == null || division == null) {
+            Alert blankFields = new Alert(Alert.AlertType.ERROR);
+            blankFields.setTitle("All Fields Required");
+            blankFields.setContentText("All fields are required and must not be left blank.\nPlease complete any blank/missing fields and try again.");
+            blankFields.showAndWait();
+            return false;
+            //Displays an error dialog if postal code is longer than the maximum of 8 digits for UK addresses.
+        } else if(postalCode.length() > 8 || postalCode.length() < 5) {
+            Alert postalCodeError = new Alert(Alert.AlertType.ERROR);
+            postalCodeError.setTitle("Postal Code Error");
+            postalCodeError.setContentText("Valid postal codes should be a minimum character length of 5(USA, no spaces), 6-7(Canada, including a space), or 6-8(U.K., including a space).\n" +
+                    "Postal codes must not be longer than 8 characters max including spaces.");
+            postalCodeError.showAndWait();
+            return false;
+        }
+        address = street + " " + city + ", " + state;
+        return true;
     }
 
     /** This method saves the entered customer data and stores a new customer in the database.

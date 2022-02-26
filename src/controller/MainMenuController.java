@@ -127,9 +127,9 @@ public class MainMenuController implements Initializable {
         }
     }
 
-    /** This method displays the
+    /** This method displays the date and time as a digital clock for user reference purposes.
      */
-    private void initClock() {
+    public void initClock() {
 
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

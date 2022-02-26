@@ -26,7 +26,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="599.0" prefWidth="235.0">
                      <children>
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="53.0" stroke="#005883" strokeType="INSIDE" width="235.0" />
-                        <Label layoutX="17.0" layoutY="13.0" text="Appointments Manager" textFill="#f8f3f3">
+                        <Label layoutX="17.0" layoutY="13.0" text="Main Menu" textFill="#f8f3f3">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -40,7 +40,7 @@
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Label layoutX="17.0" layoutY="62.0" text="Menu" textFill="#f8f3f3">
+                        <Label layoutX="17.0" layoutY="62.0" text="Appointments" textFill="#f8f3f3">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -48,7 +48,7 @@
                               <Glow />
                            </effect>
                         </Label>
-                        <Button fx:id="scheduleApptButton" layoutX="12.0" layoutY="96.0" mnemonicParsing="false" onAction="#toScheduleAppointment" prefHeight="27.0" prefWidth="210.0" text="Schedule An Appointment">
+                        <Button fx:id="scheduleApptButton" layoutX="12.0" layoutY="96.0" mnemonicParsing="false" onAction="#toScheduleAppointment" prefHeight="27.0" prefWidth="210.0" text="Schedule Appointment">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
@@ -58,18 +58,18 @@
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="customersMenuButton" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" onAction="#toCustomersMenu" prefHeight="27.0" prefWidth="210.0" text="View/Update Customers">
+                        <Button fx:id="customersMenuButton" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" onAction="#toCustomersMenu" prefHeight="27.0" prefWidth="210.0" text="Customers Menu">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="reportsByMonthAndTypeButton" layoutX="12.0" layoutY="453.0" mnemonicParsing="false" onAction="#toApptsByMonthAndType" prefHeight="27.0" prefWidth="210.0" text="Appts By Month and Type">
+                        <Button fx:id="reportsByMonthAndTypeButton" layoutX="12.0" layoutY="453.0" mnemonicParsing="false" onAction="#toApptsByMonthAndType" prefHeight="27.0" prefWidth="210.0" text="Month and Type Report">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="53.0" layoutY="621.0" stroke="#005883" strokeType="INSIDE" width="235.0" />
-                        <Button fx:id="exitAppButton" layoutX="36.0" layoutY="634.0" mnemonicParsing="false" onAction="#exitApplication" prefHeight="27.0" prefWidth="136.0" text="Exit Application">
+                        <Button fx:id="exitAppButton" layoutX="36.0" layoutY="634.0" mnemonicParsing="false" onAction="#exitApplication" prefHeight="27.0" prefWidth="136.0" text="Log Out/Exit">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
@@ -82,7 +82,7 @@
                               <Glow />
                            </effect>
                         </Label>
-                        <Label layoutX="16.0" layoutY="419.0" text="Reports" textFill="#f8f3f3">
+                        <Label layoutX="16.0" layoutY="419.0" prefHeight="27.0" prefWidth="210.0" text="Appointment Reports" textFill="#f8f3f3">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -143,7 +143,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="welcomeLbl" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="259.0" text="Welcome, Username! ">
+                        <Label fx:id="welcomeLbl" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="259.0" text="Welcome, test! ">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
