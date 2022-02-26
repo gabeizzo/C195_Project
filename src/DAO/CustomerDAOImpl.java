@@ -41,8 +41,9 @@ public class CustomerDAOImpl implements CustomerDAO{
         String lastUpdatedBy = rs.getString("Last_Updated_By");
         int divisionID = rs.getInt("Division_ID");
 
-        return new Customer(customerID, customerName, customerAddress, postalCode, phone,
+        Customer customer = new Customer(customerID, customerName, customerAddress, postalCode, phone,
                 createDateTime, createdBy, lastUpdate, lastUpdatedBy, divisionID);
+        return customer;
     }
 
     /** This method gets a customer from the database based on the customer's ID.
@@ -104,18 +105,21 @@ public class CustomerDAOImpl implements CustomerDAO{
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public void addCustomer(String customerName, String address, String postalCode, String phone, String createdBy, String lastUpdatedBy, int divisionID) throws SQLException {
-        String addCustomerToDB = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, Division_ID) VALUES(?, ?, ?, ?, ?, ?, ?)";
+    public void addNewCustomer(String customerName, String address, String postalCode, String phone, String createdBy, String lastUpdatedBy, int divisionID) throws SQLException{
+        String addCustomerToDB = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         DBQuery.setPreparedStatement(connection, addCustomerToDB);
         pst = DBQuery.getPreparedStatement();
         pst.setString(1, customerName);
         pst.setString(2, address);
         pst.setString(3, postalCode);
         pst.setString(4, phone);
-        pst.setString(5, createdBy);
-        pst.setString(6, lastUpdatedBy);
-        pst.setInt(7, divisionID);
+        pst.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+        pst.setString(6,createdBy);
+        pst.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+        pst.setString(8, lastUpdatedBy);
+        pst.setInt(9, divisionID);
         pst.execute();
+
     }
 
     /** Modifies a selected customer in the database when the save button is clicked on the Modify Customer screen.

@@ -65,9 +65,9 @@ public class ModifyAppointmentController implements Initializable {
     private ContactDAOImpl contactDAO = new ContactDAOImpl();
     private UserDAOImpl userDAO = new UserDAOImpl();
     private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-    private AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
-    private ObservableList<String> types = FXCollections.observableArrayList();
-    private ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+    private AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+    private ObservableList<String> apptTypes = FXCollections.observableArrayList();
+    private ObservableList<Appointment> appts = FXCollections.observableArrayList();
     private Customer customer;
     private User user;
     private String title;
@@ -94,15 +94,18 @@ public class ModifyAppointmentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        apptIDTxt.setText(String.valueOf(apptToModify.getApptID()));
+        apptTypes.addAll("Planning Session", "De-Briefing", "Department Meeting", "Escalation", "Review","Miscellaneous");
+        apptTypeCB.setItems(apptTypes);
+        int apptTypeIndex = apptTypes.indexOf(apptToModify.getApptType());
+        apptTypeCB.getSelectionModel().select(apptTypeIndex);
+
         try {
-            // populate customer combo box and select current customer
+            //Fills the combo boxes with customers, names and contacts.
             customerIDCB.setItems(customerDAO.getAllDBCustomers());
             customerIDCB.getSelectionModel().select(customerDAO.getCustomerByID(apptToModify.getCustomerID()));
-
-            //  populate user combo box and select current user
             userNameCB.setItems(userDAO.getAllUsers());
             userNameCB.getSelectionModel().select(userDAO.getUserByID(apptToModify.getUserID()));
-            // populate contact combo box
             contactCB.setItems(contactDAO.getAllContactsFromDB());
             contactCB.getSelectionModel().select(contactDAO.getContactByID(apptToModify.getContactID()));
         }
@@ -127,6 +130,10 @@ public class ModifyAppointmentController implements Initializable {
 
     }
 
+    /** Saves the modified appointment to the database and returns to the Main Menu.
+     * @param actionEvent When the save button is activated on the Modify Appointment screen.
+     * @throws IOException
+     */
     public void saveAppt(ActionEvent actionEvent) throws IOException {
         //if else here with try/catch
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
@@ -136,6 +143,10 @@ public class ModifyAppointmentController implements Initializable {
         stage.show();
     }
 
+    /** Returns to the Main Menu when the cancel button is activated on the Modify Appointment screen.
+     * @param actionEvent When the cancel button is activated.
+     * @throws IOException
+     */
     public void toMainMenu(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
         Stage stage = (Stage) (cancelScheduleApptButton.getScene().getWindow());

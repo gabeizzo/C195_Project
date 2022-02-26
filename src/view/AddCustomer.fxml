@@ -60,13 +60,13 @@
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
-            <ComboBox fx:id="customerCountryCB" prefHeight="26.0" prefWidth="161.0" />
+            <ComboBox fx:id="customerCountryCB" onAction="#populateDivisions" prefHeight="26.0" prefWidth="161.0" />
             <Label layoutX="10.0" layoutY="335.0" prefHeight="46.0" prefWidth="150.0" text="First Level Division" textFill="#f5f5f5">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <ComboBox fx:id="customerDivisionIDCB" layoutX="104.0" layoutY="344.0" prefHeight="26.0" prefWidth="162.0" />
+            <ComboBox fx:id="customerDivisionCB" layoutX="104.0" layoutY="344.0" prefHeight="26.0" prefWidth="162.0" />
          </children>
       </FlowPane>
       <Button fx:id="saveCustomerBtn" layoutX="136.0" layoutY="528.0" mnemonicParsing="false" onAction="#saveAddedCustomer" prefHeight="26.0" prefWidth="72.0" text="Save" />

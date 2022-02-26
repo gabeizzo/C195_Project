@@ -17,7 +17,7 @@ public class DivisionsByCountryID {
     public DivisionsByCountryID() throws SQLException {
     }
 
-    public ObservableList<FirstLvlDivision> DivisionsByCountryID(int id) throws SQLException {
+    public ObservableList<FirstLvlDivision> divisionsByCountryID(int id) throws SQLException {
         ObservableList<FirstLvlDivision> countryDivisions = FXCollections.observableArrayList();
         for(FirstLvlDivision fld : allFLDs){
             if(fld.getCountryID() == id){

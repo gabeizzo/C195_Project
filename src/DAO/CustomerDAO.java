@@ -29,9 +29,9 @@ public interface CustomerDAO {
      * @param createdBy The user who created the customer in the database.
      * @param lastUpdatedBy The user who last updated the customer data in the database.
      * @param divisionID The customer's division ID.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a database access error.
      */
-    public void addCustomer(String customerName, String address, String postalCode, String phone, String createdBy, String lastUpdatedBy, int divisionID) throws SQLException;
+    public void addNewCustomer(String customerName, String address, String postalCode, String phone, String createdBy, String lastUpdatedBy, int divisionID) throws SQLException;
 
     /** This method modifies a selected customer's information.
      * @param customerID The customer's unique ID.
@@ -41,13 +41,13 @@ public interface CustomerDAO {
      * @param phone The customer's phone number.
      * @param lastUpdatedBy The user who last updated the customer data in the database.
      * @param divisionID The customer's division ID.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a database access error.
      */
     public void modifyCustomer(int customerID, String customerName, String address, String postalCode, String phone, int divisionID, String lastUpdatedBy) throws SQLException;
 
     /** This method deletes customers from the database along with their existing appointments.
      * @param customerID The customer's unique ID.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a database access error.
      */
     public void deleteCustomer(int customerID) throws SQLException;
 

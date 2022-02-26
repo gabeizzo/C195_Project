@@ -89,7 +89,7 @@ public class CustomersMenuController implements Initializable {
     }
 
     /** This method deletes a selected customer from the database.
-     * @param actionEvent When the Delete Customer button is activated.
+     * @param actionEvent When Delete Customer button is activated.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void deleteCustomer(ActionEvent actionEvent) throws IOException{
@@ -99,7 +99,8 @@ public class CustomersMenuController implements Initializable {
      * @param actionEvent When the Add Customer button is activated.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void toAddCustomer(ActionEvent actionEvent) throws IOException{
+    @FXML
+    private void toAddCustomer(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddCustomer.fxml")));
         Stage stage = (Stage) (addCustomerBtn.getScene().getWindow());
         stage.setTitle("Appointment Scheduler Main Menu");

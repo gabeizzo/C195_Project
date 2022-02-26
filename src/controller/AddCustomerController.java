@@ -12,18 +12,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Country;
 import model.FirstLvlDivision;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /** This is the AddCustomerController class.
@@ -37,15 +34,17 @@ public class AddCustomerController implements Initializable {
     private String postalCode;
     private String state;
     private String address;
-    private Country country;
-    private FirstLvlDivision division;
+    private Country selectedCountry;
+    private FirstLvlDivision selectedDivision;
+
     private FirstLvlDivisionDAOImpl fldDAO = new FirstLvlDivisionDAOImpl();
-    private DivisionsByCountryID divisionsByCountryID = new DivisionsByCountryID();
     private CountryDAOImpl countryDAO = new CountryDAOImpl();
     private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-    private ObservableList<FirstLvlDivision> flds = fldDAO.getAllFLDs();
-    private ObservableList<FirstLvlDivision> fldByCountry = FXCollections.observableArrayList();
-    private ObservableList<Country> countryList = countryDAO.getAllCountriesFromDB();
+    private DivisionsByCountryID divisionsByCountry = new DivisionsByCountryID();
+
+    private ObservableList<FirstLvlDivision> allFLDs = fldDAO.getAllFLDs();
+    private ObservableList<FirstLvlDivision> countryDivisions = FXCollections.observableArrayList();
+    private ObservableList<Country> allCountries = countryDAO.getAllCountriesFromDB();
 
     @FXML
     private TextField customerIDTxt;
@@ -64,7 +63,7 @@ public class AddCustomerController implements Initializable {
     @FXML
     private ComboBox<Country> customerCountryCB;
     @FXML
-    private ComboBox<FirstLvlDivision> customerDivisionIDCB;
+    private ComboBox<FirstLvlDivision> customerDivisionCB;
     @FXML
     private Button saveCustomerBtn;
     @FXML
@@ -84,10 +83,21 @@ public class AddCustomerController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        customerCountryCB.setPromptText("Select your Country");
-        customerCountryCB.setItems(countryList);
-        customerDivisionIDCB.setPromptText("Select Division after Country");
-        customerDivisionIDCB.setItems(null);
+        //Populates the country combo box and selects the first country in the list
+        customerCountryCB.setItems(allCountries);
+        customerCountryCB.getSelectionModel().selectFirst();
+
+        //Filters divisions by the selected country
+        Country country = customerCountryCB.getSelectionModel().getSelectedItem();
+        try {
+            countryDivisions = divisionsByCountry.divisionsByCountryID(country.getCountryID());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        //Populates the First Level Division combo box with divisions based on the country's ID.
+        customerDivisionCB.setItems(countryDivisions);
+        customerDivisionCB.getSelectionModel().selectFirst();
     }
 
     /** This method gets all customer data entered into the Add Customer form.
@@ -99,8 +109,15 @@ public class AddCustomerController implements Initializable {
         city = customerCityTxt.getText().trim();
         postalCode = customerPostalCodeTxt.getText().trim();
         state = customerStateTxt.getText().toUpperCase().trim();
-        country = customerCountryCB.getSelectionModel().getSelectedItem();
-        division = customerDivisionIDCB.getSelectionModel().getSelectedItem();
+        selectedCountry = customerCountryCB.getSelectionModel().getSelectedItem();
+        selectedDivision = customerDivisionCB.getSelectionModel().getSelectedItem();
+    }
+    @FXML
+    private void populateDivisions(ActionEvent actionEvent) throws SQLException {
+        Country country = customerCountryCB.getSelectionModel().getSelectedItem();
+        countryDivisions = divisionsByCountry.divisionsByCountryID(country.getCountryID());
+        customerDivisionCB.setItems(countryDivisions);
+        customerDivisionCB.getSelectionModel().selectFirst();
     }
 
     /** This method validates the customer data entered into the Add Customer form.
@@ -110,7 +127,7 @@ public class AddCustomerController implements Initializable {
     private boolean validateCustomerData(ActionEvent actionEvent) {
         getCustomerData();
         if(customerName.isBlank() || phone.isBlank() || street.isBlank() || city.isBlank() || postalCode.isBlank() || state.isBlank()
-                || country == null || division == null) {
+                || selectedCountry == null || selectedDivision == null) {
             Alert blankFields = new Alert(Alert.AlertType.ERROR);
             blankFields.setTitle("All Fields Required");
             blankFields.setContentText("All fields are required and must not be left blank.\nPlease complete any blank/missing fields and try again.");
@@ -120,8 +137,10 @@ public class AddCustomerController implements Initializable {
         } else if(postalCode.length() > 8 || postalCode.length() < 5) {
             Alert postalCodeError = new Alert(Alert.AlertType.ERROR);
             postalCodeError.setTitle("Postal Code Error");
-            postalCodeError.setContentText("Valid postal codes should be a minimum character length of 5(USA, no spaces), 6-7(Canada, including a space), or 6-8(U.K., including a space).\n" +
-                    "Postal codes must not be longer than 8 characters max including spaces.");
+            postalCodeError.setContentText("""
+                    Valid postal codes should be a minimum character length of 5(U.S, no spaces), 6-7(Canada, including a space), or 6-8(UK, including a space).
+
+                    Postal codes must not be longer than 8 characters max including spaces.""");
             postalCodeError.showAndWait();
             return false;
         }
@@ -133,25 +152,41 @@ public class AddCustomerController implements Initializable {
      * @param actionEvent When the Save button is activated on the Add Customer screen.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void saveAddedCustomer(ActionEvent actionEvent) throws IOException{
+    @FXML
+    private void saveAddedCustomer(ActionEvent actionEvent) throws IOException{
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/CustomersMenu.fxml")));
-        Stage stage = (Stage) (saveCustomerBtn.getScene().getWindow());
-        stage.setTitle("Customers Menu");
-        stage.setScene(new Scene(root,1200 ,700));
-        stage.show();
+        if(validateCustomerData(actionEvent)) {
+
+            try {
+                customerDAO.addNewCustomer(customerName, address, postalCode, phone, LoginScreenController.userName, LoginScreenController.userName, selectedDivision.getDivisionID());
+                Parent root = FXMLLoader.load(getClass().getResource("/view/CustomersMenu.fxml"));
+                Stage stage = (Stage) (saveCustomerBtn.getScene().getWindow());
+                stage.setTitle("Customers Menu");
+                stage.setScene(new Scene(root,1200 ,700));
+                stage.show();
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /** This method cancels adding the customer to the database and returns to the Customers Menu.
      * @param actionEvent When the Cancel button is activated on the Add Customer screen.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void toCustomersMenu(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/CustomersMenu.fxml")));
-        Stage stage = (Stage) (cancelAddCustomerBtn.getScene().getWindow());
-        stage.setTitle("Customers Menu");
-        stage.setScene(new Scene(root,1200 ,700));
-        stage.show();
+    @FXML
+    private void toCustomersMenu(ActionEvent actionEvent) throws IOException {
+        Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to cancel adding new customer?");
+        cancelAlert.setTitle("Cancel Adding Customer");
+        Optional<ButtonType> result = cancelAlert.showAndWait();
 
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/CustomersMenu.fxml")));
+            Stage stage = (Stage) (cancelAddCustomerBtn.getScene().getWindow());
+            stage.setTitle("Customers Menu");
+            stage.setScene(new Scene(root,1200 ,700));
+            stage.show();
+        }
     }
 }
