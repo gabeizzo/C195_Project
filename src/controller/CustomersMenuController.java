@@ -1,28 +1,43 @@
 package controller;
 
 import DAO.CustomerDAOImpl;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 /** This is the CustomersMenuController class which defines the methods to be used for adding, deleting, modifying and displaying Customers from the database.
  */
 public class CustomersMenuController implements Initializable {
+    @FXML
+    private TextField customerSearchBar;
+    @FXML
+    private Label timeZoneID;
+    @FXML
+    private Label dateTimeLbl;
     @FXML
     private Button deleteCustomerBtn;
     @FXML
@@ -54,6 +69,9 @@ public class CustomersMenuController implements Initializable {
     @FXML
     private TableView<Customer> customerDataTable;
 
+    private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+    public static Customer modifyCustomer;
+
     /** This is the CustomersMenuController constructor.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
@@ -66,10 +84,17 @@ public class CustomersMenuController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ZoneId localTimezone = ZoneId.of(TimeZone.getDefault().getID());
+        timeZoneID.setText(localTimezone.toString());
+        displayClock();
+        viewAllCustomerFromDB();
+    }
+
+    private void viewAllCustomerFromDB() {
         try {
             CustomerDAOImpl customerDAO = new CustomerDAOImpl();
             customerDataTable.setItems(customerDAO.getAllDBCustomers());
-            customerIDCol.setCellValueFactory( new PropertyValueFactory<>("customerID"));
+            customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
             customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
             addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
             postalCodeCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
@@ -81,18 +106,46 @@ public class CustomersMenuController implements Initializable {
             divisionIDCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
 
             customerDataTable.getSelectionModel().selectFirst();
-
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    /** This method deletes a selected customer from the database.
+    /** displayClock method uses the EventHandler interface with a lambda expression to efficiently display an animated digital clock on the Customers Menu.
+     */
+    public void displayClock() {
+        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            dateTimeLbl.setText(LocalDateTime.now().format(formatter));
+        }), new KeyFrame(javafx.util.Duration.seconds(1)));
+        clock.setCycleCount(Animation.INDEFINITE);
+        clock.play();
+    }
+
+    /** This method deletes a selected customer from the database and re-loads the Customers Menu to prevent duplicate table entries.
      * @param actionEvent When Delete Customer button is activated.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void deleteCustomer(ActionEvent actionEvent) throws IOException{
+    public void deleteCustomer(ActionEvent actionEvent) throws IOException, SQLException {
+        Customer delete = customerDataTable.getSelectionModel().getSelectedItem();
+
+        if(delete != null){
+        Alert deleteCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete customer: " + delete.getCustomerName() + "?\n" +
+                "\n" + delete.getCustomerName() + "'s appointments will also be deleted.");
+        deleteCustomer.setTitle("Delete Confirmation");
+
+        Optional<ButtonType> result = deleteCustomer.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK) {
+            customerDAO.deleteCustomer(delete.getCustomerID());
+
+            //Reload the screen after the delete to re-initialize the Customers Menu, otherwise will get duplicates.
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/CustomersMenu.fxml")));
+            Stage stage = (Stage) (deleteCustomerBtn.getScene().getWindow());
+            stage.setTitle("Customers Menu");
+            stage.setScene(new Scene(root, 1200, 700));
+            stage.show();
+            }
+        }
     }
 
     /** This method loads the Add Customer screen.
@@ -113,6 +166,7 @@ public class CustomersMenuController implements Initializable {
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void toModifyCustomer(ActionEvent actionEvent) throws IOException{
+        modifyCustomer = customerDataTable.getSelectionModel().getSelectedItem();
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyCustomer.fxml")));
         Stage stage = (Stage) (modifyCustomerBtn.getScene().getWindow());
         stage.setTitle("Appointment Scheduler Main Menu");
@@ -131,4 +185,79 @@ public class CustomersMenuController implements Initializable {
         stage.setScene(new Scene(root,1200 ,700));
         stage.show();
     }
+
+    /** This method searches the Customer Data table for any customers that have either a Customer ID or Name that match the text input.
+     * @param actionEvent When data is entered into the search bar on the main menu.
+     * @throws SQLException Thrown if there is a database access error.
+     */
+    public void searchCustomers(ActionEvent actionEvent) throws SQLException {
+
+        String searchInput = customerSearchBar.getText();
+
+        ObservableList<Customer> customers = searchByCustomerName(searchInput);
+        try {
+            int customerID = Integer.parseInt(searchInput);
+            Customer c = searchByCustomerID(customerID);
+            if(c != null){
+                customers.add(c);
+            }
+        } catch (NumberFormatException e) {
+            //ignore
+        }
+        customerDataTable.setItems(customers);
+
+        if(customerSearchBar.getText().isBlank()){
+
+            viewAllCustomerFromDB();
+        }
+
+        if(customers.isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Results");
+            alert.setContentText("""
+                    No customers found with the entered ID or Name.
+                    Please check spelling and try again.
+
+                    Reminder: search is case sensitive.""");
+            alert.showAndWait();
+
+            customerSearchBar.clear();
+            viewAllCustomerFromDB();
+
+        }
+
+    }
+    /** Searches for Customers by Name.
+     @param partialCustomerName The text input entered into the search field above the Customer Data table.
+     @return resultsSearch The search results to be displayed in the Customers table.
+     @throws SQLException Thrown if there is a database access error.
+     */
+    private ObservableList<Customer> searchByCustomerName(String partialCustomerName) throws SQLException {
+        ObservableList<Customer> resultsSearch = FXCollections.observableArrayList();
+
+        viewAllCustomerFromDB();
+        ObservableList<Customer> allCustomers = customerDataTable.getItems();
+
+        for(Customer c : allCustomers){
+            if(c.getCustomerName().contains(partialCustomerName))
+                resultsSearch.add(c);
+        }
+        return resultsSearch;
+    }
+
+    /** Searches customers by id.
+     @param customerID The customer id that is searched.
+     @return c, the customer that matches the searched id.
+     @throws SQLException Thrown if there is a database error.
+     */
+    private Customer searchByCustomerID(int customerID) throws SQLException {
+        ObservableList<Customer> allCustomers = customerDataTable.getItems();
+        for (Customer c : allCustomers) {
+            if (c.getCustomerID() == customerID) {
+                return c;
+            }
+        }
+        return null;
+    }
+
 }

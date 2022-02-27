@@ -96,9 +96,8 @@ public class MainMenuController implements Initializable {
     private  ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
 
 
-    /**
-     *
-     * @throws SQLException
+    /** This is the MainMenuController constructor and is used to instantiate objects of this type.
+     * @throws SQLException Thrown if there is a database access error.
      */
     public MainMenuController() throws SQLException{
         allAppts = apptDAO.getAllApptsFromDB();
@@ -112,7 +111,7 @@ public class MainMenuController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ZoneId localTimezone = ZoneId.of(TimeZone.getDefault().getID());
         timeZoneID.setText(localTimezone.toString());
-        initClock();
+        displayClock();
 
         apptsViewToggle = new ToggleGroup();
         allApptsRadioBtn.setToggleGroup(apptsViewToggle);
@@ -127,9 +126,9 @@ public class MainMenuController implements Initializable {
         }
     }
 
-    /** This method displays the date and time as a digital clock for user reference purposes.
+    /** displayClock method uses the EventHandler interface with a lambda expression to efficiently display an animated digital clock on the Customers Menu.
      */
-    public void initClock() {
+    public void displayClock() {
 
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -373,8 +372,8 @@ public class MainMenuController implements Initializable {
 
     }
     /** Searches for Appointments by Title.
-     @param partialApptTitle The text input entered into the search field above the Parts table.
-     @return resultsSearch The search results to be displayed in the Parts table.
+     @param partialApptTitle The text input entered into the search field above the table.
+     @return resultsSearch The search results to be displayed in the table.
      @throws SQLException Thrown if there is a database access error.
      */
     private ObservableList<Appointment> searchByApptTitle(String partialApptTitle) throws SQLException {

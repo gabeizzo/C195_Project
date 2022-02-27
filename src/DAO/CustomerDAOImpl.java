@@ -18,6 +18,7 @@ public class CustomerDAOImpl implements CustomerDAO{
 
     ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
 
+
     /** This is the constructor for the CustomerDAOImpl class.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
@@ -41,9 +42,8 @@ public class CustomerDAOImpl implements CustomerDAO{
         String lastUpdatedBy = rs.getString("Last_Updated_By");
         int divisionID = rs.getInt("Division_ID");
 
-        Customer customer = new Customer(customerID, customerName, customerAddress, postalCode, phone,
+        return new Customer(customerID, customerName, customerAddress, postalCode, phone,
                 createDateTime, createdBy, lastUpdate, lastUpdatedBy, divisionID);
-        return customer;
     }
 
     /** This method gets a customer from the database based on the customer's ID.
@@ -113,9 +113,9 @@ public class CustomerDAOImpl implements CustomerDAO{
         pst.setString(2, address);
         pst.setString(3, postalCode);
         pst.setString(4, phone);
-        pst.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+        pst.setTimestamp(5, new Timestamp(System.currentTimeMillis())); //Adds Create_Date to database
         pst.setString(6,createdBy);
-        pst.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+        pst.setTimestamp(7, new Timestamp(System.currentTimeMillis())); //Adds Last_Update to database
         pst.setString(8, lastUpdatedBy);
         pst.setInt(9, divisionID);
         pst.execute();
