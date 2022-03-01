@@ -49,14 +49,12 @@ public class ConvertTime {
      * @param localTimeCB The local time combo box.
      * @param apptStartTime The appointment's start time.
      * @param apptEndTime The appointment's end time.
-     * @return A combo box displaying all available times.
      */
-    public static ComboBox<LocalTime> displayValidTimes(ComboBox<LocalTime> localTimeCB, LocalTime apptStartTime, LocalTime apptEndTime) {
+    public static void displayValidTimes(ComboBox<LocalTime> localTimeCB, LocalTime apptStartTime, LocalTime apptEndTime) {
         while(apptStartTime.isBefore(apptEndTime.plusSeconds(1))) {
             localTimeCB.getItems().add(apptStartTime);
             apptStartTime = apptStartTime.plusMinutes(15);
         }
-        return localTimeCB;
     }
 
     /** Converts local time to EST.
@@ -84,11 +82,9 @@ public class ConvertTime {
         LocalTime startTime = LocalTime.of(7,59);
         ZoneId ESTZoneID = ZoneId.of("America/New_York");
         ZonedDateTime ESTStartTime = ZonedDateTime.of(compareTime.toLocalDate(), startTime, ESTZoneID);
-        System.out.println("EST start time " + ESTStartTime + " " + ESTStartTime.toLocalDateTime());
 
         LocalTime endTime = LocalTime.of(22, 1);
         ZonedDateTime ESTEndTime = ZonedDateTime.of(compareTime.toLocalDate(), endTime, ESTZoneID);
-        System.out.println("EST end time " + ESTEndTime + " " + ESTEndTime.toLocalDateTime());
 
         LocalDateTime ESTtoCompare = localToEST(compareTime);
         return ESTtoCompare.isAfter(ChronoLocalDateTime.from(ESTStartTime)) && ESTtoCompare.isBefore(ChronoLocalDateTime.from(ESTEndTime));

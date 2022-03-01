@@ -27,7 +27,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,8 +36,11 @@ import java.util.ResourceBundle;
  * This class defines the methods used to schedule appointments and save them to the database.
  */
 public class ScheduleAppointmentController implements Initializable {
-    private LocalTime start = LocalTime.of(5,0);
+
+    //Start at 3AM to account for 5-hour difference for Hawaii based appointments to start at 8AM EST
+    private LocalTime start = LocalTime.of(3,0);
     private LocalTime end = LocalTime.of(23,0);
+
     private ContactDAOImpl contactDAO = new ContactDAOImpl();
     private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
     private UserDAOImpl userDAO = new UserDAOImpl();
@@ -50,13 +52,13 @@ public class ScheduleAppointmentController implements Initializable {
     private String apptTitle;
     private String description;
     private String location;
-    private Contact contact;
+    private Contact contactName;
     private String apptType;
     private LocalDate apptDate;
     private LocalTime apptStart;
     private LocalTime apptEnd;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalDateTime apptStartDateTime;
+    private LocalDateTime apptEndDateTime;
 
     @FXML
     private TextField apptIDTxt;
@@ -85,6 +87,9 @@ public class ScheduleAppointmentController implements Initializable {
     @FXML
     private Button cancelScheduleApptBtn;
 
+    /** This is the ScheduleAppointmentController constructor.
+     * @throws SQLException Thrown if there is a MySQL database access error.
+     */
     public ScheduleAppointmentController() throws SQLException {
     }
 
@@ -123,6 +128,7 @@ public class ScheduleAppointmentController implements Initializable {
                 }
             });
 
+            //Set the date picker
             apptDatePicker.setValue(LocalDate.now());
             apptDate = apptDatePicker.getValue();
 
@@ -136,15 +142,15 @@ public class ScheduleAppointmentController implements Initializable {
         }
     }
 
-    /** Gets all data from the input fields on the Schedule Appointment screen.
-     */
+/** This method gets all data from the form input fields on the Schedule Appointment screen.
+ */
     private void getApptData() {
         customerName = customerCB.getSelectionModel().getSelectedItem();
         userName = userNameCB.getSelectionModel().getSelectedItem();
         apptTitle = apptTitleTxt.getText().trim();
         description = apptDescriptionTxt.getText().trim();
         location = apptLocationTxt.getText().trim();
-        contact = contactCB.getSelectionModel().getSelectedItem();
+        contactName = contactCB.getSelectionModel().getSelectedItem();
         apptType = apptTypeCB.getSelectionModel().getSelectedItem();
         apptDate = apptDatePicker.getValue();
         apptStart = apptStartTimeCB.getValue();
@@ -166,14 +172,19 @@ public class ScheduleAppointmentController implements Initializable {
      * @return True if the appointment data is valid, false if there are blank fields or start/end times are invalid.
      */
     private boolean apptDataIsValid(){
+
+        //Gets the appointment data
         getApptData();
-        if(customerName == null || userName == null || apptTitle.isBlank() || description.isBlank() || location.isBlank() || contact == null || apptType == null || apptDate == null || apptStart == null || apptEnd == null){
+
+        //Ensures no form fields are left blank/null
+        if(customerName == null || userName == null || apptTitle.isBlank() || description.isBlank() || location.isBlank() || contactName == null || apptType == null || apptDate == null || apptStart == null || apptEnd == null){
             Alert blankFields = new Alert(Alert.AlertType.ERROR);
             blankFields.setTitle("All Fields Required");
             blankFields.setContentText("All fields are required and must not be left blank.\nPlease complete any blank/missing fields and try again.");
             blankFields.showAndWait();
             return false;
         }
+        //Ensures that the start time is before and not equal to the end time.
         else if(apptStart.isAfter(apptEnd) || apptStart.equals(apptEnd)){
             Alert apptStartInvalid = new Alert(Alert.AlertType.ERROR);
             apptStartInvalid.setTitle("Invalid Start Time");
@@ -185,16 +196,18 @@ public class ScheduleAppointmentController implements Initializable {
             return false;
         }
         else if(!apptStartEndAreValid()){
-            Alert blankFields = new Alert(Alert.AlertType.ERROR);
-            blankFields.setTitle("Invalid Start/End Times");
-            blankFields.setContentText("Appointment start and end times must be between 08:00AM-10:00PM(EST).\nAppointment start time(EST): "
+            Alert invalidTimes = new Alert(Alert.AlertType.ERROR);
+            invalidTimes.setTitle("Invalid Start/End Times");
+            invalidTimes.setContentText("Appointment start and end times must be between 08:00AM-10:00PM(EST).\n\nAppointment start time(EST): "
                     + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptStart)))
                     + "\nAppointment end time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptEnd)))
-                    + "\nLocal time: " + ConvertTime.timeFormatted(LocalTime.now())
-                    + "\nLocal time in EST: " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.now())));
-            blankFields.showAndWait();
+                    + "\n\nFor your reference:\nCurrent Local time: " + ConvertTime.timeFormatted(LocalTime.now())
+                    + "\nCurrent Local time in EST: " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.now())));
+            invalidTimes.showAndWait();
             return false;
         }
+
+        //If entered data is valid check for appointment overlap
         else {
             //Checks if there is any appointments that overlap and returns false if there are conflicting appointments.
             try {
@@ -202,8 +215,8 @@ public class ScheduleAppointmentController implements Initializable {
                     return false;
                 }
                 else {
-                    startTime = LocalDateTime.of(apptDate, apptStart);
-                    endTime = LocalDateTime.of(apptDate, apptEnd);
+                    apptStartDateTime = LocalDateTime.of(apptDate, apptStart);
+                    apptEndDateTime = LocalDateTime.of(apptDate, apptEnd);
                 }
             }
             catch (SQLException e) {
@@ -221,8 +234,8 @@ public class ScheduleAppointmentController implements Initializable {
     private boolean apptOverlap() throws SQLException {
         try{
             //establish the appointment start and end times for comparison.
-            startTime = LocalDateTime.of(apptDate, apptStart);
-            endTime = LocalDateTime.of(apptDate, apptEnd);
+            apptStartDateTime = LocalDateTime.of(apptDate, apptStart);
+            apptEndDateTime = LocalDateTime.of(apptDate, apptEnd);
             appts = apptDAO.getAllApptsFromDB();
 
             //Loop through the appointments and check if there are any with conflicting start and end times.
@@ -230,22 +243,22 @@ public class ScheduleAppointmentController implements Initializable {
                 if(a.getCustomerID() == customerName.getCustomerID()){
 
                     //Checks appointment start times for overlap.
-                    if(startTime.isAfter(a.getStartDateTime().minusMinutes(1)) && startTime.isBefore(a.getEndDateTime())){
+                    if(apptStartDateTime.isAfter(a.getStartDateTime().minusMinutes(1)) && apptStartDateTime.isBefore(a.getEndDateTime())){
                         Alert apptCollision = new Alert(Alert.AlertType.ERROR);
                         apptCollision.setTitle("Appointment Conflict");
                         apptCollision.setContentText("This appointment's start/end times overlap with the following appointment:\n\n"
                                 + "Appointment ID: " + a.getApptID() + "\nAppointment Title: " + a.getApptTitle() + "\nDescription: "
-                                + a.getDescription() +"\nStart Time:" + a.getStartTime() + "\nEnd Time: " + a.getEndTime());
+                                + a.getDescription() +"\nLocal Start Time:" + a.getStartTime() + "\nLocal End Time: " + a.getEndTime());
                         apptCollision.showAndWait();
                         return false;
                     }
                     //Checks appointment end times for overlap.
-                    else if (endTime.isAfter(a.getStartDateTime().minusMinutes(1)) && endTime.isBefore(a.getEndDateTime())) {
+                    else if (apptEndDateTime.isAfter(a.getStartDateTime().minusMinutes(1)) && apptEndDateTime.isBefore(a.getEndDateTime())) {
                         Alert apptCollision = new Alert(Alert.AlertType.ERROR);
                         apptCollision.setTitle("Appointment Conflict");
                         apptCollision.setContentText("This appointment's start/end times overlap with the following appointment:\n\n"
                                 + "Appointment ID: " + a.getApptID() + "\nAppointment Title: " + a.getApptTitle() + "\nDescription: "
-                                + a.getDescription() +"\nStart Time:" + a.getStartTime() + "\nEnd Time: " + a.getEndTime());
+                                + a.getDescription() +"\nLocal Start Time:" + a.getStartTime() + "\nLocal End Time: " + a.getEndTime());
                         apptCollision.showAndWait();
                         return false;
                     }
@@ -266,22 +279,22 @@ public class ScheduleAppointmentController implements Initializable {
 
         if(apptDataIsValid()) {
 
+            //Add the appointment to the database
             try {
-                apptDAO.addAppt(apptTitle, description, location, apptType, startTime, endTime, LocalDateTime.now(),
+                apptDAO.addAppt(apptTitle, description, location, apptType, apptStartDateTime, apptEndDateTime, LocalDateTime.now(),
                         LoginScreenController.userName, LocalDateTime.now(), LoginScreenController.userName,
-                        customerName.getCustomerID(), userName.getUserID(), contact.getContactID());
+                        customerName.getCustomerID(), userName.getUserID(), contactName.getContactID());
 
+                //Return to the Main Menu
                 Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
                 Stage stage = (Stage) (saveApptBtn.getScene().getWindow());
                 stage.setTitle("Appointment Scheduler Main Menu");
                 stage.setScene(new Scene(root, 1200, 700));
                 stage.show();
-
-            } catch (SQLException e) {
+            }
+            catch (SQLException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
 
@@ -291,10 +304,12 @@ public class ScheduleAppointmentController implements Initializable {
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
 
+        //Cancel button alert
         Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to cancel scheduling this appointment?");
         cancelAlert.setTitle("Cancel Scheduling Appointment");
         Optional<ButtonType> result = cancelAlert.showAndWait();
 
+        //Return to the Main Menu
         if (result.isPresent() && result.get() == ButtonType.OK) {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
             Stage stage = (Stage) (cancelScheduleApptBtn.getScene().getWindow());

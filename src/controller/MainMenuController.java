@@ -156,8 +156,52 @@ public class MainMenuController implements Initializable {
      * @param actionEvent When the Delete Appointment button is clicked.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void deleteAppointment(ActionEvent actionEvent) throws IOException{
+    public void deleteAppointment(ActionEvent actionEvent) throws IOException {
+        Appointment deleteThisAppt = apptsTable.getSelectionModel().getSelectedItem();
 
+        if (deleteThisAppt != null) {
+            try {
+                int apptID = deleteThisAppt.getApptID();
+                String apptTitle = deleteThisAppt.getApptTitle();
+                String apptType = deleteThisAppt.getApptType();
+                String apptDesc = deleteThisAppt.getDescription();
+                LocalDateTime apptStart = deleteThisAppt.getStartDateTime();
+                LocalDateTime apptEnd = deleteThisAppt.getEndDateTime();
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Delete Appointment");
+                alert.setContentText("Are you sure you want to delete this appointment?"
+                        + "\n\nAppointment ID: " + apptID
+                        + "\nAppointment Title: " + apptTitle
+                        + "\nAppointment Type: " + apptType
+                        + "\nDescription: " + apptDesc
+                        + "\nStart Time: " + apptStart
+                        + "\nEnd Time: " + apptEnd
+                        + "?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    allAppts.remove(deleteThisAppt);
+                    apptDAO.deleteApptFromDB(deleteThisAppt.getApptID());
+                    Alert deleteSuccess = new Alert(Alert.AlertType.INFORMATION);
+                    deleteSuccess.setTitle("Appointment Deleted");
+                    deleteSuccess.setContentText("This appointment has been cancelled: "
+                            + "\n\nAppointment ID: " + apptID
+                            + "\nAppointment Title: " + apptTitle
+                            + "\nAppointment Type: " + apptType
+                            + "\nDescription: " + apptDesc
+                            + "\nLocal Start Time: " + apptStart
+                            + "\nLocal End Time: " + apptEnd
+                    );
+                    //Delete the appointment
+                    allAppts.remove(deleteThisAppt);
+                    deleteSuccess.showAndWait();
+                }
+            }
+            catch ( SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /** This method changes the stage to the Schedule Appointment screen.
@@ -172,8 +216,8 @@ public class MainMenuController implements Initializable {
         stage.show();
     }
 
-    /** This method changes the stage to display the Modify Appointments screen.
-     * @param actionEvent When the Modify Appointment button is selected.
+    /** This method changes the stage to display to Modify Appointments screen.
+     * @param actionEvent When to Modify Appointment button is selected.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void toModifyAppointment(ActionEvent actionEvent) throws IOException{
@@ -268,7 +312,6 @@ public class MainMenuController implements Initializable {
                 noAppts.showAndWait();
             }
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -278,6 +321,8 @@ public class MainMenuController implements Initializable {
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     private void viewAllApptsFromDB() throws SQLException {
+
+        //Sets up the apptsTable columns with all the Appointment object parameters
         apptsTable.setItems(allAppts);
         apptIDCol.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         titleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
@@ -321,7 +366,7 @@ public class MainMenuController implements Initializable {
             currWeekAppts.clear();
         }
 
-        //Checks if any appointments start this week and if so, adds them to currWeekAppts ObservableList
+        //Checks if any appointments start this week and if true, adds them to currWeekAppts ObservableList
         for (Appointment appt : allAppts) {
             TemporalField apptWeek = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
             int numOfApptWeek = appt.getStartDateTime().toLocalDate().get(apptWeek);
@@ -329,9 +374,10 @@ public class MainMenuController implements Initializable {
                 currWeekAppts.add(appt);
             }
         }
-
+        //Add current week's appointments to the appointments table
         apptsTable.setItems(currWeekAppts);
         apptsTable.getSelectionModel().selectFirst();
+
         // If there are no weekly appointments show alert
         if (currWeekAppts.isEmpty()) {
             Alert noWeeklyAppts = new Alert(Alert.AlertType.INFORMATION);
@@ -347,9 +393,10 @@ public class MainMenuController implements Initializable {
      */
     public void searchAppts(ActionEvent actionEvent) throws SQLException {
 
+        //Get the search text input
         String searchInput = apptSearchBar.getText();
-
         ObservableList<Appointment> appointments = searchByApptTitle(searchInput);
+
         try {
             int apptID = Integer.parseInt(searchInput);
             Appointment a = searchByApptID(apptID);
@@ -361,6 +408,7 @@ public class MainMenuController implements Initializable {
         }
         apptsTable.setItems(appointments);
 
+        //If blank search, display all appointments to the table
         if(apptSearchBar.getText().isBlank()){
             try{
                 viewAllApptsFromDB();
@@ -369,6 +417,7 @@ public class MainMenuController implements Initializable {
             }
         }
 
+        //If there are no matches and the list is empty display message.
         if(appointments.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("No Results");
@@ -379,15 +428,14 @@ public class MainMenuController implements Initializable {
                     Reminder: Appointments search is case sensitive.""");
             alert.showAndWait();
 
+            //Clear the text field and display all appointments
             apptSearchBar.clear();
             try{
                 viewAllApptsFromDB();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
     /** Searches for Appointments by Title.
      @param partialApptTitle The text input entered into the search field above the table.
