@@ -29,7 +29,7 @@
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font></Label>
-            <ComboBox fx:id="customerIDCB" prefWidth="150.0" />
+            <ComboBox fx:id="customerCB" prefWidth="150.0" />
                 <Label layoutX="10.0" layoutY="10.0" prefHeight="46.0" prefWidth="113.0" text="User" textFill="#f5f5f5">
                     <font>
                         <Font name="System Bold" size="14.0" />
@@ -80,7 +80,7 @@
             <ComboBox fx:id="apptEndTimeCB" layoutX="124.0" layoutY="437.0" prefHeight="26.0" prefWidth="102.0" />
             </children>
         </FlowPane>
-        <Button fx:id="saveApptButton" layoutX="141.0" layoutY="640.0" mnemonicParsing="false" onAction="#saveAppt" prefHeight="26.0" prefWidth="72.0" text="Save" />
-        <Button fx:id="cancelScheduleApptButton" layoutX="224.0" layoutY="640.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="26.0" prefWidth="72.0" text="Cancel" />
+        <Button fx:id="saveApptBtn" layoutX="141.0" layoutY="640.0" mnemonicParsing="false" onAction="#saveAppt" prefHeight="26.0" prefWidth="72.0" text="Save" />
+        <Button fx:id="cancelScheduleApptBtn" layoutX="224.0" layoutY="640.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="26.0" prefWidth="72.0" text="Cancel" />
     </children>
 </AnchorPane>

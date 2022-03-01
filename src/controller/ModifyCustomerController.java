@@ -2,7 +2,7 @@ package controller;
 
 import DAO.CountryDAOImpl;
 import DAO.CustomerDAOImpl;
-import DAO.FirstLvlDivisionDAOImpl;
+import DAO.DivisionDAOImpl;
 import Utilities.DivisionsByCountryID;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +16,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Country;
 import model.Customer;
-import model.FirstLvlDivision;
+import model.Division;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -41,29 +42,34 @@ public class ModifyCustomerController implements Initializable {
     @FXML
     private ComboBox<Country> customerCountryCB;
     @FXML
-    private ComboBox<FirstLvlDivision> customerDivisionCB;
+    private ComboBox<Division> customerDivisionCB;
     @FXML
     private Button saveCustomerBtn;
     @FXML
     private Button cancelModifyCustomerBtn;
 
+    //Provides the customer to be modified and ability to call the methods needed from the DAOImpl's.
     private Customer modifyCustomer = CustomersMenuController.modifyCustomer;
     private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-    private FirstLvlDivisionDAOImpl fldDAO = new FirstLvlDivisionDAOImpl();
+    private DivisionDAOImpl fldDAO = new DivisionDAOImpl();
     private CountryDAOImpl countryDAO = new CountryDAOImpl();
+
+    //Used for country and division filtering and populating the combo boxes
     private DivisionsByCountryID divisionsByCountry = new DivisionsByCountryID();
-    private ObservableList<FirstLvlDivision> countryDivisions = FXCollections.observableArrayList();
+    private ObservableList<Division> countryDivisions = FXCollections.observableArrayList();
     private final ObservableList<Country> allCountries = countryDAO.getAllCountriesFromDB();
 
-
+    //Customer data
     private String customerName;
     private String phone;
     private String postalCode;
     private String address;
     private Country country;
-    private FirstLvlDivision division;
+    private Division division;
 
-
+    /** ModifyCustomerController constructor.
+     * @throws SQLException Thrown if there is a database access error.
+     */
     public ModifyCustomerController() throws SQLException {
     }
 
@@ -99,7 +105,7 @@ public class ModifyCustomerController implements Initializable {
             countryDivisions = divisionsByCountry.divisionsByCountryID(country.getCountryID());
             customerDivisionCB.setItems(countryDivisions);
 
-            FirstLvlDivision customerFLD = getDivision(modifyCustomer.getDivisionID());
+            Division customerFLD = getDivision(modifyCustomer.getDivisionID());
             customerDivisionCB.getSelectionModel().select(customerFLD);
         }
         catch (SQLException e ) {
@@ -107,7 +113,7 @@ public class ModifyCustomerController implements Initializable {
         }
     }
 
-    private FirstLvlDivision getDivision(int divisionID) throws SQLException{
+    private Division getDivision(int divisionID) throws SQLException{
         return fldDAO.getFLDByID(divisionID);
     }
 

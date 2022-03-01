@@ -54,7 +54,7 @@ public class ConvertTime {
     public static ComboBox<LocalTime> displayValidTimes(ComboBox<LocalTime> localTimeCB, LocalTime apptStartTime, LocalTime apptEndTime) {
         while(apptStartTime.isBefore(apptEndTime.plusSeconds(1))) {
             localTimeCB.getItems().add(apptStartTime);
-            apptStartTime = apptEndTime.plusMinutes(15);
+            apptStartTime = apptStartTime.plusMinutes(15);
         }
         return localTimeCB;
     }
@@ -86,7 +86,7 @@ public class ConvertTime {
         ZonedDateTime ESTStartTime = ZonedDateTime.of(compareTime.toLocalDate(), startTime, ESTZoneID);
         System.out.println("EST start time " + ESTStartTime + " " + ESTStartTime.toLocalDateTime());
 
-        LocalTime endTime = LocalTime.of(22, 0);
+        LocalTime endTime = LocalTime.of(22, 1);
         ZonedDateTime ESTEndTime = ZonedDateTime.of(compareTime.toLocalDate(), endTime, ESTZoneID);
         System.out.println("EST end time " + ESTEndTime + " " + ESTEndTime.toLocalDateTime());
 

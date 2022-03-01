@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class UserScheduleController implements Initializable {
-    private AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
+    private AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
     private ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     private ObservableList<Appointment> testUser;
     private ObservableList<Appointment> adminUser;
@@ -62,38 +62,35 @@ public class UserScheduleController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-     //   try {
+        try {
 
             // Grab all user specific users appointments
-          //  testUser = appointmentDAO.getUserSpecificAppointment(1);
-         //   adminUser = appointmentDAO.getUserSpecificAppointment(2);
+            testUser = apptDAO.getApptsByUserID(1);
+            adminUser = apptDAO.getApptsByUserID(2);
             // add each user's list to overall list
-         //   addListToAllContactAppointments(firstUser);
-          //  addListToAllContactAppointments(secondUser);
+           // addListToAllContactAppointments(firstUser);
+           // addListToAllContactAppointments(secondUser);
+
             // set up table view
             userScheduleTable.setItems(allAppointments);
             userNameCol.setCellValueFactory(new PropertyValueFactory<>("user"));
             apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
             titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
             descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-
+            typeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
             apptDateCol.setCellValueFactory(new PropertyValueFactory<>("startDateFormatted"));
             startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTimeFormatted"));
             endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTimeFormatted"));
             customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
 
-       /* } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+        } catch (SQLException e) {
             e.printStackTrace();
-        }*/
-
-
+        }
     }
 
-    /**
-     *
-     * @param actionEvent
-     * @throws IOException
+    /** Returns to the Main Menu screen when the Return to Main Menu button is activated.
+     * @param actionEvent When the Return to Main Menu Button is activated.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));

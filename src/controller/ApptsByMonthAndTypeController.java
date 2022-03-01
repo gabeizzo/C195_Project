@@ -16,7 +16,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import model.Appointment;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;

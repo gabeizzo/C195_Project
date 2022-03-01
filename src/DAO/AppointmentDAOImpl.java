@@ -48,7 +48,6 @@ public class AppointmentDAOImpl implements AppointmentDAO{
                 appts.add(appt);
             }
         } catch (SQLException e ) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return appts;
@@ -73,7 +72,6 @@ public class AppointmentDAOImpl implements AppointmentDAO{
                 return getApptData();
             }
         } catch (SQLException e) {
-            System.out.println("Error:" + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -98,7 +96,6 @@ public class AppointmentDAOImpl implements AppointmentDAO{
                 apptsByType.add(appt);
             }
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return apptsByType;
@@ -146,7 +143,6 @@ public class AppointmentDAOImpl implements AppointmentDAO{
                 currMonthAppts.add(appt);
             }
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return currMonthAppts;
@@ -240,7 +236,7 @@ public class AppointmentDAOImpl implements AppointmentDAO{
             System.out.println("Inserted appointment into database successfully!");
         }
         else {
-            System.out.println("Attempt to insert appointment failed.");
+            System.out.println("Attempt to insert appointment FAILED.");
         }
     }
 
@@ -284,7 +280,6 @@ public class AppointmentDAOImpl implements AppointmentDAO{
             pst.execute();
         }
         catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -330,14 +325,13 @@ public class AppointmentDAOImpl implements AppointmentDAO{
             pst.execute();
 
             if (pst.getUpdateCount() > 0) {
-                System.out.println("Deleted customer's associated appointments from the database successfully!");
+                System.out.println("Deleted customer's appointments from the database successfully!");
             }
             else {
-                System.out.println("Attempt to delete customer associated appointments from the database failed.");
+                System.out.println("Attempt to delete customer associated appointments from the database failed. This may occur if there are no appointments for this customer to delete.");
             }
         }
         catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

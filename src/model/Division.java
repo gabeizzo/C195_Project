@@ -4,10 +4,10 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-/** This is the FirstLvlDivision(FLD for short) class.
+/** This is the Division(FLD for short) class.
  * This class holds the methods for building FLD objects and getting and setting FLD attributes.
  */
-public class FirstLvlDivision {
+public class Division {
     private int divisionID;
     private String divisionName;
     private LocalDate createDate;
@@ -17,8 +17,8 @@ public class FirstLvlDivision {
     private String lastUpdateBy;
     private int countryID;
 
-    /** This is the FirstLvlDivision constructor.
-     * The FirstLvlDivision constructor is used to initialize FirstLvlDivision objects.
+    /** This is the Division constructor.
+     * The Division constructor is used to initialize Division objects.
      * @param divisionID The first level division's ID.
      * @param divisionName The division's name.
      * @param createDate The division's create date.
@@ -28,7 +28,7 @@ public class FirstLvlDivision {
      * @param lastUpdateBy The person who last updated the division data.
      * @param countryID The country ID the FLD belongs to.
      */
-    public FirstLvlDivision(int divisionID, String divisionName, LocalDate createDate, LocalTime createTime, String createdBy, Timestamp lastUpdate, String lastUpdateBy, int countryID) {
+    public Division(int divisionID, String divisionName, LocalDate createDate, LocalTime createTime, String createdBy, Timestamp lastUpdate, String lastUpdateBy, int countryID) {
         this.divisionID = divisionID;
         this.divisionName = divisionName;
         this.createDate = createDate;

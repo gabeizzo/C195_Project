@@ -93,7 +93,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="timeZoneID" layoutX="120.0" layoutY="648.0" text="timeZoneID">
+                        <Label fx:id="timeZoneLbl" layoutX="120.0" layoutY="648.0" text="timeZoneID">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>

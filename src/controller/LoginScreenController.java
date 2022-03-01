@@ -2,7 +2,9 @@ package controller;
 
 import DAO.AppointmentDAOImpl;
 import DAO.UserDAOImpl;
+import Utilities.DBConnection;
 import Utilities.DBQuery;
+import Utilities.TimeZoneLambda;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -22,6 +24,7 @@ import model.Appointment;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
@@ -51,7 +54,7 @@ public class LoginScreenController implements Initializable {
     @FXML
     private TextField userNameTxt;
     @FXML
-    private Label localTimeZoneLabel;
+    private Label timeZoneTitle;
     @FXML
     private Button resetButton;
     @FXML
@@ -65,10 +68,11 @@ public class LoginScreenController implements Initializable {
     @FXML
     private Label appTitleLabel;
     @FXML
-    private Label timeZoneID;
+    private Label timeZoneLbl;
 
     /** Initializes the login screen with either English or French language depending on the system settings.
-     * Initializes the zone information to reflect the user's system default.
+     * Initializes the zone information using a lambda to reflect the user's system default.
+     * Initializes the animated digital clock using an event handler interface lambda.
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
      * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
      */
@@ -77,17 +81,21 @@ public class LoginScreenController implements Initializable {
         userNameTxt.clear();
         passwordTxt.clear();
 
-        initClock();
+        //Displays the animated digital clock
+        displayClock();
 
-        ZoneId localTimezone = ZoneId.of(TimeZone.getDefault().getID());
-        timeZoneID.setText(localTimezone.toString());
+        //TimeZoneLambda getZone displays the time zone on the login screen based on the user's system default.
+        TimeZoneLambda getZone = () -> {
+            timeZoneLbl.setText(ZoneId.of(TimeZone.getDefault().getID()).toString());
+        };
+        getZone.showZone();
 
         // Translates login screen to French if the operating system's Language Pack is set to French
         try {
             resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 appTitleLabel.setText(resourceBundle.getString("appTitle"));
-                localTimeZoneLabel.setText(resourceBundle.getString("localTimeZoneLabel"));
+                timeZoneTitle.setText(resourceBundle.getString("timeZoneTitle"));
                 userNameTxt.setPromptText(resourceBundle.getString("enterUserName"));
                 passwordTxt.setPromptText(resourceBundle.getString("enterPassword"));
                 userNameLabel.setText(resourceBundle.getString("userName"));
@@ -102,7 +110,9 @@ public class LoginScreenController implements Initializable {
         }
     }
 
-    private void initClock() {
+    /** displayClock uses the EventHandler interface with a lambda to initialize and shows an animated digital clock on the login screen.
+     */
+    private void displayClock() {
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             dateTimeLbl.setText(LocalDateTime.now().format(formatter));
@@ -133,8 +143,6 @@ public class LoginScreenController implements Initializable {
             int apptID = -1;
             String apptDate ="";
             String apptTime = "";
-
-            // check to see if an appointment occurs within 15 minutes of current time
             LocalTime currentTime = LocalTime.now();
 
             // search through all appointments in the database to see if an appointment is within 15 minutes
@@ -194,7 +202,6 @@ public class LoginScreenController implements Initializable {
             }
         }
         catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -313,7 +320,7 @@ public class LoginScreenController implements Initializable {
             e.printStackTrace();
         }
 
-        //Gathers the text input from the Username and Password text fields and trims off any additional blank space
+        //Gathers the text input from the Username and Password text fields and trims off any additional blank space to prevent login issue.
         usernameInput = userNameTxt.getText().toLowerCase().trim();
         passwordInput = passwordTxt.getText().trim();
 
@@ -325,21 +332,27 @@ public class LoginScreenController implements Initializable {
 
     /** This method records successful and failed login attempts to login_activity.txt.
      * @param loginSuccessful True if the user login is successful, false if login attempt fails.
-     * @param user The user who attempted to log in.
+     * @param userName The user who attempted to log in.
      */
-    private void recordLoginActivity(boolean loginSuccessful, String user) throws IOException {
+    private void recordLoginActivity(boolean loginSuccessful, String userName) throws IOException {
         String loginRecord = "login_activity.txt";
         FileWriter fw = new FileWriter(loginRecord, true);
         PrintWriter pw = new PrintWriter(fw);
         ZoneId loginZone = ZoneId.of(TimeZone.getDefault().getID());
+        InetAddress ip;
+        String hostname;
+        ip = InetAddress.getLocalHost();
+        hostname = ip.getHostName();
 
-        //Prints a message to the login_activity.txt file depending on the login activity circumstance.
+        //Prints to login_activity.txt depending on the login activity circumstance.
         if(loginSuccessful) {
-            pw.println("Login Activity | Valid Username and Password: (" + user + ") | Login attempt SUCCESSFUL at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " | Network IP Location: (" + loginZone + ")");
-        } else if(user.isBlank()) {
-            pw.println("Login Activity | Invalid/Blank Username: (" + user + ") | Login attempt FAILED at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " | Network IP Location: (" + loginZone + ")");
-        } else {
-            pw.println("Login Activity | Invalid Username or Password: (" + user + ") | Login attempt FAILED at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " | Network IP Location: (" + loginZone + ")");
+            pw.println("Login Activity | Valid Username and Password: (" + userName + ") | Login attempt SUCCESSFUL at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " | Time Zone: (" + loginZone + ") | IP: " + ip + " | Host Name: " + hostname);
+        }
+        else if(userName.isBlank()) {
+            pw.println("Login Activity | Invalid/Blank Username: (" + userName + ") | Login attempt FAILED at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " | Time Zone: (" + loginZone + ") | IP: " + ip + " | Host Name: " + hostname);
+        }
+        else {
+            pw.println("Login Activity | Invalid Username or Password: (" + userName + ") | Login attempt FAILED at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " | TimeZone: (" + loginZone + ") | IP: " + ip + " | Host Name: " + hostname);
         }
         pw.close();
     }
@@ -357,6 +370,7 @@ public class LoginScreenController implements Initializable {
 
         //If login is valid, prints a success message to the console, logs the activity and loads the main menu.
         if(validLogin()) {
+
             //Records the login activity to login_activity.txt
             recordLoginActivity(true, usernameInput);
             userName = usernameInput;
@@ -416,13 +430,15 @@ public class LoginScreenController implements Initializable {
                 }
             }
         }
-        //If not set to French, resource bundle defaults and the confirmation box displays in English.
+        //If language is not set to French, resource bundle defaults and the confirmation box displays in English.
         catch (MissingResourceException e) {
             Alert alertEnglish = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit?");
             alertEnglish.setTitle("Exit Application");
 
             Optional<ButtonType> result = alertEnglish.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
+                DBConnection.closeConnection();
+                System.out.println("| Thank you for using Appointment+! Goodbye. |");
                 System.exit(0);
             }
         }

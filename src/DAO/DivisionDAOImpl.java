@@ -4,21 +4,22 @@ import Utilities.DBQuery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.Main;
-import model.FirstLvlDivision;
+import model.Division;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class FirstLvlDivisionDAOImpl implements FirstLvlDivisionDAO {
+public class DivisionDAOImpl implements DivisionDAO {
     private Connection connection = Main.connection;
     private PreparedStatement pst;
     private ResultSet rs;
-    private ObservableList<FirstLvlDivision> allFLDs = FXCollections.observableArrayList();
+    private ObservableList<Division> allFLDs = FXCollections.observableArrayList();
 
-    /** This is the FirstLvlDivisionDAOImpl constructor.
+    /** This is the DivisionDAOImpl constructor.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public FirstLvlDivisionDAOImpl() throws SQLException {
+    public DivisionDAOImpl() throws SQLException {
     }
 
     /** This method gets all first level divisions from the database.
@@ -29,7 +30,7 @@ public class FirstLvlDivisionDAOImpl implements FirstLvlDivisionDAO {
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public ObservableList<FirstLvlDivision> getAllFLDs() throws SQLException {
+    public ObservableList<Division> getAllFLDs() throws SQLException {
         String getAllFLDsFromDB = "SELECT * FROM first_level_divisions";
         DBQuery.setPreparedStatement(connection, getAllFLDsFromDB);
         pst = DBQuery.getPreparedStatement();
@@ -46,7 +47,7 @@ public class FirstLvlDivisionDAOImpl implements FirstLvlDivisionDAO {
                 String lastUpdatedBy = rs.getString("Last_Updated_By");
                 int countryID = rs.getInt("Country_ID");
 
-                FirstLvlDivision fld = new FirstLvlDivision(divisionID, divisionName, createDate, createTime, createdBy, lastUpdate, lastUpdatedBy, countryID);
+                Division fld = new Division(divisionID, divisionName, createDate, createTime, createdBy, lastUpdate, lastUpdatedBy, countryID);
                 allFLDs.add(fld);
             }
         } catch(SQLException e) {
@@ -59,12 +60,12 @@ public class FirstLvlDivisionDAOImpl implements FirstLvlDivisionDAO {
     /** This method queries the database for a first level division based on its ID.
      * After the query it builds a first level division object with the matching ID data and returns the fld object.
      * @param divisionID The first level division's ID.
-     * @return The FirstLvlDivision object - fld - built from the matching ID's database data.
+     * @return The Division object - fld - built from the matching ID's database data.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public FirstLvlDivision getFLDByID(int divisionID) throws SQLException {
-        FirstLvlDivision fld = null;
+    public Division getFLDByID(int divisionID) throws SQLException {
+        Division fld = null;
         String getFLDByIDFromDB = "SELECT * FROM first_level_divisions WHERE Division_ID=" + divisionID;
         DBQuery.setPreparedStatement(connection, getFLDByIDFromDB);
         PreparedStatement pst = DBQuery.getPreparedStatement();
@@ -79,7 +80,7 @@ public class FirstLvlDivisionDAOImpl implements FirstLvlDivisionDAO {
             String lastUpdatedBy = rs.getString("Last_Updated_By");
             int countryID = rs.getInt("Country_ID");
 
-            fld = new FirstLvlDivision(divisionID, divisionName, createDate, createTime, createdBy, lastUpdate, lastUpdatedBy,countryID);
+            fld = new Division(divisionID, divisionName, createDate, createTime, createdBy, lastUpdate, lastUpdatedBy,countryID);
         }
         return fld;
     }

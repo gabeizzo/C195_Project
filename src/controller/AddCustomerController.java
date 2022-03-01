@@ -14,7 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Country;
-import model.FirstLvlDivision;
+import model.Division;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -36,7 +36,7 @@ public class AddCustomerController implements Initializable {
     private String state;
     private String address;
     private Country country;
-    private FirstLvlDivision division;
+    private Division division;
 
     //Enables use of methods from the DAO's and division filtering
     private final CountryDAOImpl countryDAO = new CountryDAOImpl();
@@ -44,7 +44,7 @@ public class AddCustomerController implements Initializable {
     private final DivisionsByCountryID divisionsByCountry = new DivisionsByCountryID();
 
     //Countries and divisions lists for the combo boxes
-    private ObservableList<FirstLvlDivision> countryDivisions = FXCollections.observableArrayList();
+    private ObservableList<Division> countryDivisions = FXCollections.observableArrayList();
     private final ObservableList<Country> allCountries = countryDAO.getAllCountriesFromDB();
 
     @FXML
@@ -64,7 +64,7 @@ public class AddCustomerController implements Initializable {
     @FXML
     private ComboBox<Country> customerCountryCB;
     @FXML
-    private ComboBox<FirstLvlDivision> customerDivisionCB;
+    private ComboBox<Division> customerDivisionCB;
     @FXML
     private Button saveCustomerBtn;
     @FXML
@@ -85,7 +85,7 @@ public class AddCustomerController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         try {
-            //Populates the country combo box and shows the first country in the list
+            //Populates the country combo box and shows the first country in the list(U.S)
             customerCountryCB.setItems(allCountries);
             customerCountryCB.getSelectionModel().selectFirst();
 
@@ -142,15 +142,22 @@ public class AddCustomerController implements Initializable {
             blankFields.showAndWait();
             return false;
         }
-        else if(state.length() != 2) {
+        else if((country.getCountryID() == 1 || country.getCountryID() == 3) && state.length() != 2) {
             Alert stateLengthError = new Alert(Alert.AlertType.ERROR);
             stateLengthError.setTitle("State/Province Error");
             stateLengthError.setContentText("Please enter the 2 character abbreviation for the State/Province.");
             stateLengthError.showAndWait();
             return false;
         }
+        else if(country.getCountryID() == 2 && state.length() != 3) {
+            Alert stateLengthError = new Alert(Alert.AlertType.ERROR);
+            stateLengthError.setTitle("State/Province Error");
+            stateLengthError.setContentText("Please enter the 3 character abbreviation for the UK State/Province.");
+            stateLengthError.showAndWait();
+            return false;
+        }
         // If U.S is selected, postal codes must be 5 characters in length.
-        else if((country.getCountryID() == 1) && postalCode.length() != 5) {
+        else if(country.getCountryID() == 1 && postalCode.length() != 5) {
             Alert postalCodeError = new Alert(Alert.AlertType.ERROR);
             postalCodeError.setTitle("U.S Postal Code Error");
             postalCodeError.setContentText("Valid U.S postal codes should be 5 characters in length.");

@@ -81,6 +81,6 @@
             </children>
         </FlowPane>
         <Button fx:id="saveApptButton" layoutX="141.0" layoutY="640.0" mnemonicParsing="false" onAction="#saveAppt" prefHeight="26.0" prefWidth="72.0" text="Save" />
-        <Button fx:id="cancelScheduleApptButton" layoutX="224.0" layoutY="640.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="26.0" prefWidth="72.0" text="Cancel" />
+        <Button fx:id="cancelScheduleApptBtn" layoutX="224.0" layoutY="640.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="26.0" prefWidth="72.0" text="Cancel" />
     </children>
 </AnchorPane>

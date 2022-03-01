@@ -1,6 +1,7 @@
 package controller;
 
 import DAO.CustomerDAOImpl;
+import Utilities.TimeZoneLambda;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -35,7 +36,7 @@ public class CustomersMenuController implements Initializable {
     @FXML
     private TextField customerSearchBar;
     @FXML
-    private Label timeZoneID;
+    private Label timeZoneLbl;
     @FXML
     private Label dateTimeLbl;
     @FXML
@@ -84,8 +85,12 @@ public class CustomersMenuController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ZoneId localTimezone = ZoneId.of(TimeZone.getDefault().getID());
-        timeZoneID.setText(localTimezone.toString());
+
+        //TimeZoneLambda changes the timeZoneLbl on the Main Menu screen based on the user's system default.
+        TimeZoneLambda getZone = () -> {
+            timeZoneLbl.setText(ZoneId.of(TimeZone.getDefault().getID()).toString());
+        };
+        getZone.showZone();
         displayClock();
         viewAllCustomerFromDB();
     }
@@ -104,14 +109,14 @@ public class CustomersMenuController implements Initializable {
             lastUpdatedCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdateFormatted"));
             lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
             divisionIDCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
-
             customerDataTable.getSelectionModel().selectFirst();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    /** displayClock method uses the EventHandler interface with a lambda expression to efficiently display an animated digital clock on the Customers Menu.
+    /** displayClock method uses the EventHandler interface with a lambda expression to display a formatted animated digital clock on the Customers Menu.
      */
     public void displayClock() {
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
@@ -131,7 +136,7 @@ public class CustomersMenuController implements Initializable {
 
         if(delete != null){
         Alert deleteCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete customer: " + delete.getCustomerName() + "?\n" +
-                "\n" + delete.getCustomerName() + "'s appointments will also be deleted.");
+                "\n" + delete.getCustomerName() + "'s appointments will also be deleted.\n\nContinue anyways?");
         deleteCustomer.setTitle("Delete Confirmation");
 
         Optional<ButtonType> result = deleteCustomer.showAndWait();
@@ -218,7 +223,7 @@ public class CustomersMenuController implements Initializable {
                     No customers found with the entered ID or Name.
                     Please check spelling and try again.
 
-                    Reminder: search is case sensitive.""");
+                    Reminder: Customer search is case sensitive.""");
             alert.showAndWait();
 
             customerSearchBar.clear();
@@ -248,7 +253,7 @@ public class CustomersMenuController implements Initializable {
     /** Searches customers by id.
      @param customerID The customer id that is searched.
      @return c, the customer that matches the searched id.
-     @throws SQLException Thrown if there is a database error.
+     @throws SQLException Thrown if there is a database access error.
      */
     private Customer searchByCustomerID(int customerID) throws SQLException {
         ObservableList<Customer> allCustomers = customerDataTable.getItems();

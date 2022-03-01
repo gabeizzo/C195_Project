@@ -2,6 +2,9 @@
 package controller;
 
 import DAO.AppointmentDAOImpl;
+import Utilities.DBConnection;
+import Utilities.TimeZoneLambda;
+import Utilities.WelcomeUserLambda;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -40,7 +43,7 @@ public class MainMenuController implements Initializable {
     @FXML
     private Label welcomeLbl;
     @FXML
-    private Label timeZoneID;
+    private Label timeZoneLbl;
     @FXML
     private RadioButton currentMonthRadioBtn;
     @FXML
@@ -50,7 +53,7 @@ public class MainMenuController implements Initializable {
     @FXML
     private ToggleGroup apptsViewToggle;
     @FXML
-    private Label timeZoneLbl;
+    private Label timeZoneTitle;
     @FXML
     private Button deleteApptButton;
     @FXML
@@ -109,8 +112,20 @@ public class MainMenuController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ZoneId localTimezone = ZoneId.of(TimeZone.getDefault().getID());
-        timeZoneID.setText(localTimezone.toString());
+
+        //Displays a welcome message with the logged in user's name.
+        WelcomeUserLambda user = () -> {
+            welcomeLbl.setText("Welcome, " + LoginScreenController.userName + "!");
+        };
+        user.welcomeUser();
+
+        //TimeZoneLambda changes the timeZoneLbl on the Main Menu screen based on the user's system default.
+        TimeZoneLambda getZone = () -> {
+            timeZoneLbl.setText(ZoneId.of(TimeZone.getDefault().getID()).toString());
+        };
+        getZone.showZone();
+
+        //Displays the animated digital clock.
         displayClock();
 
         apptsViewToggle = new ToggleGroup();
@@ -129,7 +144,6 @@ public class MainMenuController implements Initializable {
     /** displayClock method uses the EventHandler interface with a lambda expression to efficiently display an animated digital clock on the Customers Menu.
      */
     public void displayClock() {
-
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             dateTimeLbl.setText(LocalDateTime.now().format(formatter));
@@ -231,7 +245,7 @@ public class MainMenuController implements Initializable {
         int currYear = LocalDate.now().getYear();
 
         try {
-            // Re-initializes the currMonthAppts ObservableList.
+            // Re-initializes the currMonthAppts ObservableList for the current month.
             if (!currMonthAppts.isEmpty()) {
                 currMonthAppts.clear();
             }
@@ -358,7 +372,11 @@ public class MainMenuController implements Initializable {
         if(appointments.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("No Results");
-            alert.setContentText("No appointments found with the entered ID or Title.");
+            alert.setContentText("""
+                    No appointments found with the entered ID or Title.
+                    Please check spelling and try again.
+
+                    Reminder: Appointments search is case sensitive.""");
             alert.showAndWait();
 
             apptSearchBar.clear();
@@ -418,6 +436,8 @@ public class MainMenuController implements Initializable {
 
         Optional<ButtonType> result = alertEnglish.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            DBConnection.closeConnection();
+            System.out.println("| Thank you for using Appointment+! Goodbye. |");
             System.exit(0);
         }
     }

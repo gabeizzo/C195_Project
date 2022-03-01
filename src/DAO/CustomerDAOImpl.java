@@ -64,7 +64,6 @@ public class CustomerDAOImpl implements CustomerDAO{
             }
         }
         catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -88,7 +87,6 @@ public class CustomerDAOImpl implements CustomerDAO{
             }
         }
         catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return allCustomers;
@@ -152,7 +150,6 @@ public class CustomerDAOImpl implements CustomerDAO{
             pst.execute();
         }
         catch (SQLException e ) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -172,7 +169,6 @@ public class CustomerDAOImpl implements CustomerDAO{
             pst.execute();
         }
         catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

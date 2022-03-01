@@ -13,10 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Contact;
@@ -30,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ModifyAppointmentController implements Initializable {
@@ -58,9 +56,9 @@ public class ModifyAppointmentController implements Initializable {
     @FXML
     private Button saveApptButton;
     @FXML
-    private Button cancelScheduleApptButton;
+    private Button cancelScheduleApptBtn;
 
-    private LocalTime start = LocalTime.of(4,0);
+    private LocalTime start = LocalTime.of(5,0);
     private LocalTime end = LocalTime.of(23, 0);
     private ContactDAOImpl contactDAO = new ContactDAOImpl();
     private UserDAOImpl userDAO = new UserDAOImpl();
@@ -110,7 +108,6 @@ public class ModifyAppointmentController implements Initializable {
             contactCB.getSelectionModel().select(contactDAO.getContactByID(apptToModify.getContactID()));
         }
         catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         // set title, description, and location
@@ -132,26 +129,32 @@ public class ModifyAppointmentController implements Initializable {
 
     /** Saves the modified appointment to the database and returns to the Main Menu.
      * @param actionEvent When the save button is activated on the Modify Appointment screen.
-     * @throws IOException
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void saveAppt(ActionEvent actionEvent) throws IOException {
         //if else here with try/catch
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
         Stage stage = (Stage) (saveApptButton.getScene().getWindow());
-        stage.setTitle("Appointment Scheduler Main Menu");
+        stage.setTitle("Appointment+ Main Menu");
         stage.setScene(new Scene(root,1200 ,700));
         stage.show();
     }
 
     /** Returns to the Main Menu when the cancel button is activated on the Modify Appointment screen.
      * @param actionEvent When the cancel button is activated.
-     * @throws IOException
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
-        Stage stage = (Stage) (cancelScheduleApptButton.getScene().getWindow());
-        stage.setTitle("Appointment Scheduler Main Menu");
-        stage.setScene(new Scene(root,1200 ,700));
-        stage.show();
+        Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to cancel modifying this appointment?");
+        cancelAlert.setTitle("Cancel Modify Appointment");
+        Optional<ButtonType> result = cancelAlert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
+            Stage stage = (Stage) (cancelScheduleApptBtn.getScene().getWindow());
+            stage.setTitle("Appointment+ Main Menu");
+            stage.setScene(new Scene(root, 1200, 700));
+            stage.show();
+        }
     }
 }

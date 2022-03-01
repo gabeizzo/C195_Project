@@ -133,12 +133,12 @@
                            <font>
                               <Font size="14.0" />
                            </font></RadioButton>
-                        <Label fx:id="timeZoneLbl" layoutX="10.0" layoutY="648.0" prefHeight="27.0" prefWidth="100.0" text="Time Zone: ">
+                        <Label fx:id="timeZoneTitle" layoutX="10.0" layoutY="648.0" prefHeight="27.0" prefWidth="100.0" text="Time Zone: ">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="timeZoneID" layoutX="110.0" layoutY="648.0" text="timeZoneID">
+                        <Label fx:id="timeZoneLbl" layoutX="110.0" layoutY="648.0" text="timeZoneID">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
