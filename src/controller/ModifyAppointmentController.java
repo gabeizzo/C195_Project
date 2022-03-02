@@ -19,24 +19,25 @@ import model.Appointment;
 import model.Contact;
 import model.Customer;
 import model.User;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
-/**
- *
+/** This is the ModifyAppointmentController class.
+ * This class holds the methods used to modify appointments in the database.
  */
 public class ModifyAppointmentController implements Initializable {
 
     //Appointment to modify related fields
-    private Appointment apptToModify = MainMenuController.apptToModify;
+    private final Appointment appt = MainMenuController.appt;
     private Customer customerName;
     private User userName;
     private String apptTitle;
@@ -74,10 +75,10 @@ public class ModifyAppointmentController implements Initializable {
     private Button cancelScheduleApptBtn;
 
     //Data Access Objects
+    private final AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
     private final ContactDAOImpl contactDAO = new ContactDAOImpl();
     private final UserDAOImpl userDAO = new UserDAOImpl();
     private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-    private final AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
 
     //List of Appointment Types for populating the apptTypeCB combo box
     private final ObservableList<String> apptTypes = FXCollections.observableArrayList();
@@ -86,8 +87,10 @@ public class ModifyAppointmentController implements Initializable {
     private LocalDate apptDate;
     private LocalTime apptStart;
     private LocalTime apptEnd;
-    private LocalTime start = LocalTime.of(5,0);
-    private LocalTime end = LocalTime.of(23, 0);
+
+    //Start times list at 3AM to account for 5-hour difference for Hawaii based appointments to start at 8AM EST
+    private final LocalTime start = LocalTime.of(3,0);
+    private final LocalTime end = LocalTime.of(23, 0);
     private LocalDateTime apptStartDateTime;
     private LocalDateTime apptEndDateTime;
 
@@ -102,39 +105,41 @@ public class ModifyAppointmentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        apptIDTxt.setText(String.valueOf(apptToModify.getApptID()));
-        apptTypes.addAll("Planning Session", "De-Briefing", "Department Meeting", "Escalation", "Review","Miscellaneous");
-        apptTypeCB.setItems(apptTypes);
-        int apptTypeIndex = apptTypes.indexOf(apptToModify.getApptType());
-        apptTypeCB.getSelectionModel().select(apptTypeIndex);
 
+        //Sets the form fields with appointment data
         try {
+            apptIDTxt.setText(String.valueOf(appt.getApptID()));
+            apptTypes.addAll("Planning Session", "De-Briefing", "Department Meeting", "Escalation", "Review","Miscellaneous");
+            apptTypeCB.setItems(apptTypes);
+            int apptTypeIndex = apptTypes.indexOf(appt.getApptType());
+            apptTypeCB.getSelectionModel().select(apptTypeIndex);
+
             //Fills the combo boxes with customers, names and contacts.
             customerIDCB.setItems(customerDAO.getAllDBCustomers());
-            customerIDCB.getSelectionModel().select(customerDAO.getCustomerByID(apptToModify.getCustomerID()));
+            customerIDCB.getSelectionModel().select(customerDAO.getCustomerByID(appt.getCustomerID()));
             userNameCB.setItems(userDAO.getAllUsers());
-            userNameCB.getSelectionModel().select(userDAO.getUserByID(apptToModify.getUserID()));
+            userNameCB.getSelectionModel().select(userDAO.getUserByID(appt.getUserID()));
             contactCB.setItems(contactDAO.getAllContactsFromDB());
-            contactCB.getSelectionModel().select(contactDAO.getContactByID(apptToModify.getContactID()));
+            contactCB.getSelectionModel().select(contactDAO.getContactByID(appt.getContactID()));
+
+            // set title, description, and location
+            apptTitleTxt.setText(appt.getApptTitle());
+            apptDescriptionTxt.setText(appt.getDescription());
+            apptLocationTxt.setText(appt.getLocation());
+
+            // set date-picker and get initial date value
+            apptDatePicker.setValue(appt.getStartDateTime().toLocalDate());
+            apptDate = apptDatePicker.getValue();
+
+            //populate times and select time
+            ConvertTime.displayValidTimes(apptStartTimeCB, start, end);
+            ConvertTime.displayValidTimes(apptEndTimeCB, start, end);
+            apptStartTimeCB.getSelectionModel().select(appt.getStartDateTime().toLocalTime());
+            apptEndTimeCB.getSelectionModel().select(appt.getEndDateTime().toLocalTime());
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-        // set title, description, and location
-        apptTitleTxt.setText(apptToModify.getApptTitle());
-        apptDescriptionTxt.setText(apptToModify.getDescription());
-        apptLocationTxt.setText(apptToModify.getLocation());
-
-        // set datepicker and get initial date value
-        apptDatePicker.setValue(apptToModify.getStartDateTime().toLocalDate());
-        apptDate = apptDatePicker.getValue();
-
-        //populate times and select time
-        ConvertTime.displayValidTimes(apptStartTimeCB, start, end);
-        ConvertTime.displayValidTimes(apptEndTimeCB, start, end);
-        apptStartTimeCB.getSelectionModel().select(apptToModify.getStartDateTime().toLocalTime());
-        apptEndTimeCB.getSelectionModel().select(apptToModify.getEndDateTime().toLocalTime());
-
     }
 
     /** Gets all data from the input fields on the Modify Appointment screen.
@@ -186,14 +191,17 @@ public class ModifyAppointmentController implements Initializable {
             return false;
         }
         else if(!apptStartEndAreValid()){
-            Alert blankFields = new Alert(Alert.AlertType.ERROR);
-            blankFields.setTitle("Invalid Start/End Times");
-            blankFields.setContentText("Appointment start and end times must be between 08:00AM-10:00PM(EST).\nAppointment start time(EST): "
+            Alert invalidTimes = new Alert(Alert.AlertType.ERROR);
+            invalidTimes.setTitle("Invalid Start/End Times");
+            invalidTimes.setHeight(500);
+            invalidTimes.setWidth(450);
+            invalidTimes.setContentText("Appointment start and end times must be between 08:00AM-10:00PM(EST).\n\nAppointment Start Time(EST): "
                     + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptStart)))
-                    + "\nAppointment end time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptEnd)))
-                    + "\nLocal time: " + ConvertTime.timeFormatted(LocalTime.now())
-                    + "\nLocal time in EST: " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.now())));
-            blankFields.showAndWait();
+                    + "\nAppointment End Time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptEnd)))
+                    + "\n\nFor your reference:\nLocal Time Zone: " + ZoneId.of(TimeZone.getDefault().getID())
+                    + "\nCurrent Local Time: " + ConvertTime.timeFormatted(LocalTime.now())
+                    + "\nCurrent Local Time in EST: " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.now())));
+            invalidTimes.showAndWait();
             return false;
         }
         else {
@@ -236,7 +244,10 @@ public class ModifyAppointmentController implements Initializable {
                         apptCollision.setTitle("Appointment Conflict");
                         apptCollision.setContentText("This appointment's start/end times overlap with the following appointment:\n\n"
                                 + "Appointment ID: " + a.getApptID() + "\nAppointment Title: " + a.getApptTitle() + "\nDescription: "
-                                + a.getDescription() +"\nStart Time:" + a.getStartTime() + "\nEnd Time: " + a.getEndTime());
+                                + a.getDescription() +"\nLocal Start Time:" + a.getStartTime() + "\nLocal End Time: " + a.getEndTime()
+                                + "\nAppointment Start Time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptStart)))
+                                + "\nAppointment End Time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptEnd)))
+                        );
                         apptCollision.showAndWait();
                         return false;
                     }
@@ -246,7 +257,10 @@ public class ModifyAppointmentController implements Initializable {
                         apptCollision.setTitle("Appointment Conflict");
                         apptCollision.setContentText("This appointment's start/end times overlap with the following appointment:\n\n"
                                 + "Appointment ID: " + a.getApptID() + "\nAppointment Title: " + a.getApptTitle() + "\nDescription: "
-                                + a.getDescription() +"\nStart Time:" + a.getStartTime() + "\nEnd Time: " + a.getEndTime());
+                                + a.getDescription() +"\nLocal Start Time:" + a.getStartTime() + "\nLocal End Time: " + a.getEndTime()
+                                + "\nAppointment start time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptStart)))
+                                + "\nAppointment end time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptEnd)))
+                        );
                         apptCollision.showAndWait();
                         return false;
                     }
@@ -265,23 +279,24 @@ public class ModifyAppointmentController implements Initializable {
      */
     public void saveAppt(ActionEvent actionEvent) throws IOException {
 
+        //Check that field data is valid before attempting to save the appointment
         if(apptDataIsValid()) {
 
             try {
-                apptDAO.modifyAppt(apptToModify.getApptID(), apptTitle, description, location, apptType, apptStartDateTime,
+                //Modify the appointment
+                apptDAO.modifyAppt(appt.getApptID(), apptTitle, description, location, apptType, apptStartDateTime,
                         apptEndDateTime,customerName.getCustomerID(), userName.getUserID(), contactName.getContactID());
 
+                //Return to Main Menu after appointment is saved
                 Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
                 Stage stage = (Stage) (saveApptButton.getScene().getWindow());
                 stage.setTitle("Appointment+ Main Menu");
                 stage.setScene(new Scene(root, 1200, 700));
                 stage.show();
-
-            } catch (SQLException e) {
+            }
+            catch (SQLException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
 

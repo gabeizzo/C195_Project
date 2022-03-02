@@ -34,8 +34,11 @@ import java.util.*;
  * This class is responsible for providing the functionality to the Main Menu and all labels and buttons users interact with.
  */
 public class MainMenuController implements Initializable {
-    public static Appointment apptToModify;
-    private AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+    //Supplies appointment for modification
+    public static Appointment appt;
+    private final AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+
+    //GUI Buttons, Text-Fields and Table fx:id's
     @FXML
     private Label dateTimeLbl;
     @FXML
@@ -95,8 +98,8 @@ public class MainMenuController implements Initializable {
 
     //Observable Lists used to populate the appointments table
     private ObservableList<Appointment> allAppts = FXCollections.observableArrayList();
-    private  ObservableList<Appointment> currWeekAppts = FXCollections.observableArrayList();
-    private  ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
+    private final ObservableList<Appointment> currWeekAppts = FXCollections.observableArrayList();
+    private final ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
 
 
     /** This is the MainMenuController constructor and is used to instantiate objects of this type.
@@ -113,7 +116,7 @@ public class MainMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        //Displays a welcome message with the logged in user's name.
+        //Displays a welcome message with the logged-in user's name.
         WelcomeUserLambda user = () -> {
             welcomeLbl.setText("Welcome, " + LoginScreenController.userName + "!");
         };
@@ -128,6 +131,7 @@ public class MainMenuController implements Initializable {
         //Displays the animated digital clock.
         displayClock();
 
+        //Sets the radio buttons to view all appointments
         apptsViewToggle = new ToggleGroup();
         allApptsRadioBtn.setToggleGroup(apptsViewToggle);
         currentMonthRadioBtn.setToggleGroup(apptsViewToggle);
@@ -221,7 +225,7 @@ public class MainMenuController implements Initializable {
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void toModifyAppointment(ActionEvent actionEvent) throws IOException{
-        apptToModify = apptsTable.getSelectionModel().getSelectedItem();
+        appt = apptsTable.getSelectionModel().getSelectedItem();
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyAppointment.fxml")));
         Stage stage = (Stage) (modifyApptButton.getScene().getWindow());
         stage.setTitle("Modify Appointment");
@@ -249,8 +253,8 @@ public class MainMenuController implements Initializable {
     public void toApptsByMonthAndType(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByMonthAndType.fxml")));
         Stage stage = (Stage) (reportsByMonthAndTypeButton.getScene().getWindow());
-        stage.setTitle("Reports By Month and Type");
-        stage.setScene(new Scene(root,600 ,500));
+        stage.setTitle("Appointments By Month and Type");
+        stage.setScene(new Scene(root,800 ,700));
         stage.show();
     }
 
@@ -284,7 +288,7 @@ public class MainMenuController implements Initializable {
      * @param actionEvent When the user selects the currMonthRadioBtn.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void viewCurrentMonthAppts(ActionEvent actionEvent) throws IOException{
+    public void viewCurrMonthAppts(ActionEvent actionEvent) throws IOException{
         Month currMonth = LocalDate.now().getMonth();
         int currYear = LocalDate.now().getYear();
 
@@ -353,7 +357,7 @@ public class MainMenuController implements Initializable {
      * @param actionEvent When the currWeeksRadioBtn is selected.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void viewCurrentWeekAppts(ActionEvent actionEvent) throws IOException{
+    public void viewCurrWeekAppts(ActionEvent actionEvent) throws IOException{
 
         //Establishes current date, week and year and gets the week number of the year to compare to the appointment start date.
         LocalDate currDate = LocalDate.now(); //Today's date
@@ -389,7 +393,7 @@ public class MainMenuController implements Initializable {
 
     /** This method searches the appointment table for any appointments that have either an Appointment ID or Title that match the text input.
      * @param actionEvent When data is entered into the search bar on the main menu.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public void searchAppts(ActionEvent actionEvent) throws SQLException {
 

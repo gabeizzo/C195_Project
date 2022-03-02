@@ -27,26 +27,29 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 /** This is the ScheduleAppointmentController class.
  * This class defines the methods used to schedule appointments and save them to the database.
  */
 public class ScheduleAppointmentController implements Initializable {
 
-    //Start at 3AM to account for 5-hour difference for Hawaii based appointments to start at 8AM EST
-    private LocalTime start = LocalTime.of(3,0);
-    private LocalTime end = LocalTime.of(23,0);
+    //Start times list at 3AM to account for 5-hour difference for Hawaii based appointments to start at 8AM EST
+    private final LocalTime start = LocalTime.of(3,0);
+    private final LocalTime end = LocalTime.of(23,0);
 
-    private ContactDAOImpl contactDAO = new ContactDAOImpl();
-    private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-    private UserDAOImpl userDAO = new UserDAOImpl();
-    private AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
-    private ObservableList<String> apptTypes = FXCollections.observableArrayList();
-    private ObservableList<Appointment> appts = FXCollections.observableArrayList();
+    //Data Access Objects
+    private final ContactDAOImpl contactDAO = new ContactDAOImpl();
+    private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+    private final UserDAOImpl userDAO = new UserDAOImpl();
+    private final AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+
+    //Appointment data
     private Customer customerName;
     private User userName;
     private String apptTitle;
@@ -60,6 +63,7 @@ public class ScheduleAppointmentController implements Initializable {
     private LocalDateTime apptStartDateTime;
     private LocalDateTime apptEndDateTime;
 
+    //GUI Form Fields and Buttons
     @FXML
     private TextField apptIDTxt;
     @FXML
@@ -87,6 +91,9 @@ public class ScheduleAppointmentController implements Initializable {
     @FXML
     private Button cancelScheduleApptBtn;
 
+    private final ObservableList<String> apptTypes = FXCollections.observableArrayList();
+
+
     /** This is the ScheduleAppointmentController constructor.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
@@ -102,36 +109,40 @@ public class ScheduleAppointmentController implements Initializable {
 
         try {
             customerCB.setItems(customerDAO.getAllDBCustomers());
+            customerCB.setPromptText("Select Customer");
             userNameCB.setItems(userDAO.getAllUsers());
+            userNameCB.setPromptText("Select User");
             contactCB.setItems(contactDAO.getAllContactsFromDB());
+            contactCB.setPromptText("Select Contact");
             apptTypes.addAll("Planning Session", "De-Briefing", "Department Meeting", "Escalation", "Review","Miscellaneous");
             apptTypeCB.setItems(apptTypes);
+            apptTypeCB.setPromptText("Select Type");
             apptDatePicker.setConverter(new StringConverter<LocalDate>() {
-                String date = "MM-dd-yyyy";
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(date);
+                final String date = "MM-dd-yyyy";
+                final DateTimeFormatter DTF = DateTimeFormatter.ofPattern(date);
 
+                //Formats the localDate as a String with format MM-dd-yyyy
                 @Override
                 public String toString(LocalDate localDate) {
                     if(localDate != null) {
-                        return dateTimeFormatter.format(localDate);
+                        return DTF.format(localDate);
                     }
                     else {
-                        return " ";
+                        return "LocalDate value is Null.";
                     }
                 }
+                //Converts the String format of MM-dd-yyyy displayed back to LocalDate
                 @Override
                 public LocalDate fromString(String s) {
                     if(s != null && !s.isEmpty()){
-                        return LocalDate.parse(s, dateTimeFormatter);
-                    }
-                    return null;
-                }
-            });
+                        return LocalDate.parse(s, DTF);
+                    }return null;}});
 
             //Set the date picker
             apptDatePicker.setValue(LocalDate.now());
             apptDate = apptDatePicker.getValue();
 
+            //Displays start and end times to combo boxes and sets the end time to 15 after initialized start time by default
             ConvertTime.displayValidTimes(apptStartTimeCB, start, end);
             ConvertTime.displayValidTimes(apptEndTimeCB, start, end);
             apptStartTimeCB.getSelectionModel().selectFirst();
@@ -198,11 +209,14 @@ public class ScheduleAppointmentController implements Initializable {
         else if(!apptStartEndAreValid()){
             Alert invalidTimes = new Alert(Alert.AlertType.ERROR);
             invalidTimes.setTitle("Invalid Start/End Times");
-            invalidTimes.setContentText("Appointment start and end times must be between 08:00AM-10:00PM(EST).\n\nAppointment start time(EST): "
+            invalidTimes.setHeight(500);
+            invalidTimes.setWidth(450);
+            invalidTimes.setContentText("Appointment start and end times must be between 08:00AM-10:00PM(EST).\n\nAppointment Start Time(EST): "
                     + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptStart)))
-                    + "\nAppointment end time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptEnd)))
-                    + "\n\nFor your reference:\nCurrent Local time: " + ConvertTime.timeFormatted(LocalTime.now())
-                    + "\nCurrent Local time in EST: " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.now())));
+                    + "\nAppointment End Time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptEnd)))
+                    + "\n\nFor your reference:\nLocal Time Zone: " + ZoneId.of(TimeZone.getDefault().getID())
+                    + "\nCurrent Local Time: " + ConvertTime.timeFormatted(LocalTime.now())
+                    + "\nCurrent Local Time in EST: " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.now())));
             invalidTimes.showAndWait();
             return false;
         }
@@ -236,7 +250,7 @@ public class ScheduleAppointmentController implements Initializable {
             //establish the appointment start and end times for comparison.
             apptStartDateTime = LocalDateTime.of(apptDate, apptStart);
             apptEndDateTime = LocalDateTime.of(apptDate, apptEnd);
-            appts = apptDAO.getAllApptsFromDB();
+            ObservableList<Appointment> appts = apptDAO.getAllApptsFromDB();
 
             //Loop through the appointments and check if there are any with conflicting start and end times.
             for(Appointment a : appts){

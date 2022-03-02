@@ -58,16 +58,16 @@ public class ConvertTime {
     }
 
     /** Converts local time to EST.
-     * @param convertTime LocalDateTime
+     * @param localDateTime The time to convert.
      * @return The local time converted to EST.
      */
-    public static LocalDateTime localToEST(LocalDateTime convertTime) {
+    public static LocalDateTime localToEST(LocalDateTime localDateTime) {
         //Establish EST(Eastern) timezone. Can also use America/Eastern if desired.
         ZoneId EST = ZoneId.of("America/New_York");
         ZoneId localZoneID = ZoneId.systemDefault();
 
         //Convert local time to EST
-        ZonedDateTime currLocalTime = convertTime.atZone(localZoneID);
+        ZonedDateTime currLocalTime = localDateTime.atZone(localZoneID);
         ZonedDateTime currEST = currLocalTime.withZoneSameInstant(EST);
         return currEST.toLocalDateTime();
     }
@@ -75,18 +75,18 @@ public class ConvertTime {
     /** Compares local time to EST business hours(8AM-10PM).
      * If the time is between 8AM-10PM, true.
      * If the time is not during business hours(8AM-10PM), false.
-     * @param compareTime The local time to compare to EST.
+     * @param localDateTime The local time to compare to EST.
      * @return true or false, if time is between 8AM-10PM or not.
      */
-    public static boolean compareLToESTBizHrs(LocalDateTime compareTime) {
+    public static boolean compareLToESTBizHrs(LocalDateTime localDateTime) {
         LocalTime startTime = LocalTime.of(7,59);
         ZoneId ESTZoneID = ZoneId.of("America/New_York");
-        ZonedDateTime ESTStartTime = ZonedDateTime.of(compareTime.toLocalDate(), startTime, ESTZoneID);
+        ZonedDateTime ESTStartTime = ZonedDateTime.of(localDateTime.toLocalDate(), startTime, ESTZoneID);
 
         LocalTime endTime = LocalTime.of(22, 1);
-        ZonedDateTime ESTEndTime = ZonedDateTime.of(compareTime.toLocalDate(), endTime, ESTZoneID);
+        ZonedDateTime ESTEndTime = ZonedDateTime.of(localDateTime.toLocalDate(), endTime, ESTZoneID);
 
-        LocalDateTime ESTtoCompare = localToEST(compareTime);
+        LocalDateTime ESTtoCompare = localToEST(localDateTime);
         return ESTtoCompare.isAfter(ChronoLocalDateTime.from(ESTStartTime)) && ESTtoCompare.isBefore(ChronoLocalDateTime.from(ESTEndTime));
     }
 }

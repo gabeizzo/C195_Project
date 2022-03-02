@@ -28,7 +28,7 @@ public class MonthAndTypeReport {
      * @return An ObservableList of the
      */
     public ObservableList<MonthAndTypeData> apptMonthAndTypeData(String apptType) {
-        String getApptTypeFromDB = "SELECT MONTHNAME(Start) as MONTH, type, COUNT(*) as COUNT FROM appointments WHERE TYPE=? GROUP BY MONTHNAME(Start)";
+        String getApptTypeFromDB = "SELECT MONTHNAME(Start) as MONTH, type, COUNT(*) as COUNT FROM appointments WHERE TYPE=? GROUP BY MONTHNAME(Start) ORDER BY MONTHNAME(Start) ASC";
         ObservableList<MonthAndTypeData> apptMonthTypeData = FXCollections.observableArrayList();
 
         try {
