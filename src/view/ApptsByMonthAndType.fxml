@@ -6,11 +6,11 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ApptsByMonthAndTypeController">
+<AnchorPane prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ApptsByMonthAndTypeController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#007faa" height="700.0" stroke="BLACK" strokeType="INSIDE" width="800.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="63.0" layoutY="24.0" stroke="BLACK" strokeType="INSIDE" width="800.0" />
-      <Label layoutX="205.0" layoutY="38.0" text="Appointments By Month and Type" textFill="WHITE">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#007faa" height="700.0" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="63.0" layoutY="24.0" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
+      <Label layoutX="399.0" layoutY="38.0" text="Appointments By Month and Type" textFill="WHITE">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
@@ -18,18 +18,18 @@
             <Glow />
          </effect>
       </Label>
-      <TableView fx:id="apptsByMonthAndTypeTable" layoutX="18.0" layoutY="155.0" prefHeight="478.0" prefWidth="766.0">
+      <TableView fx:id="apptsByMonthAndTypeTable" layoutX="36.0" layoutY="155.0" prefHeight="475.0" prefWidth="1126.0">
         <columns>
-          <TableColumn fx:id="apptMonthCol" prefWidth="218.00000381469727" text="Month" />
-          <TableColumn fx:id="apptTypeCol" prefWidth="312.40000915527344" text="Appointment Type" />
-            <TableColumn fx:id="numOfApptsCol" prefWidth="233.4000244140625" text="Number of Appointments" />
+          <TableColumn fx:id="apptMonthCol" prefWidth="361.4000053405762" text="Month" />
+          <TableColumn fx:id="apptTypeCol" prefWidth="393.0" text="Appointment Type" />
+            <TableColumn fx:id="numOfApptsCol" prefWidth="404.199951171875" text="Number of Appointments" />
         </columns>
       </TableView>
-      <Button fx:id="mainMenuBtn" layoutX="323.0" layoutY="650.0" mnemonicParsing="false" onAction="#toMainMenu" text="Return to Main Menu">
+      <Button fx:id="mainMenuBtn" layoutX="518.0" layoutY="655.0" mnemonicParsing="false" onAction="#toMainMenu" text="Return to Main Menu">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <TextField fx:id="apptSearchBar" layoutX="524.0" layoutY="112.0" onAction="#searchAppts" prefHeight="26.0" prefWidth="261.0" promptText="Search By Appointment Month or Type" />
+      <TextField fx:id="apptSearchBar" layoutX="764.0" layoutY="114.0" onAction="#searchAppts" prefHeight="26.0" prefWidth="397.0" promptText="Search By Appointment Month or Type" />
    </children>
 </AnchorPane>

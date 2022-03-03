@@ -18,6 +18,7 @@ import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -76,6 +77,11 @@ public class ApptsByMonthAndTypeController implements Initializable {
         apptMonthCol.setCellValueFactory(new PropertyValueFactory<>("apptMonth"));
         apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
         numOfApptsCol.setCellValueFactory(new PropertyValueFactory<>("numOfAppts"));
+        apptMonthCol.setSortType(TableColumn.SortType.ASCENDING);
+        apptsByMonthAndTypeTable.sort();
+        apptsByMonthAndTypeTable.getSelectionModel().selectFirst();
+
+
     }
     private void getAllApptData(ObservableList<MonthAndTypeData> addAllApptTypes) {
         // add each appointment to overall list
@@ -117,9 +123,7 @@ public class ApptsByMonthAndTypeController implements Initializable {
             alert.setTitle("No Results");
             alert.setContentText("""
                     No appointments found.
-                    Please check spelling and try again.
-
-                    Reminder: Appointments search is case sensitive.""");
+                    Please check spelling and try again.""");
             alert.showAndWait();
 
             //Clear the text field and display all appointments
@@ -139,7 +143,10 @@ public class ApptsByMonthAndTypeController implements Initializable {
         ObservableList<MonthAndTypeData> allAppts = apptsByMonthAndTypeTable.getItems();
 
         for(MonthAndTypeData a : allAppts){
-            if(a.getApptType().contains(partialApptTypeOrMonth) || a.getApptMonth().contains(partialApptTypeOrMonth))
+            if(a.getApptType().equalsIgnoreCase(partialApptTypeOrMonth) || a.getApptType().contains(partialApptTypeOrMonth)
+                    || a.getApptType().toLowerCase().contains(partialApptTypeOrMonth) || a.getApptType().toUpperCase().contains(partialApptTypeOrMonth)
+                    || a.getApptMonth().contains(partialApptTypeOrMonth) || a.getApptMonth().equalsIgnoreCase(partialApptTypeOrMonth)
+                    || a.getApptMonth().toLowerCase().contains(partialApptTypeOrMonth) || a.getApptMonth().toUpperCase().contains(partialApptTypeOrMonth))
                 resultsSearch.add(a);
         }
         return resultsSearch;

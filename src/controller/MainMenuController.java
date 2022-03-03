@@ -97,7 +97,7 @@ public class MainMenuController implements Initializable {
     private TableView<Appointment> apptsTable;
 
     //Observable Lists used to populate the appointments table
-    private ObservableList<Appointment> allAppts = FXCollections.observableArrayList();
+    private final ObservableList<Appointment> allAppts;
     private final ObservableList<Appointment> currWeekAppts = FXCollections.observableArrayList();
     private final ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
 
@@ -254,7 +254,7 @@ public class MainMenuController implements Initializable {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByMonthAndType.fxml")));
         Stage stage = (Stage) (reportsByMonthAndTypeButton.getScene().getWindow());
         stage.setTitle("Appointments By Month and Type");
-        stage.setScene(new Scene(root,800 ,700));
+        stage.setScene(new Scene(root,1200 ,700));
         stage.show();
     }
 
@@ -334,9 +334,9 @@ public class MainMenuController implements Initializable {
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         contactCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
-        dateCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("startDateFormatted"));
-        startTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, LocalTime>("startTimeFormatted"));
-        endTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, LocalTime>("endTimeFormatted"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("startDateFormatted"));
+        startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTimeFormatted"));
+        endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTimeFormatted"));
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         apptsTable.getSelectionModel().selectFirst();
 
@@ -426,10 +426,8 @@ public class MainMenuController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("No Results");
             alert.setContentText("""
-                    No appointments found with the entered ID or Title.
-                    Please check spelling and try again.
-
-                    Reminder: Appointments search is case sensitive.""");
+                    No appointments found.
+                    Please check spelling and try again.""");
             alert.showAndWait();
 
             //Clear the text field and display all appointments
@@ -457,7 +455,12 @@ public class MainMenuController implements Initializable {
         ObservableList<Appointment> allAppts = apptsTable.getItems();
 
         for(Appointment a : allAppts){
-            if(a.getApptTitle().contains(partialApptTitle))
+            if(a.getApptTitle().equalsIgnoreCase(partialApptTitle) || a.getApptTitle().contains(partialApptTitle)
+                    || a.getApptTitle().toLowerCase().contains(partialApptTitle) || a.getApptTitle().toUpperCase().contains(partialApptTitle)
+                    || a.getApptType().equalsIgnoreCase(partialApptTitle) || a.getApptType().contains(partialApptTitle)
+                    || a.getApptType().toLowerCase().contains(partialApptTitle) || a.getApptType().toUpperCase().contains(partialApptTitle)
+                    || a.getContactName().toLowerCase().contains(partialApptTitle) || a.getContactName().toUpperCase().contains(partialApptTitle)
+                    || a.getContactName().equalsIgnoreCase(partialApptTitle) || a.getContactName().contains(partialApptTitle))
                 resultsSearch.add(a);
         }
         return resultsSearch;

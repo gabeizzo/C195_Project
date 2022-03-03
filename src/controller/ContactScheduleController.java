@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.AppointmentDAOImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,9 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
@@ -18,6 +17,7 @@ import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -26,13 +26,15 @@ import java.util.ResourceBundle;
  */
 public class ContactScheduleController implements Initializable {
     @FXML
+    private TextField apptSearchBar;
+    @FXML
     private Button mainMenuBtn;
     @FXML
     private TableColumn<Appointment, Integer> customerIDCol;
     @FXML
-    private TableColumn<Appointment, String> endTimeCol;
+    private TableColumn<Appointment, LocalTime> endTimeCol;
     @FXML
-    private TableColumn<Appointment, String> startTimeCol;
+    private TableColumn<Appointment, LocalTime> startTimeCol;
     @FXML
     private TableColumn<Appointment, String> apptDateCol;
     @FXML
@@ -48,15 +50,16 @@ public class ContactScheduleController implements Initializable {
     @FXML
     private TableView<Appointment> contactScheduleTable;
 
-    private ObservableList<Appointment> contact1Appts;
-    private ObservableList<Appointment> contact2Appts;
-    private ObservableList<Appointment> contact3Appts;
-    private ObservableList<Appointment> allContactsAppts = FXCollections.observableArrayList();
+    private final AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+    private final ObservableList<Appointment> allAppts;
+
+
 
     /** This is the ContactScheduleController constructor.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public ContactScheduleController() throws SQLException{
+        allAppts = apptDAO.getAllApptsFromDB();
     }
 
     /** This method initializes the Contact Schedule screen and loads the appointments for contacts.
@@ -65,7 +68,17 @@ public class ContactScheduleController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        contactScheduleTable.setItems(allContactsAppts);
+        try {
+            viewAllApptsFromDB();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void viewAllApptsFromDB() throws SQLException {
+
+        //Sets up the apptsTable columns with all the Appointment object parameters
+        contactScheduleTable.setItems(allAppts);
         contactNameCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         apptIDCol.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         titleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
@@ -75,7 +88,101 @@ public class ContactScheduleController implements Initializable {
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTimeFormatted"));
         endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTimeFormatted"));
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        contactScheduleTable.getSelectionModel().selectFirst();
+
     }
+
+    /** This method searches the table for any appointments that have either an Appointment ID, Title, Type, or Contact Name that match the text input.
+     * @param actionEvent When data is entered into the search bar on the main menu.
+     * @throws SQLException Thrown if there is a MySQL database access error.
+     */
+    public void searchAppts(ActionEvent actionEvent) throws SQLException {
+
+        //Get the search text input
+        String searchInput = apptSearchBar.getText();
+        ObservableList<Appointment> appointments = searchByApptTitle(searchInput);
+
+        try {
+            int apptID = Integer.parseInt(searchInput);
+            Appointment a = searchByApptID(apptID);
+            if(a != null){
+                appointments.add(a);
+            }
+        } catch (NumberFormatException e) {
+            //ignore
+        }
+        contactScheduleTable.setItems(appointments);
+
+        //If blank search, display all appointments to the table
+        if(apptSearchBar.getText().isBlank()){
+            try{
+                viewAllApptsFromDB();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //If there are no matches and the list is empty display message.
+        if(appointments.isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Results");
+            alert.setContentText("""
+                    No appointments found.
+                    Please check spelling and try again.""");
+            alert.showAndWait();
+
+            //Clear the text field and display all appointments
+            apptSearchBar.clear();
+            try{
+                viewAllApptsFromDB();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    /** Searches for Appointments by Title.
+     @param partialApptTitle The text input entered into the search field above the table.
+     @return resultsSearch The search results to be displayed in the table.
+     @throws SQLException Thrown if there is a database access error.
+     */
+    private ObservableList<Appointment> searchByApptTitle(String partialApptTitle) throws SQLException {
+        ObservableList<Appointment> resultsSearch = FXCollections.observableArrayList();
+
+        try{
+            viewAllApptsFromDB();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ObservableList<Appointment> allAppts = contactScheduleTable.getItems();
+
+        for(Appointment a : allAppts){
+            if(a.getApptTitle().equalsIgnoreCase(partialApptTitle) || a.getApptTitle().contains(partialApptTitle)
+                    || a.getApptTitle().toLowerCase().contains(partialApptTitle) || a.getApptTitle().toUpperCase().contains(partialApptTitle)
+                    || a.getApptType().equalsIgnoreCase(partialApptTitle) || a.getApptType().contains(partialApptTitle)
+                    || a.getApptType().toLowerCase().contains(partialApptTitle) || a.getApptType().toUpperCase().contains(partialApptTitle)
+                    || a.getContactName().toLowerCase().contains(partialApptTitle) || a.getContactName().toUpperCase().contains(partialApptTitle)
+                    || a.getContactName().equalsIgnoreCase(partialApptTitle) || a.getContactName().contains(partialApptTitle))
+                resultsSearch.add(a);
+        }
+        return resultsSearch;
+    }
+
+    /**Searches Appointments by id.
+     @param apptID The Appointment id that is searched.
+     @return a, the appointment that matches the searched id.
+     @throws SQLException Thrown if there is a database error.
+     */
+    private Appointment searchByApptID(int apptID) throws SQLException {
+        ObservableList<Appointment> allAppts = contactScheduleTable.getItems();
+        for (Appointment a : allAppts) {
+            if (a.getApptID() == apptID) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+
 
     /** This method returns to the main menu if the Main Menu button gets selected.
      * @param actionEvent When the Main Menu button is selected.

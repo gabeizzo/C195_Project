@@ -221,9 +221,7 @@ public class CustomersMenuController implements Initializable {
             alert.setTitle("No Results");
             alert.setContentText("""
                     No customers found with the entered ID or Name.
-                    Please check spelling and try again.
-
-                    Reminder: Customer search is case sensitive.""");
+                    Please check spelling and try again.""");
             alert.showAndWait();
 
             customerSearchBar.clear();
@@ -244,7 +242,8 @@ public class CustomersMenuController implements Initializable {
         ObservableList<Customer> allCustomers = customerDataTable.getItems();
 
         for(Customer c : allCustomers){
-            if(c.getCustomerName().contains(partialCustomerName))
+            if(c.getCustomerName().equalsIgnoreCase(partialCustomerName) || c.getCustomerName().contains(partialCustomerName)
+                    || c.getCustomerName().toLowerCase().contains(partialCustomerName) || c.getCustomerName().toUpperCase().contains(partialCustomerName))
                 resultsSearch.add(c);
         }
         return resultsSearch;

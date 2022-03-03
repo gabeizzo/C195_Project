@@ -148,7 +148,7 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="apptSearchBar" layoutX="753.0" layoutY="67.0" onAction="#searchAppts" prefHeight="26.0" prefWidth="194.0" promptText="Search by Appointment ID or Title" />
+                        <TextField fx:id="apptSearchBar" layoutX="667.0" layoutY="67.0" onAction="#searchAppts" prefHeight="26.0" prefWidth="280.0" promptText="Search by Appointment ID, Title, Type, or Contact" />
                         <Label fx:id="dateTimeLbl" layoutX="783.0" layoutY="648.0" text="dateTimeLbl">
                            <font>
                               <Font name="System Bold" size="16.0" />
