@@ -283,7 +283,6 @@ public class AppointmentDAOImpl implements AppointmentDAO{
         catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     /** Deletes a selected appointment from the database.
@@ -326,10 +325,10 @@ public class AppointmentDAOImpl implements AppointmentDAO{
             pst.execute();
 
             if (pst.getUpdateCount() > 0) {
-                System.out.println("Deleted customer's appointments from the database successfully!");
+                System.out.println("Deleted the customer's appointments from the database successfully!");
             }
             else {
-                System.out.println("Attempt to delete customer associated appointments from the database failed. This may occur if there are no appointments for this customer to delete.");
+                System.out.println("Attempt to delete the customer's appointments from the database failed. This may occur if there are no appointments for this customer to delete.");
             }
         }
         catch (Exception e) {
