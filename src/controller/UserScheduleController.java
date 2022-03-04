@@ -1,7 +1,6 @@
 package controller;
 
 import DAO.AppointmentDAOImpl;
-import DAO.UserDAOImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,8 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
-import model.User;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -23,10 +20,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class UserScheduleController implements Initializable {
-    private final UserDAOImpl userDAO = new UserDAOImpl();
-    private final AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
     private final ObservableList<Appointment> allAppts;
-
     @FXML
     private TextField apptSearchBar;
     @FXML
@@ -56,6 +50,7 @@ public class UserScheduleController implements Initializable {
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public UserScheduleController() throws SQLException {
+        AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
         allAppts = apptDAO.getAllApptsFromDB();
     }
 
@@ -88,8 +83,6 @@ public class UserScheduleController implements Initializable {
         userNameCol.setSortType(TableColumn.SortType.ASCENDING);
         userScheduleTable.sort();
         userScheduleTable.getSelectionModel().selectFirst();
-
-
     }
 
     /** This method searches the table for any appointments that have either an Appointment ID, Title, Type, or Contact Name that match the text input.
@@ -121,7 +114,6 @@ public class UserScheduleController implements Initializable {
                 e.printStackTrace();
             }
         }
-
         //If there are no matches and the list is empty display message.
         if(appointments.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

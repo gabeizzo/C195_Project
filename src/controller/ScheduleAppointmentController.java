@@ -110,33 +110,40 @@ public class ScheduleAppointmentController implements Initializable {
         try {
             customerCB.setItems(customerDAO.getAllDBCustomers());
             customerCB.setPromptText("Select Customer");
+
             userNameCB.setItems(userDAO.getAllUsers());
             userNameCB.setPromptText("Select User");
+
             contactCB.setItems(contactDAO.getAllContactsFromDB());
             contactCB.setPromptText("Select Contact");
+
             apptTypes.addAll("Planning Session", "De-Briefing", "Department Meeting", "Escalation", "Review","Miscellaneous");
             apptTypeCB.setItems(apptTypes);
             apptTypeCB.setPromptText("Select Type");
-            apptDatePicker.setConverter(new StringConverter<LocalDate>() {
+
+            apptDatePicker.setConverter(new StringConverter<>() {
                 final String date = "MM-dd-yyyy";
                 final DateTimeFormatter DTF = DateTimeFormatter.ofPattern(date);
 
                 //Formats the localDate as a String with format MM-dd-yyyy
                 @Override
                 public String toString(LocalDate localDate) {
-                    if(localDate != null) {
+                    if (localDate != null) {
                         return DTF.format(localDate);
-                    }
-                    else {
+                    } else {
                         return "LocalDate value is Null.";
                     }
                 }
+
                 //Converts the String format of MM-dd-yyyy displayed back to LocalDate
                 @Override
                 public LocalDate fromString(String s) {
-                    if(s != null && !s.isEmpty()){
+                    if (s != null && !s.isEmpty()) {
                         return LocalDate.parse(s, DTF);
-                    }return null;}});
+                    }
+                    return null;
+                }
+            });
 
             //Set the date picker
             apptDatePicker.setValue(LocalDate.now());

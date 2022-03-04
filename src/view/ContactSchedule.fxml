@@ -10,7 +10,7 @@
     <children>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#007faa" height="700.0" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="63.0" layoutY="24.0" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
-        <Label layoutX="453.0" layoutY="29.0" text="Contact Schedule" textFill="WHITE">
+        <Label layoutX="390.0" layoutY="29.0" text="Contact Schedule Report" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="36.0" />
             </font>

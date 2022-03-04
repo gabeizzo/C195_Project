@@ -88,7 +88,7 @@ public class ModifyAppointmentController implements Initializable {
     private LocalTime apptStart;
     private LocalTime apptEnd;
 
-    //Start times list at 3AM to account for 5-hour difference for Hawaii based appointments to start at 8AM EST
+    //Start times list at 3AM to account for 5-hour difference for Hawaii based appointments that potentially start at 8AM EST
     private final LocalTime start = LocalTime.of(3,0);
     private final LocalTime end = LocalTime.of(23, 0);
     private LocalDateTime apptStartDateTime;

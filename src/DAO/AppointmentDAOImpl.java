@@ -1,7 +1,6 @@
 package DAO;
 
 import Utilities.DBQuery;
-import controller.LoginScreenController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.Main;
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 public class AppointmentDAOImpl implements AppointmentDAO{
     private PreparedStatement pst;
     private ResultSet rs;
-    private Connection connection = Main.connection;
+    private final Connection connection = Main.connection;
     ObservableList<Appointment> appts = FXCollections.observableArrayList();
     ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
     ObservableList<Appointment> apptsByType = FXCollections.observableArrayList();
