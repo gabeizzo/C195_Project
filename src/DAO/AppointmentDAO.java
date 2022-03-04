@@ -57,7 +57,7 @@ public interface AppointmentDAO {
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public void modifyAppt(int apptID, String apptTitle, String description, String location, String apptType,
-                           LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) throws SQLException;
+                           LocalDateTime start, LocalDateTime end, LocalDateTime createDate, String createdBy,LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) throws SQLException;
 
     /** Deletes an appointment based on the appointment ID.
      * @param appointmentID The ID of the appointment being deleted.

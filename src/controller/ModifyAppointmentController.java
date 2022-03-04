@@ -228,6 +228,7 @@ public class ModifyAppointmentController implements Initializable {
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     private boolean apptOverlap() throws SQLException {
+
         try{
             //establish the appointment start and end times for comparison.
             apptStartDateTime = LocalDateTime.of(apptDate, apptStart);
@@ -236,15 +237,16 @@ public class ModifyAppointmentController implements Initializable {
 
             //Loop through the appointments and check if there are any with conflicting start and end times.
             for(Appointment a : appts){
-                if(a.getCustomerID() == customerName.getCustomerID()){
+                if (a.getApptID() != appt.getApptID()){
+                if(a.getCustomerID() == customerName.getCustomerID()) {
 
                     //Checks appointment start times for overlap.
-                    if(apptStartDateTime.isAfter(a.getStartDateTime().minusMinutes(1)) && apptStartDateTime.isBefore(a.getEndDateTime())){
+                    if (apptStartDateTime.isAfter(a.getStartDateTime().minusMinutes(1)) && apptStartDateTime.isBefore(a.getEndDateTime())) {
                         Alert apptCollision = new Alert(Alert.AlertType.ERROR);
                         apptCollision.setTitle("Appointment Conflict");
                         apptCollision.setContentText("This appointment's start/end times overlap with the following appointment:\n\n"
                                 + "Appointment ID: " + a.getApptID() + "\nAppointment Title: " + a.getApptTitle() + "\nDescription: "
-                                + a.getDescription() +"\nLocal Start Time:" + a.getStartTime() + "\nLocal End Time: " + a.getEndTime()
+                                + a.getDescription() + "\nLocal Start Time:" + a.getStartTime() + "\nLocal End Time: " + a.getEndTime()
                                 + "\nAppointment Start Time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptStart)))
                                 + "\nAppointment End Time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptEnd)))
                         );
@@ -257,13 +259,14 @@ public class ModifyAppointmentController implements Initializable {
                         apptCollision.setTitle("Appointment Conflict");
                         apptCollision.setContentText("This appointment's start/end times overlap with the following appointment:\n\n"
                                 + "Appointment ID: " + a.getApptID() + "\nAppointment Title: " + a.getApptTitle() + "\nDescription: "
-                                + a.getDescription() +"\nLocal Start Time:" + a.getStartTime() + "\nLocal End Time: " + a.getEndTime()
+                                + a.getDescription() + "\nLocal Start Time:" + a.getStartTime() + "\nLocal End Time: " + a.getEndTime()
                                 + "\nAppointment start time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptStart)))
                                 + "\nAppointment end time(EST): " + ConvertTime.timeFormatted(ConvertTime.localToEST(LocalDateTime.of(apptDate, apptEnd)))
                         );
                         apptCollision.showAndWait();
                         return false;
                     }
+                }
                 }
             }
         }
@@ -281,11 +284,13 @@ public class ModifyAppointmentController implements Initializable {
 
         //Check that field data is valid before attempting to save the appointment
         if(apptDataIsValid()) {
+            LocalDateTime createDate = LocalDateTime.now();
+            String createdBy = LoginScreenController.userName;
 
             try {
                 //Modify the appointment
                 apptDAO.modifyAppt(appt.getApptID(), apptTitle, description, location, apptType, apptStartDateTime,
-                        apptEndDateTime,customerName.getCustomerID(), userName.getUserID(), contactName.getContactID());
+                        apptEndDateTime, appt.getCreateDate(), appt.getCreatedBy(), appt.getLastUpdate(), appt.getLastUpdatedBy(), customerName.getCustomerID(), userName.getUserID(), contactName.getContactID());
 
                 //Return to Main Menu after appointment is saved
                 Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));

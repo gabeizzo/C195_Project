@@ -9,6 +9,7 @@ import model.Appointment;
 import java.sql.*;
 import java.time.LocalDateTime;
 
+
 /** This is the Appointment Data Access Object concrete class which implements the AppointmentDAO interface.
  * This class is responsible for accessing data from the database.
  */
@@ -255,13 +256,12 @@ public class AppointmentDAOImpl implements AppointmentDAO{
      */
     @Override
     public void modifyAppt(int apptID, String apptTitle, String description, String location, String apptType, LocalDateTime start,
-                           LocalDateTime end, int customerID, int userID, int contactID) throws SQLException {
+                           LocalDateTime end, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) throws SQLException {
 
         //Modifies existing appointment in the database and sets the update time and last updated by the user logged in.
-        String modifyApptInDB = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, Contact_ID = ?, WHERE Appointment_ID = ?";
+        String modifyApptInDB = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         DBQuery.setPreparedStatement(connection, modifyApptInDB);
-        LocalDateTime lastUpdate = LocalDateTime.now();
-        String lastUpdatedBy = LoginScreenController.userName;
+
 
         try{
             PreparedStatement pst = DBQuery.getPreparedStatement();
@@ -271,12 +271,14 @@ public class AppointmentDAOImpl implements AppointmentDAO{
             pst.setString(4, apptType);
             pst.setTimestamp(5, Timestamp.valueOf(start));
             pst.setTimestamp(6, Timestamp.valueOf(end));
-            pst.setTimestamp(7, Timestamp.valueOf(lastUpdate));
-            pst.setString(8, lastUpdatedBy);
-            pst.setInt(9, customerID);
-            pst.setInt(10, userID);
-            pst.setInt(11, contactID);
-            pst.setInt(12, apptID);
+            pst.setTimestamp(7, Timestamp.valueOf(createDate));
+            pst.setString(8, createdBy);
+            pst.setTimestamp(9, Timestamp.valueOf(lastUpdate));
+            pst.setString(10, lastUpdatedBy);
+            pst.setInt(11, customerID);
+            pst.setInt(12, userID);
+            pst.setInt(13, contactID);
+            pst.setInt(14, apptID);
             pst.execute();
         }
         catch (SQLException e) {
