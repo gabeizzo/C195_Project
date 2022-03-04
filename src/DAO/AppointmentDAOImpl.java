@@ -262,7 +262,6 @@ public class AppointmentDAOImpl implements AppointmentDAO{
         String modifyApptInDB = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         DBQuery.setPreparedStatement(connection, modifyApptInDB);
 
-
         try{
             PreparedStatement pst = DBQuery.getPreparedStatement();
             pst.setString(1, apptTitle);
