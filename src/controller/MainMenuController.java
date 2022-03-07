@@ -2,9 +2,9 @@
 package controller;
 
 import DAO.AppointmentDAOImpl;
-import Utilities.DBConnection;
-import Utilities.TimeZoneLambda;
-import Utilities.WelcomeUserLambda;
+import utilities.DBConnection;
+import utilities.TimeZoneLambda;
+import utilities.WelcomeUserLambda;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

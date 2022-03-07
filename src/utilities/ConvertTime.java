@@ -1,4 +1,4 @@
-package Utilities;
+package utilities;
 
 import javafx.scene.control.ComboBox;
 import java.time.LocalDateTime;
@@ -78,11 +78,14 @@ public class ConvertTime {
      * @param localDateTime The local time to compare to EST.
      * @return true or false, if time is between 8AM-10PM or not.
      */
-    public static boolean compareLToESTBizHrs(LocalDateTime localDateTime) {
+    public static boolean isApptWithinBusinessHrs(LocalDateTime localDateTime) {
+        //Start one minute before 8AM to allow appointments to start at 8AM EST.
+        //If set to 8AM appointments start time will not work for 8AM.
         LocalTime startTime = LocalTime.of(7,59);
         ZoneId ESTZoneID = ZoneId.of("America/New_York");
         ZonedDateTime ESTStartTime = ZonedDateTime.of(localDateTime.toLocalDate(), startTime, ESTZoneID);
 
+        //End one minute after 10PM to allow appointments to end at 10PM Eastern.
         LocalTime endTime = LocalTime.of(22, 1);
         ZonedDateTime ESTEndTime = ZonedDateTime.of(localDateTime.toLocalDate(), endTime, ESTZoneID);
 

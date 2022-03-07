@@ -1,24 +1,28 @@
 package controller;
 
-import DAO.AppointmentDAOImpl;
-import Utilities.MonthAndTypeData;
-import Utilities.MonthAndTypeReport;
+import utilities.MonthAndTypeData;
+import utilities.MonthAndTypeReport;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.print.PageLayout;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -26,10 +30,16 @@ import java.util.ResourceBundle;
  * This class holds the methods used to gather appointment data by their Month and Types and displays them in a table view.
  */
 public class ApptsByMonthAndTypeController implements Initializable {
+
+    //Month and Type related fields
     private final ObservableList<MonthAndTypeData> apptData = FXCollections.observableArrayList();
     private final MonthAndTypeReport monthAndTypeReport = new MonthAndTypeReport();
 
     //GUI fx:id's
+    @FXML
+    private Button printReportBtn;
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private TextField apptSearchBar;
     @FXML
@@ -43,8 +53,6 @@ public class ApptsByMonthAndTypeController implements Initializable {
     @FXML
     private TableView<MonthAndTypeData> apptsByMonthAndTypeTable;
 
-
-
     /** This is the ApptsByMonthAndTypeController constructor for initializing objects of this type.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
@@ -57,7 +65,7 @@ public class ApptsByMonthAndTypeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Lists for each appointment type: "Planning Session", "De-Briefing", "Department Meeting", "Escalation", "Review","Miscellaneous"
+        //Lists for each appointment type: "Planning Session", "De-Briefing", "Department Meeting", "Escalation", "Review","Miscellaneous"
         ObservableList<MonthAndTypeData> planningSessions = monthAndTypeReport.apptMonthAndTypeData("Planning Session");
         ObservableList<MonthAndTypeData> debriefings = monthAndTypeReport.apptMonthAndTypeData("De-Briefing");
         ObservableList<MonthAndTypeData> deptMeetings = monthAndTypeReport.apptMonthAndTypeData("Department Meeting");
@@ -65,8 +73,10 @@ public class ApptsByMonthAndTypeController implements Initializable {
         ObservableList<MonthAndTypeData> reviews = monthAndTypeReport.apptMonthAndTypeData("Review");
         ObservableList<MonthAndTypeData> miscellaneousAppts = monthAndTypeReport.apptMonthAndTypeData("Miscellaneous");
 
+        //Sets the table with the appointment data.
         apptsByMonthAndTypeTable.setItems(apptData);
 
+        //Gets all the appointment types data
         getAllApptData(planningSessions);
         getAllApptData(debriefings);
         getAllApptData(deptMeetings);
@@ -74,15 +84,18 @@ public class ApptsByMonthAndTypeController implements Initializable {
         getAllApptData(reviews);
         getAllApptData(miscellaneousAppts);
 
+        //Sets up the table columns and sorts the data by Month in ascending order.
         apptMonthCol.setCellValueFactory(new PropertyValueFactory<>("apptMonth"));
         apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
         numOfApptsCol.setCellValueFactory(new PropertyValueFactory<>("numOfAppts"));
         apptMonthCol.setSortType(TableColumn.SortType.ASCENDING);
         apptsByMonthAndTypeTable.sort();
         apptsByMonthAndTypeTable.getSelectionModel().selectFirst();
-
-
     }
+
+    /** Gets all the appointment data to be added to the apptData list.
+     * @param addAllApptTypes All of the appointment types to be added to the report.
+     */
     private void getAllApptData(ObservableList<MonthAndTypeData> addAllApptTypes) {
         // add each appointment to overall list
         apptData.addAll(addAllApptTypes);
@@ -131,6 +144,7 @@ public class ApptsByMonthAndTypeController implements Initializable {
             apptsByMonthAndTypeTable.setItems(apptData);
         }
     }
+
     /** Searches for Appointments by Title.
      @param partialApptTypeOrMonth The text input entered into the search field above the table.
      @return resultsSearch The search results to be displayed in the table.
@@ -151,4 +165,67 @@ public class ApptsByMonthAndTypeController implements Initializable {
         }
         return resultsSearch;
     }
+
+    /** This method prints the node passed into it and any nodes that are attached.
+     * If the image to print is too large, it is resized to fit when printed.
+     * @param node The node to be printed.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
+     */
+    private void printNode(Node node) throws IOException {
+        Printer printer = Printer.getDefaultPrinter();
+        PageLayout pageLayout = printer.getDefaultPageLayout();
+
+        //Printable area
+        double pWidth = pageLayout.getPrintableWidth();
+        double pHeight = pageLayout.getPrintableHeight();
+
+        //Node's dimensions
+        double nWidth = node.getBoundsInParent().getWidth();
+        double nHeight = node.getBoundsInParent().getHeight();
+
+        //Determines whether the image is larger than the printable width/height.
+        double widthLeft = pWidth - nWidth;
+        double heightLeft = pHeight - nHeight;
+
+        //Scale the node to fit the printable width and height
+        double scale;
+
+        if (widthLeft < heightLeft) scale = pWidth / nWidth;
+        else scale = pHeight / nHeight;
+
+        //Preserves aspect ratio (both values are the same)
+        node.getTransforms().add(new Scale(scale, scale));
+
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job != null && job.showPrintDialog(node.getScene().getWindow())) {
+
+            boolean success = job.printPage(node);
+            //If job prints successfully, reloads the screen back to full size.
+            if (success) {
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByMonthAndType.fxml")));
+                Stage stage = (Stage) (printReportBtn.getScene().getWindow());
+                stage.setTitle("Appointments By Month and Type");
+                stage.setScene(new Scene(root,1200 ,700));
+                stage.show();
+                System.out.println("Report successfully printed!");
+                job.endJob();
+            }
+        }
+    }
+
+    /** This method prints the report screen when the Print Report button is activated.
+     * @param actionEvent When the printReportBtn is activated.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
+     */
+    public void printReport(ActionEvent actionEvent) throws IOException {
+        //Prints the node/screen
+        printNode(anchorPane);
+        //Reloads the screen even if printing gets cancelled.
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByMonthAndType.fxml")));
+        Stage stage = (Stage) (printReportBtn.getScene().getWindow());
+        stage.setTitle("Appointments By Month and Type");
+        stage.setScene(new Scene(root,1200 ,700));
+        stage.show();
+    }
+
 }

@@ -5,13 +5,12 @@
 
 package main;
 
-import Utilities.DBConnection;
+import utilities.DBConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -35,7 +34,7 @@ public class Main extends Application {
     public void start(Stage stage) throws MissingResourceException, IOException {
         try {
             // Used for changing the stage title to French as all other stage elements are set to French by the LoginScreenController.
-            ResourceBundle rb = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
 
             if (Locale.getDefault().getLanguage().equals("fr")) {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/LoginScreen.fxml")));

@@ -1,6 +1,6 @@
 package DAO;
 
-import Utilities.DBQuery;
+import utilities.DBQuery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.Main;
@@ -14,10 +14,13 @@ import java.sql.SQLException;
  * This class implements the ContactDAO interface for accessing contact data from the database to be used in the application.
  */
 public class ContactDAOImpl {
+
+    //For database queries
     Connection connection = Main.connection;
     private PreparedStatement pst;
     private ResultSet rs;
 
+    //List of all contacts
     ObservableList<Contact> allContacts = FXCollections.observableArrayList();
 
 

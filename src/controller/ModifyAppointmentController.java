@@ -4,7 +4,7 @@ import DAO.AppointmentDAOImpl;
 import DAO.ContactDAOImpl;
 import DAO.CustomerDAOImpl;
 import DAO.UserDAOImpl;
-import Utilities.ConvertTime;
+import utilities.ConvertTime;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -164,7 +164,7 @@ public class ModifyAppointmentController implements Initializable {
     private boolean apptStartEndAreValid() {
         LocalDateTime apptStartDateTime = LocalDateTime.of(apptDate, apptStart);
         LocalDateTime apptEndDateTime = LocalDateTime.of(apptDate, apptEnd);
-        return ConvertTime.compareLToESTBizHrs(apptStartDateTime) && ConvertTime.compareLToESTBizHrs(apptEndDateTime);
+        return ConvertTime.isApptWithinBusinessHrs(apptStartDateTime) && ConvertTime.isApptWithinBusinessHrs(apptEndDateTime);
 
     }
 

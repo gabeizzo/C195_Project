@@ -1,7 +1,7 @@
 package controller;
 
 import DAO.CustomerDAOImpl;
-import Utilities.TimeZoneLambda;
+import utilities.TimeZoneLambda;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -33,6 +33,8 @@ import java.util.TimeZone;
 /** This is the CustomersMenuController class which defines the methods to be used for adding, deleting, modifying and displaying Customers from the database.
  */
 public class CustomersMenuController implements Initializable {
+
+    //GUI fx:id's
     @FXML
     private TextField customerSearchBar;
     @FXML
@@ -95,7 +97,11 @@ public class CustomersMenuController implements Initializable {
         viewAllCustomerFromDB();
     }
 
+    /** This method displays all the customers from the database to be displayed in the Customers table.
+     */
     private void viewAllCustomerFromDB() {
+
+        //Sets the customerDataTable columns and data to be displayed.
         try {
             CustomerDAOImpl customerDAO = new CustomerDAOImpl();
             customerDataTable.setItems(customerDAO.getAllDBCustomers());

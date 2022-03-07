@@ -1,4 +1,4 @@
-package Utilities;
+package utilities;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +12,8 @@ import java.sql.SQLException;
  * This class defines the methods for querying the database for appointments based on their month, type, and occurrence.
  */
 public class MonthAndTypeReport {
+
+    //Database Connection and Query
     private PreparedStatement pst;
     private ResultSet rs;
     Connection connection = Main.connection;
@@ -45,7 +47,6 @@ public class MonthAndTypeReport {
             }
         }
         catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return apptMonthTypeData;

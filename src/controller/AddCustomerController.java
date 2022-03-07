@@ -2,7 +2,7 @@ package controller;
 
 import DAO.CountryDAOImpl;
 import DAO.CustomerDAOImpl;
-import Utilities.DivisionsByCountryID;
+import utilities.DivisionsByCountryID;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

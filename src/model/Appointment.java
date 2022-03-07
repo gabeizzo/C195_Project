@@ -2,7 +2,7 @@ package model;
 
 import DAO.ContactDAOImpl;
 import DAO.UserDAOImpl;
-import Utilities.ConvertTime;
+import utilities.ConvertTime;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -300,10 +300,10 @@ public class Appointment {
         return this.user;
     }
 
-        /** Gets the appointment's contact ID.
-         * @return The contact ID associated with the appointment.
-         */
-        public int getContactID() {
+    /** Gets the appointment's contact ID.
+     * @return The contact ID associated with the appointment.
+     */
+    public int getContactID() {
             return contactID;
         }
 

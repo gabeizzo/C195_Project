@@ -1,6 +1,6 @@
 package DAO;
 
-import Utilities.DBQuery;
+import utilities.DBQuery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.Main;
@@ -8,14 +8,17 @@ import model.Appointment;
 import java.sql.*;
 import java.time.LocalDateTime;
 
-
 /** This is the Appointment Data Access Object concrete class which implements the AppointmentDAO interface.
  * This class is responsible for accessing data from the database.
  */
 public class AppointmentDAOImpl implements AppointmentDAO{
+
+    //For database queries
     private PreparedStatement pst;
     private ResultSet rs;
     private final Connection connection = Main.connection;
+
+    //Appointment Lists
     ObservableList<Appointment> appts = FXCollections.observableArrayList();
     ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
     ObservableList<Appointment> apptsByType = FXCollections.observableArrayList();
@@ -26,7 +29,6 @@ public class AppointmentDAOImpl implements AppointmentDAO{
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public AppointmentDAOImpl() throws SQLException {
-        //empty class constructor
     }
 
     /** Gets the list of all appointments in the MySQL db.

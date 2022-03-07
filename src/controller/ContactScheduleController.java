@@ -7,13 +7,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.print.PageLayout;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import model.Appointment;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -25,6 +30,10 @@ import java.util.ResourceBundle;
  * This class defines the methods used to display the Contact Schedule GUI report.
  */
 public class ContactScheduleController implements Initializable {
+    @FXML
+    private AnchorPane anchorPane;
+    @FXML
+    private Button printReportBtn;
     @FXML
     private TextField apptSearchBar;
     @FXML
@@ -75,6 +84,9 @@ public class ContactScheduleController implements Initializable {
         }
     }
 
+    /** Gets all the appointments from the database.
+     * @throws SQLException Thrown if there is a database access error.
+     */
     private void viewAllApptsFromDB() throws SQLException {
 
         //Sets up the apptsTable columns with all the Appointment object parameters
@@ -182,8 +194,6 @@ public class ContactScheduleController implements Initializable {
         return null;
     }
 
-
-
     /** This method returns to the main menu if the Main Menu button gets selected.
      * @param actionEvent When the Main Menu button is selected.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
@@ -192,6 +202,76 @@ public class ContactScheduleController implements Initializable {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
         Stage stage = (Stage) (mainMenuBtn.getScene().getWindow());
         stage.setTitle("Appointment Scheduler Main Menu");
+        stage.setScene(new Scene(root,1200 ,700));
+        stage.show();
+    }
+
+    /** This method prints the node passed into it and any nodes that are attached.
+     * If the image to print is too large, it is resized to fit when printed.
+     * @param node The node to be printed.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
+     */
+    private void printNode(Node node) throws IOException {
+        Printer printer = Printer.getDefaultPrinter();
+        PageLayout pageLayout = printer.getDefaultPageLayout();
+
+        // Printable area
+        double pWidth = pageLayout.getPrintableWidth();
+        double pHeight = pageLayout.getPrintableHeight();
+
+        // Node's dimensions
+        double nWidth = node.getBoundsInParent().getWidth();
+        double nHeight = node.getBoundsInParent().getHeight();
+
+        // Determines whether the image is larger than the printable width/height.
+        double widthLeft = pWidth - nWidth;
+        double heightLeft = pHeight - nHeight;
+
+        // Scale the node to fit the printable width and height
+        double scale;
+
+        if (widthLeft < heightLeft) scale = pWidth / nWidth;
+        else scale = pHeight / nHeight;
+
+        // preserve ratio (both values are the same)
+        node.getTransforms().add(new Scale(scale, scale));
+
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job != null && job.showPrintDialog(node.getScene().getWindow())) {
+
+            boolean success = job.printPage(node);
+            //If job prints successfully, reloads the screen back to full size.
+            if (success) {
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ContactSchedule.fxml")));
+                Stage stage = (Stage) (printReportBtn.getScene().getWindow());
+                stage.setTitle("Contact Schedule");
+                stage.setScene(new Scene(root,1200 ,700));
+                stage.show();
+                System.out.println("Report successfully printed!");
+                job.endJob();
+            }
+            else {
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ContactSchedule.fxml")));
+                Stage stage = (Stage) (printReportBtn.getScene().getWindow());
+                stage.setTitle("Contact Schedule");
+                stage.setScene(new Scene(root,1200 ,700));
+                stage.show();
+                System.out.println("Printing was cancelled.");
+            }
+        }
+    }
+
+    /** This method prints the report screen when the Print Report button is activated.
+     * @param actionEvent When the printReportBtn is activated.
+     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
+     */
+    public void printReport(ActionEvent actionEvent) throws IOException {
+        //Prints the node/screen
+        printNode(anchorPane);
+        //Reloads the screen even if print job gets cancelled
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ContactSchedule.fxml")));
+        Stage stage = (Stage) (printReportBtn.getScene().getWindow());
+        stage.setTitle("Contact Schedule");
         stage.setScene(new Scene(root,1200 ,700));
         stage.show();
     }

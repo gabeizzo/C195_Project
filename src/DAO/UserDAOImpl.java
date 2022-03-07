@@ -1,6 +1,6 @@
 package DAO;
 
-import Utilities.DBQuery;
+import utilities.DBQuery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.Main;
@@ -12,16 +12,19 @@ import java.time.LocalDateTime;
  * This class gets the users and their data from the MySQL database.
  */
 public class UserDAOImpl implements UserDAO{
-    private String selectAllUsers = "Select * FROM users";
+    //For database queries
+    Connection connection = Main.connection;
     private PreparedStatement pst;
     private ResultSet rs;
+
+    //List of all users
     private ObservableList<User> allUsers = FXCollections.observableArrayList();
-    Connection connection = Main.connection;
 
     /** This is the user data access object implementation constructor used to create instances of UserDAOImpl.
      * @throws SQLException throws SQLException in case a database error occurs.
      */
     public UserDAOImpl() throws SQLException {
+        String selectAllUsers = "Select * FROM users";
         DBQuery.setPreparedStatement(connection, selectAllUsers);
         pst = DBQuery.getPreparedStatement();
         rs = pst.executeQuery();

@@ -1,19 +1,22 @@
 package DAO;
 
-import Utilities.DBQuery;
+import utilities.DBQuery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.Main;
 import model.Division;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class DivisionDAOImpl implements DivisionDAO {
+
+    //For queries
     private Connection connection = Main.connection;
     private PreparedStatement pst;
     private ResultSet rs;
+
+    //List of all first level divisions
     private ObservableList<Division> allFLDs = FXCollections.observableArrayList();
 
     /** This is the DivisionDAOImpl constructor.

@@ -2,13 +2,12 @@ package controller;
 
 import DAO.AppointmentDAOImpl;
 import DAO.UserDAOImpl;
-import Utilities.DBConnection;
-import Utilities.DBQuery;
-import Utilities.TimeZoneLambda;
+import utilities.DBConnection;
+import utilities.DBQuery;
+import utilities.TimeZoneLambda;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,13 +39,15 @@ import java.util.*;
  * It also is responsible for displaying login content in French or English depending on the system's current Language settings.
  */
 public class LoginScreenController implements Initializable {
+
+    //Usernames and Passwords
+    public static String userName;
     private String passwordInput;
     private String usernameInput;
-    public static String userName;
     private final ArrayList<String> allUserNames = new ArrayList<>();
     private final ArrayList<String> allPasswords = new ArrayList<>();
-    private ObservableList<Appointment> allAppts = FXCollections.observableArrayList();
-    private final Connection connection = Main.connection;
+
+    //GUI fx:id's
     @FXML
     private Label dateTimeLbl;
     @FXML
@@ -70,6 +71,10 @@ public class LoginScreenController implements Initializable {
     @FXML
     private Label timeZoneLbl;
 
+    //Connects to the database for queries
+    private final Connection connection = Main.connection;
+
+
     /** Initializes the login screen with either English or French language depending on the system settings.
      * Initializes the zone information using a lambda to reflect the user's system default.
      * Initializes the animated digital clock using an event handler interface lambda.
@@ -92,7 +97,7 @@ public class LoginScreenController implements Initializable {
 
         // Translates login screen to French if the operating system's Language Pack is set to French
         try {
-            resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
+            resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 appTitleLabel.setText(resourceBundle.getString("appTitle"));
                 timeZoneTitle.setText(resourceBundle.getString("timeZoneTitle"));
@@ -138,25 +143,25 @@ public class LoginScreenController implements Initializable {
         try {
             AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
             UserDAOImpl userDAO = new UserDAOImpl();
-            allAppts = apptDAO.getAllApptsFromDB();
+            ObservableList<Appointment> allAppts = apptDAO.getAllApptsFromDB();
             boolean apptWithin15mins = false;
             int apptID = -1;
             String apptDate ="";
             String apptTime = "";
-            LocalTime currentTime = LocalTime.now();
+            LocalTime currTime = LocalTime.now();
 
             // search through all appointments in the database to see if an appointment is within 15 minutes
-            for(Appointment appt : allAppts) {
-                LocalTime startTime = appt.getStartDateTime().toLocalTime();
-                long minutesBetweenNowAndAppt = ChronoUnit.MINUTES.between(currentTime, startTime);
+            for(Appointment a : allAppts) {
+                LocalTime startTime = a.getStartDateTime().toLocalTime();
+                long minutesBetweenNowAndAppt = ChronoUnit.MINUTES.between(currTime, startTime);
 
                 //if the current day matches today and the time is within 0-15 minutes apptWithin15mins is true.
-                if (appt.getStartDateTime().toLocalDate().equals(LocalDate.now())) {
+                if (a.getStartDateTime().toLocalDate().equals(LocalDate.now())) {
                     if(minutesBetweenNowAndAppt > -1 && minutesBetweenNowAndAppt <= 15) {
                         apptWithin15mins = true;
-                        apptID = appt.getApptID();
-                        apptDate = appt.getStartDateFormatted();
-                        apptTime = appt.getStartTimeFormatted();
+                        apptID = a.getApptID();
+                        apptDate = a.getStartDateFormatted();
+                        apptTime = a.getStartTimeFormatted();
                         break;
                     }
                 }
@@ -166,7 +171,7 @@ public class LoginScreenController implements Initializable {
 
                 //Checks if system is in French or not and displays alert notifying of upcoming appointment
                 try {
-                    ResourceBundle resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
+                    ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
                     // If system is in French
                     if (Locale.getDefault().getLanguage().equals("fr")) {
                         Alert apptAlertFrench = new Alert(Alert.AlertType.INFORMATION);
@@ -185,7 +190,7 @@ public class LoginScreenController implements Initializable {
             else {
                 // checks if the system language is in French or English and displays a no upcoming appointments alert
                 try {
-                    ResourceBundle resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
+                    ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
                     if (Locale.getDefault().getLanguage().equals("fr")) {
                         Alert apptAlertFrench = new Alert(Alert.AlertType.INFORMATION);
                         apptAlertFrench.setTitle(resourceBundle.getString("noApptsTitle"));
@@ -212,7 +217,7 @@ public class LoginScreenController implements Initializable {
      */
     private void blankUsernameError(ActionEvent actionEvent) throws IOException {
         try {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
 
             // If system default is in French, alerts will appear in French
             if (Locale.getDefault().getLanguage().equals("fr")) {
@@ -237,7 +242,7 @@ public class LoginScreenController implements Initializable {
      */
     private void blankPasswordError(ActionEvent actionEvent) throws IOException {
         try {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
             // If operating system is set to French language
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 System.out.println("| Erreur : Le mot de passe est vide. Veuillez saisir un mot de passe valide et réessayer. |");
@@ -264,7 +269,7 @@ public class LoginScreenController implements Initializable {
     private void invalidLogin(ActionEvent actionEvent) throws IOException {
         try {
             // If operating system is set to French language, displays error dialog in French.
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 System.out.println("| Erreur : Nom d'utilisateur/Mot de passe saisi incorrect. Veuillez saisir un nom d'utilisateur/mot de passe valide et réessayer. |");
                 Alert alertFrench = new Alert(Alert.AlertType.ERROR);
@@ -415,7 +420,7 @@ public class LoginScreenController implements Initializable {
     public void exitApplication(ActionEvent actionEvent) throws IOException {
 
         try {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("Utilities/Nationality", Locale.getDefault());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
 
             //Displays the Exit/Sortir confirmation box in French if operating system is set to French.
             if (Locale.getDefault().getLanguage().equals("fr")) {

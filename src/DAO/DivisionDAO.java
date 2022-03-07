@@ -2,7 +2,6 @@ package DAO;
 
 import javafx.collections.ObservableList;
 import model.Division;
-
 import java.sql.SQLException;
 
 /** This is the Division interface which defines the methods for accessing Division database objects.

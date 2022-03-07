@@ -1,6 +1,6 @@
 package model;
 
-import Utilities.ConvertTime;
+import utilities.ConvertTime;
 import java.time.LocalDateTime;
 
 /** This is the Customer class.

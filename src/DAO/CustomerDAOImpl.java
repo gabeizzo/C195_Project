@@ -1,6 +1,6 @@
 package DAO;
 
-import Utilities.DBQuery;
+import utilities.DBQuery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.Main;
@@ -12,10 +12,12 @@ import java.time.LocalDateTime;
  * This class defines the methods used to manipulate i.e. add/modify/delete/retrieve Customer data from/in the database.
  */
 public class CustomerDAOImpl implements CustomerDAO{
+    // For queries
     private Connection connection = Main.connection;
     private PreparedStatement pst;
     private ResultSet rs;
 
+    // List of all customers
     ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
 
 
@@ -23,7 +25,6 @@ public class CustomerDAOImpl implements CustomerDAO{
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public CustomerDAOImpl() throws SQLException {
-        //empty class constructor
     }
 
     /** Creates a new customer object and associates the related table columns with the customer data.
@@ -117,7 +118,6 @@ public class CustomerDAOImpl implements CustomerDAO{
         pst.setString(8, lastUpdatedBy);
         pst.setInt(9, divisionID);
         pst.execute();
-
     }
 
     /** Modifies a selected customer in the database when the save button is clicked on the Modify Customer screen.

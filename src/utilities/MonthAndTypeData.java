@@ -1,4 +1,4 @@
-package Utilities;
+package utilities;
 
 
 /** This is the MonthAndTypeData class which is used to gather appointment data for the AppointmentsByMonthAndType screen.

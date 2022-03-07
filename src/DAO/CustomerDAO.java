@@ -11,13 +11,13 @@ public interface CustomerDAO {
     /** Gets a customer from the db based on their ID.
      * @param customerID The ID of the customer.
      * @return The customer whose ID is a match in the db.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a database access error.
      */
     public Customer getCustomerByID(int customerID) throws SQLException;
 
     /** Gets the list of all customers stored in the database.
      * @return The list of all customers stored in the database.
-     * @throws SQLException
+     * @throws SQLException Thrown if there is a database access error.
      */
     public ObservableList<Customer> getAllDBCustomers() throws SQLException;
 

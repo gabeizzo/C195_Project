@@ -3,7 +3,7 @@ package controller;
 import DAO.CountryDAOImpl;
 import DAO.CustomerDAOImpl;
 import DAO.DivisionDAOImpl;
-import Utilities.DivisionsByCountryID;
+import utilities.DivisionsByCountryID;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 import model.Country;
 import model.Customer;
 import model.Division;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -49,13 +48,13 @@ public class ModifyCustomerController implements Initializable {
     private Button cancelModifyCustomerBtn;
 
     //Provides the customer to be modified and ability to call the methods needed from the DAOImpl's.
-    private Customer modifyCustomer = CustomersMenuController.modifyCustomer;
-    private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-    private DivisionDAOImpl fldDAO = new DivisionDAOImpl();
-    private CountryDAOImpl countryDAO = new CountryDAOImpl();
+    private final Customer modifyCustomer = CustomersMenuController.modifyCustomer;
+    private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+    private final DivisionDAOImpl fldDAO = new DivisionDAOImpl();
+    private final CountryDAOImpl countryDAO = new CountryDAOImpl();
 
     //Used for country and division filtering and populating the combo boxes
-    private DivisionsByCountryID divisionsByCountry = new DivisionsByCountryID();
+    private final DivisionsByCountryID divisionsByCountry = new DivisionsByCountryID();
     private ObservableList<Division> countryDivisions = FXCollections.observableArrayList();
     private final ObservableList<Country> allCountries = countryDAO.getAllCountriesFromDB();
 
@@ -113,10 +112,17 @@ public class ModifyCustomerController implements Initializable {
         }
     }
 
+    /** Gets the first level division by its ID.
+     * @param divisionID The division's id.
+     * @return The first level division by its ID.
+     * @throws SQLException Thrown if there is a database access error.
+     */
     private Division getDivision(int divisionID) throws SQLException{
         return fldDAO.getFLDByID(divisionID);
     }
 
+    /** Gets the customer's data.
+     */
     private void getCustomerData(){
         customerName = customerNameTxt.getText().trim();
         phone = customerPhoneTxt.getText().trim();
@@ -126,6 +132,9 @@ public class ModifyCustomerController implements Initializable {
         division = customerDivisionCB.getSelectionModel().getSelectedItem();
     }
 
+    /** Validates the customer's data.
+     * @return True if the customer's data is valid, false if invalid.
+     */
     private boolean validateCustomerData() {
 
         //Gets the customer data to be validated
@@ -163,7 +172,6 @@ public class ModifyCustomerController implements Initializable {
             postalCodeError.showAndWait();
             return false;
         }
-
         return true;
     }
 

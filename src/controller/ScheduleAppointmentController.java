@@ -4,7 +4,7 @@ import DAO.AppointmentDAOImpl;
 import DAO.ContactDAOImpl;
 import DAO.CustomerDAOImpl;
 import DAO.UserDAOImpl;
-import Utilities.ConvertTime;
+import utilities.ConvertTime;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,7 +20,6 @@ import model.Appointment;
 import model.Contact;
 import model.Customer;
 import model.User;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -134,7 +133,6 @@ public class ScheduleAppointmentController implements Initializable {
                         return "LocalDate value is Null.";
                     }
                 }
-
                 //Converts the String format of MM-dd-yyyy displayed back to LocalDate
                 @Override
                 public LocalDate fromString(String s) {
@@ -142,8 +140,7 @@ public class ScheduleAppointmentController implements Initializable {
                         return LocalDate.parse(s, DTF);
                     }
                     return null;
-                }
-            });
+                }});
 
             //Set the date picker
             apptDatePicker.setValue(LocalDate.now());
@@ -182,7 +179,7 @@ public class ScheduleAppointmentController implements Initializable {
     private boolean apptStartEndAreValid() {
         LocalDateTime apptStartDateTime = LocalDateTime.of(apptDate, apptStart);
         LocalDateTime apptEndDateTime = LocalDateTime.of(apptDate, apptEnd);
-        return ConvertTime.compareLToESTBizHrs(apptStartDateTime) && ConvertTime.compareLToESTBizHrs(apptEndDateTime);
+        return ConvertTime.isApptWithinBusinessHrs(apptStartDateTime) && ConvertTime.isApptWithinBusinessHrs(apptEndDateTime);
 
     }
 

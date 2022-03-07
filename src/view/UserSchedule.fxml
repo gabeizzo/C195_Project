@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UserScheduleController">
+<AnchorPane fx:id="anchorPane" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UserScheduleController">
     <children>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#007faa" height="700.0" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="63.0" layoutY="24.0" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
@@ -37,5 +37,10 @@
             </font>
         </Button>
       <TextField fx:id="apptSearchBar" layoutX="780.0" layoutY="107.0" onAction="#searchAppts" prefHeight="26.0" prefWidth="390.0" promptText="Search Appointments by ID, Title or Type" />
+      <Button fx:id="printReportBtn" layoutX="1003.0" layoutY="642.0" mnemonicParsing="false" onAction="#printReport" prefHeight="30.0" prefWidth="167.0" text="Print Report">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

@@ -2,7 +2,6 @@ package DAO;
 
 import javafx.collections.ObservableList;
 import model.Country;
-
 import java.sql.SQLException;
 
 /** This is the Country data access object interface.

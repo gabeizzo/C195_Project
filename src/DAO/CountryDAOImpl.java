@@ -1,11 +1,10 @@
 package DAO;
 
-import Utilities.DBQuery;
+import utilities.DBQuery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.Main;
 import model.Country;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,9 +12,13 @@ import java.time.LocalTime;
 /** CountryDAO Implementation class of CountryDAO interface. This class allows for the retrieval of all country records from the database.  */
 
 public class CountryDAOImpl implements CountryDAO {
+
+    //For database queries
     private Connection connection = Main.connection;
     private PreparedStatement pst;
     private ResultSet rs;
+
+    //All countries list
     private ObservableList<Country> allCountries = FXCollections.observableArrayList();
 
     /** CountryDAOImpl constructor method. Instantiates the class and creates a prepared query and resultSet data structure */
