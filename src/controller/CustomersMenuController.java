@@ -74,13 +74,11 @@ public class CustomersMenuController implements Initializable {
     @FXML
     private TableView<Customer> customerDataTable;
 
+    //Data Access Object related
     private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
     public static Customer modifyCustomer;
     public final ObservableList<Appointment> allAppts;
     AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
-
-
-
 
     /** This is the CustomersMenuController constructor.
      * @throws SQLException Thrown if there is a MySQL database access error.

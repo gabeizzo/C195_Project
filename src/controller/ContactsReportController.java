@@ -30,6 +30,8 @@ import java.util.ResourceBundle;
  * This class defines the methods used to display the Contact Schedule GUI report.
  */
 public class ContactsReportController implements Initializable {
+
+    //GUI fx:id's
     @FXML
     private AnchorPane anchorPane;
     @FXML

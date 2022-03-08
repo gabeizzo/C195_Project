@@ -22,11 +22,8 @@ import javafx.stage.Stage;
 import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 
 /** This is the ApptsByMonthAndTypeController class.
  * This class holds the methods used to gather appointment data by their Month and Types and displays them in a table view.

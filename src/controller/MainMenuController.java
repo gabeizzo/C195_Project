@@ -332,8 +332,8 @@ public class MainMenuController implements Initializable {
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTimeFormatted"));
         endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTimeFormatted"));
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        apptsTable.getSortOrder().add(dateCol);
-        dateCol.setSortType(TableColumn.SortType.ASCENDING);
+        apptsTable.getSortOrder().add(apptIDCol);
+        apptIDCol.setSortType(TableColumn.SortType.ASCENDING);
         apptsTable.sort();
         apptsTable.getSelectionModel().selectFirst();
 
@@ -367,11 +367,11 @@ public class MainMenuController implements Initializable {
         }
 
         //Checks if any appointments start this week and if true, adds them to currWeekAppts ObservableList
-        for (Appointment appt : allAppts) {
+        for (Appointment a : allAppts) {
             TemporalField apptWeek = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
-            int numOfApptWeek = appt.getStartDateTime().toLocalDate().get(apptWeek);
-            if (numOfApptWeek == numOfCurrWeek && appt.getStartDateTime().getYear() == currYear) {
-                currWeekAppts.add(appt);
+            int numOfApptWeek = a.getStartDateTime().toLocalDate().get(apptWeek);
+            if (numOfApptWeek == numOfCurrWeek && a.getStartDateTime().getYear() == currYear) {
+                currWeekAppts.add(a);
             }
         }
         //Add current week's appointments to the appointments table

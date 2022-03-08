@@ -1,7 +1,6 @@
 package controller;
 
 import DAO.AppointmentDAOImpl;
-import DAO.UserDAOImpl;
 import utilities.DBConnection;
 import utilities.DBQuery;
 import utilities.TimeZoneLambda;
@@ -154,7 +153,7 @@ public class LoginScreenController implements Initializable {
 
                 //if the current day matches today and the time is within 0-15 minutes apptWithin15mins is true.
                 if (a.getStartDateTime().toLocalDate().equals(LocalDate.now())) {
-                    if(minutesBetweenNowAndAppt > -1 && minutesBetweenNowAndAppt <= 15) {
+                    if(minutesBetweenNowAndAppt >= 0 && minutesBetweenNowAndAppt <= 15) {
                         apptWithin15mins = true;
                         apptID = a.getApptID();
                         apptDate = a.getStartDateFormatted();
@@ -163,7 +162,7 @@ public class LoginScreenController implements Initializable {
                     }
                 }
             }
-            // If there is an appointment set an alert with the appointment information, otherwise alert says no appointments
+            // If there is an appointment set an alert with the appointment information, otherwise alert says no appointments within the next fifteen minutes.
             if(apptWithin15mins) {
 
                 //Checks if system is in French or not and displays alert notifying of upcoming appointment
