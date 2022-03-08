@@ -60,7 +60,7 @@
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
-            <ComboBox fx:id="customerCountryCB" onAction="#populateDivisions" prefHeight="26.0" prefWidth="161.0" />
+            <ComboBox fx:id="customerCountryCB" onAction="#populateDivisionCB" prefHeight="26.0" prefWidth="161.0" />
             <Label layoutX="10.0" layoutY="335.0" prefHeight="46.0" prefWidth="150.0" text="First Level Division" textFill="#f5f5f5">
                <font>
                   <Font name="System Bold" size="14.0" />

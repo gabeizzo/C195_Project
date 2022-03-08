@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 /** This is the AppointmentDAO interface.
- * This interface defines the standard operations to be performed on Appointment model objects.
+ * This interface defines the methods for accessing and manipulating Appointment data stored in the database.
  */
 public interface AppointmentDAO {
 
@@ -14,14 +14,14 @@ public interface AppointmentDAO {
      * @return The list of all appointments from the database.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public ObservableList<Appointment> getAllApptsFromDB() throws SQLException;
+    ObservableList<Appointment> getAllApptsFromDB() throws SQLException;
 
     /** Gets appointment based on the user id.
      * @param appointmentID The appointment's id that corresponds to the user's id.
      * @return The appointment associated with the user id.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public Appointment getApptByID(int appointmentID) throws SQLException;
+    Appointment getApptByID(int appointmentID) throws SQLException;
 
     /** Adds an appointment to the schedule and stores it in the database.
      * @param apptTitle The appt title to add.
@@ -39,9 +39,9 @@ public interface AppointmentDAO {
      * @param contactID The contact ID associated with the appt.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public void addAppt(String apptTitle, String description, String location, String apptType,
-                        LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createDate, String createdBy,
-                        LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) throws SQLException;
+    void addAppt(String apptTitle, String description, String location, String apptType,
+                 LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createDate, String createdBy,
+                 LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) throws SQLException;
 
     /** Modifies a selected appt and updates the appt. data stored in the database.
      * @param apptID The appt ID - cannot be modified, auto-generated. Text field disabled.
@@ -56,20 +56,20 @@ public interface AppointmentDAO {
      * @param contactID The ID of the contact to modify.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public void modifyAppt(int apptID, String apptTitle, String description, String location, String apptType,
-                           LocalDateTime start, LocalDateTime end, LocalDateTime createDate, String createdBy,LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) throws SQLException;
+    void modifyAppt(int apptID, String apptTitle, String description, String location, String apptType,
+                    LocalDateTime start, LocalDateTime end, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) throws SQLException;
 
     /** Deletes an appointment based on the appointment ID.
      * @param appointmentID The ID of the appointment being deleted.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public void deleteApptFromDB(int appointmentID) throws SQLException;
+    void deleteApptFromDB(int appointmentID) throws SQLException;
 
     /** Deletes appointments that match the customer ID being deleted.
      * @param customerID The customer ID associated with the appt.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public void deleteCustomerAppts(int customerID) throws SQLException;
+    void deleteCustomerAppts(int customerID) throws SQLException;
 
     /** Gets a list of appts by type.
      * Used as part of displaying the reports screen showing appts by Month and Type.
@@ -77,27 +77,27 @@ public interface AppointmentDAO {
      * @return The list of all appointments by type.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public ObservableList<Appointment> getApptsByType(String apptType) throws SQLException;
+    ObservableList<Appointment> getApptsByType(String apptType) throws SQLException;
 
     /** Gets the list of current month's appointments.
      * This method is used when View Current Month's radio button is selected.
      * @return The list of the current month's appointments.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public ObservableList<Appointment> getCurrMonthAppts() throws SQLException;
+    ObservableList<Appointment> getCurrMonthAppts() throws SQLException;
 
     /** Gets a list of appointments for a contact id.
      * @param contactID The contact id associated with the appointment(s).
      * @return The list of appointments for a contact id.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public ObservableList<Appointment> getApptsByContactID(int contactID) throws SQLException;
+    ObservableList<Appointment> getApptsByContactID(int contactID) throws SQLException;
 
     /** Gets the list of appointments for a user id.
      * @param userID The user ID associated with the appointment(s).
      * @return The list of appointments for a user id.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public ObservableList<Appointment> getApptsByUserID(int userID) throws SQLException;
+    ObservableList<Appointment> getApptsByUserID(int userID) throws SQLException;
 
 }

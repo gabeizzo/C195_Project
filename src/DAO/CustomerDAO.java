@@ -13,13 +13,13 @@ public interface CustomerDAO {
      * @return The customer whose ID is a match in the db.
      * @throws SQLException Thrown if there is a database access error.
      */
-    public Customer getCustomerByID(int customerID) throws SQLException;
+    Customer getCustomerByID(int customerID) throws SQLException;
 
     /** Gets the list of all customers stored in the database.
      * @return The list of all customers stored in the database.
      * @throws SQLException Thrown if there is a database access error.
      */
-    public ObservableList<Customer> getAllDBCustomers() throws SQLException;
+    ObservableList<Customer> getAllDBCustomers() throws SQLException;
 
     /** This method is used to add customers to the database once their information has been gathered in the Add Customer Menu form.
      * @param customerName The customer's name.
@@ -31,7 +31,7 @@ public interface CustomerDAO {
      * @param divisionID The customer's division ID.
      * @throws SQLException Thrown if there is a database access error.
      */
-    public void addNewCustomer(String customerName, String address, String postalCode, String phone, String createdBy, String lastUpdatedBy, int divisionID) throws SQLException;
+    void addNewCustomer(String customerName, String address, String postalCode, String phone, String createdBy, String lastUpdatedBy, int divisionID) throws SQLException;
 
     /** This method modifies a selected customer's information.
      * @param customerID The customer's unique ID.
@@ -43,12 +43,12 @@ public interface CustomerDAO {
      * @param divisionID The customer's division ID.
      * @throws SQLException Thrown if there is a database access error.
      */
-    public void modifyCustomer(int customerID, String customerName, String address, String postalCode, String phone, int divisionID, String lastUpdatedBy) throws SQLException;
+    void modifyCustomer(int customerID, String customerName, String address, String postalCode, String phone, int divisionID, String lastUpdatedBy) throws SQLException;
 
     /** This method deletes customers from the database along with their existing appointments.
      * @param customerID The customer's unique ID.
      * @throws SQLException Thrown if there is a database access error.
      */
-    public void deleteCustomer(int customerID) throws SQLException;
+    void deleteCustomer(int customerID) throws SQLException;
 
 }

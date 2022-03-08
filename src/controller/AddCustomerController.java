@@ -47,6 +47,7 @@ public class AddCustomerController implements Initializable {
     private ObservableList<Division> countryDivisions = FXCollections.observableArrayList();
     private final ObservableList<Country> allCountries = countryDAO.getAllCountriesFromDB();
 
+    //GUI fx:id's
     @FXML
     private TextField customerIDTxt;
     @FXML
@@ -118,7 +119,7 @@ public class AddCustomerController implements Initializable {
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @FXML
-    private void populateDivisions(ActionEvent actionEvent) throws SQLException {
+    private void populateDivisionCB(ActionEvent actionEvent) throws SQLException {
         Country country = customerCountryCB.getSelectionModel().getSelectedItem();
         countryDivisions = divisionsByCountry.divisionsByCountryID(country.getCountryID());
         customerDivisionCB.setItems(countryDivisions);
@@ -180,8 +181,8 @@ public class AddCustomerController implements Initializable {
             postalCodeError.showAndWait();
             return false;
         }
-        //Builds the address from the street, city, and state fields for easier viewing in the table instead of only showing the street info.
-        address = street + " " + city + ", " + state;
+        //Builds the address from the street and city data, excludes State and Country info per rubric
+        address = street + ", " + city;
         return true;
     }
 

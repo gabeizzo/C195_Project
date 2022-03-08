@@ -9,21 +9,15 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-/** CountryDAO Implementation class of CountryDAO interface. This class allows for the retrieval of all country records from the database.  */
-
+/** This is the CountryDAOImpl class which defines the methods for accessing and manipulating Country data stored in the database.
+ */
 public class CountryDAOImpl implements CountryDAO {
 
     //For database queries
-    private Connection connection = Main.connection;
-    private PreparedStatement pst;
-    private ResultSet rs;
+    private final Connection connection = Main.connection;
 
     //All countries list
-    private ObservableList<Country> allCountries = FXCollections.observableArrayList();
-
-    /** CountryDAOImpl constructor method. Instantiates the class and creates a prepared query and resultSet data structure */
-    public CountryDAOImpl() throws SQLException {
-    }
+    private final ObservableList<Country> allCountries = FXCollections.observableArrayList();
 
     /** This method retrieves all Countries stored in the database.
      * The countries are then added to the allCountries Observable list.
@@ -33,8 +27,8 @@ public class CountryDAOImpl implements CountryDAO {
     public ObservableList<Country> getAllCountriesFromDB() throws SQLException {
         String allCountriesFromDB = "SELECT * FROM countries";
         DBQuery.setPreparedStatement(connection, allCountriesFromDB);
-        pst = DBQuery.getPreparedStatement();
-        rs = pst.executeQuery();
+        PreparedStatement pst = DBQuery.getPreparedStatement();
+        ResultSet rs = pst.executeQuery();
 
         try{
             while(rs.next()) {
@@ -49,7 +43,6 @@ public class CountryDAOImpl implements CountryDAO {
             }
         }
         catch(SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return allCountries;
@@ -80,7 +73,6 @@ public class CountryDAOImpl implements CountryDAO {
          }
      }
      catch (SQLException e) {
-         System.out.println("Error: " + e.getMessage());
          e.printStackTrace();
      }
         return country;

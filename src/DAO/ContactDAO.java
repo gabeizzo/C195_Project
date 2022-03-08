@@ -13,12 +13,12 @@ public interface ContactDAO {
     /** Gets the list of all contacts in the database.
      * @return The list of contacts stored in the db.
      */
-    public ObservableList<Contact> getAllContactsFromDB();
+    ObservableList<Contact> getAllContactsFromDB();
 
     /** Gets a contact based on their contact ID.
      * @param contactId The contact's unique ID.
      * @return The contact whose ID is a match in the database.
      * @throws SQLException Thrown if there is a database access error.
      */
-    public Contact getContactByID(int contactId) throws SQLException;
+    Contact getContactByID(int contactId) throws SQLException;
 }

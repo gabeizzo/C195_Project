@@ -56,15 +56,15 @@ public class AppointmentDAOImpl implements AppointmentDAO{
     }
 
     /** Gets an appointment based on the appointment's ID.
-     * @param appointmentID The appointment's id.
+     * @param apptID The appointment's id.
      * @return The appointment with a matching appointment ID.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     @Override
-    public Appointment getApptByID(int appointmentID) throws SQLException {
+    public Appointment getApptByID(int apptID) throws SQLException {
 
         // Queries the MySQL database and selects all appointments that match a specified appointment ID.
-        String selectByApptIDFromDB = "SELECT * FROM appointments WHERE Appointment_ID =" + appointmentID;
+        String selectByApptIDFromDB = "SELECT * FROM appointments WHERE Appointment_ID =" + apptID;
         DBQuery.setPreparedStatement(connection, selectByApptIDFromDB);
         pst = DBQuery.getPreparedStatement();
         rs = pst.executeQuery();
@@ -181,7 +181,7 @@ public class AppointmentDAOImpl implements AppointmentDAO{
     @Override
     public ObservableList<Appointment> getApptsByUserID(int userID) throws SQLException {
         // Query DB for all appointments that match a user id listed in ascending order.
-        String apptsByUserIDFromDB = "SELECT * FROM appointments WHERE User_ID = ? ORDER BY Start ASC";
+        String apptsByUserIDFromDB = "SELECT * FROM appointments WHERE User_ID = ? ORDER BY start ASC";
         DBQuery.setPreparedStatement(connection, apptsByUserIDFromDB);
         pst = DBQuery.getPreparedStatement();
         pst.setInt(1, userID);
@@ -302,9 +302,6 @@ public class AppointmentDAOImpl implements AppointmentDAO{
             if (pst.getUpdateCount() > 0) {
                 System.out.println("Deleted appointment from database successfully!");
             }
-            else {
-                System.out.println("Attempt to delete appointment failed.");
-            }
         }
         catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -327,9 +324,6 @@ public class AppointmentDAOImpl implements AppointmentDAO{
 
             if (pst.getUpdateCount() > 0) {
                 System.out.println("Deleted the customer's appointments from the database successfully!");
-            }
-            else {
-                System.out.println("Attempt to delete the customer's appointments from the database failed. This may occur if there are no appointments for this customer to delete.");
             }
         }
         catch (Exception e) {

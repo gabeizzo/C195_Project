@@ -97,7 +97,7 @@ public class MainMenuController implements Initializable {
     private TableView<Appointment> apptsTable;
 
     //Observable Lists used to populate the appointments table
-    private final ObservableList<Appointment> allAppts;
+    public final ObservableList<Appointment> allAppts;
     private final ObservableList<Appointment> currWeekAppts = FXCollections.observableArrayList();
     private final ObservableList<Appointment> currMonthAppts = FXCollections.observableArrayList();
 
@@ -117,15 +117,11 @@ public class MainMenuController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         //Displays a welcome message with the logged-in user's name.
-        WelcomeUserLambda user = () -> {
-            welcomeLbl.setText("Welcome, " + LoginScreenController.userName + "!");
-        };
+        WelcomeUserLambda user = () -> welcomeLbl.setText("Welcome, " + LoginScreenController.userName + "!");
         user.welcomeUser();
 
         //TimeZoneLambda changes the timeZoneLbl on the Main Menu screen based on the user's system default.
-        TimeZoneLambda getZone = () -> {
-            timeZoneLbl.setText(ZoneId.of(TimeZone.getDefault().getID()).toString());
-        };
+        TimeZoneLambda getZone = () -> timeZoneLbl.setText(ZoneId.of(TimeZone.getDefault().getID()).toString());
         getZone.showZone();
 
         //Displays the animated digital clock.
@@ -158,9 +154,8 @@ public class MainMenuController implements Initializable {
 
     /** This method deletes a selected appointment from the database and updates the apptsTable.
      * @param actionEvent When the Delete Appointment button is clicked.
-     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void deleteAppointment(ActionEvent actionEvent) throws IOException {
+    public void deleteAppointment(ActionEvent actionEvent) {
         Appointment deleteThisAppt = apptsTable.getSelectionModel().getSelectedItem();
 
         if (deleteThisAppt != null) {
@@ -251,7 +246,7 @@ public class MainMenuController implements Initializable {
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void toApptsByMonthAndType(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByMonthAndType.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByMonthAndTypeReport.fxml")));
         Stage stage = (Stage) (reportsByMonthAndTypeButton.getScene().getWindow());
         stage.setTitle("Appointments By Month and Type");
         stage.setScene(new Scene(root,1200 ,700));
@@ -263,7 +258,7 @@ public class MainMenuController implements Initializable {
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void toContactSchedule(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ContactSchedule.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByContactReport.fxml")));
         Stage stage = (Stage) (contactScheduleButton.getScene().getWindow());
         stage.setTitle("Contact Schedule");
         stage.setScene(new Scene(root,1200 ,700));
@@ -275,7 +270,7 @@ public class MainMenuController implements Initializable {
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void toUserSchedule(ActionEvent actionEvent) throws IOException{
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/UserSchedule.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByUserReport.fxml")));
         Stage stage = (Stage) (userScheduleButton.getScene().getWindow());
         stage.setTitle("User Schedule");
         stage.setScene(new Scene(root,1200 ,700));
@@ -286,9 +281,8 @@ public class MainMenuController implements Initializable {
      * This method runs through the list of all appointments and adds any appointments that start in the current month to a new Obs.List.
      * If there are no appointments starting this month, a dialog box displays letting the user know.
      * @param actionEvent When the user selects the currMonthRadioBtn.
-     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void viewCurrMonthAppts(ActionEvent actionEvent) throws IOException{
+    public void viewCurrMonthAppts(ActionEvent actionEvent) {
         Month currMonth = LocalDate.now().getMonth();
         int currYear = LocalDate.now().getYear();
 
@@ -338,6 +332,9 @@ public class MainMenuController implements Initializable {
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTimeFormatted"));
         endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTimeFormatted"));
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        apptsTable.getSortOrder().add(dateCol);
+        dateCol.setSortType(TableColumn.SortType.ASCENDING);
+        apptsTable.sort();
         apptsTable.getSelectionModel().selectFirst();
 
     }
@@ -355,9 +352,8 @@ public class MainMenuController implements Initializable {
 
     /** This method displays the current week's appointments in the database to the apptsTable.
      * @param actionEvent When the currWeeksRadioBtn is selected.
-     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void viewCurrWeekAppts(ActionEvent actionEvent) throws IOException{
+    public void viewCurrWeekAppts(ActionEvent actionEvent) {
 
         //Establishes current date, week and year and gets the week number of the year to compare to the appointment start date.
         LocalDate currDate = LocalDate.now(); //Today's date
@@ -456,10 +452,10 @@ public class MainMenuController implements Initializable {
 
         for(Appointment a : allAppts){
             if(a.getApptTitle().equalsIgnoreCase(partialApptTitle) || a.getApptTitle().contains(partialApptTitle)
-                    || a.getApptTitle().toLowerCase().contains(partialApptTitle) || a.getApptTitle().toUpperCase().contains(partialApptTitle)
+                    || a.getApptTitle().toLowerCase().contains(partialApptTitle.toLowerCase()) || a.getApptTitle().toUpperCase().contains(partialApptTitle.toUpperCase())
                     || a.getApptType().equalsIgnoreCase(partialApptTitle) || a.getApptType().contains(partialApptTitle)
-                    || a.getApptType().toLowerCase().contains(partialApptTitle) || a.getApptType().toUpperCase().contains(partialApptTitle)
-                    || a.getContactName().toLowerCase().contains(partialApptTitle) || a.getContactName().toUpperCase().contains(partialApptTitle)
+                    || a.getApptType().toLowerCase().contains(partialApptTitle.toLowerCase()) || a.getApptType().toUpperCase().contains(partialApptTitle.toUpperCase())
+                    || a.getContactName().toLowerCase().contains(partialApptTitle.toLowerCase()) || a.getContactName().toUpperCase().contains(partialApptTitle.toUpperCase())
                     || a.getContactName().equalsIgnoreCase(partialApptTitle) || a.getContactName().contains(partialApptTitle))
                 resultsSearch.add(a);
         }
@@ -469,9 +465,8 @@ public class MainMenuController implements Initializable {
     /**Searches Appointments by id.
      @param apptID The Appointment id that is searched.
      @return a, the appointment that matches the searched id.
-     @throws SQLException Thrown if there is a database error.
      */
-    private Appointment searchByApptID(int apptID) throws SQLException {
+    private Appointment searchByApptID(int apptID) {
         ObservableList<Appointment> allAppts = apptsTable.getItems();
         for (Appointment a : allAppts) {
             if (a.getApptID() == apptID) {
@@ -483,9 +478,8 @@ public class MainMenuController implements Initializable {
 
     /** This method closes the application if the user clicks on the Exit button and chooses the OK button option.
      * @param actionEvent When the Exit button is selected.
-     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void exitApplication(ActionEvent actionEvent) throws IOException{
+    public void exitApplication(ActionEvent actionEvent) {
         Alert alertEnglish = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit?");
         alertEnglish.setTitle("Exit Application");
 

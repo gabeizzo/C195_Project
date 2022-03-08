@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  */
 public class CustomerDAOImpl implements CustomerDAO{
     // For queries
-    private Connection connection = Main.connection;
+    private final Connection connection = Main.connection;
     private PreparedStatement pst;
     private ResultSet rs;
 
@@ -60,8 +60,7 @@ public class CustomerDAOImpl implements CustomerDAO{
         rs = pst.executeQuery();
         try {
             while(rs.next()) {
-                Customer c = newCustomer();
-                return c;
+                return newCustomer();
             }
         }
         catch (SQLException e) {

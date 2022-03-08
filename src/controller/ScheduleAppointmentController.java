@@ -80,7 +80,7 @@ public class ScheduleAppointmentController implements Initializable {
     @FXML
     private ComboBox<String> apptTypeCB;
     @FXML
-    private DatePicker apptDatePicker;
+    private DatePicker apptCalendar;
     @FXML
     private ComboBox<LocalTime> apptStartTimeCB;
     @FXML
@@ -120,7 +120,7 @@ public class ScheduleAppointmentController implements Initializable {
             apptTypeCB.setItems(apptTypes);
             apptTypeCB.setPromptText("Select Type");
 
-            apptDatePicker.setConverter(new StringConverter<>() {
+            apptCalendar.setConverter(new StringConverter<>() {
                 final String date = "MM-dd-yyyy";
                 final DateTimeFormatter DTF = DateTimeFormatter.ofPattern(date);
 
@@ -143,8 +143,8 @@ public class ScheduleAppointmentController implements Initializable {
                 }});
 
             //Set the date picker
-            apptDatePicker.setValue(LocalDate.now());
-            apptDate = apptDatePicker.getValue();
+            apptCalendar.setValue(LocalDate.now());
+            apptDate = apptCalendar.getValue();
 
             //Displays start and end times to combo boxes and sets the end time to 15 after initialized start time by default
             ConvertTime.displayValidTimes(apptStartTimeCB, start, end);
@@ -167,7 +167,7 @@ public class ScheduleAppointmentController implements Initializable {
         location = apptLocationTxt.getText().trim();
         contactName = contactCB.getSelectionModel().getSelectedItem();
         apptType = apptTypeCB.getSelectionModel().getSelectedItem();
-        apptDate = apptDatePicker.getValue();
+        apptDate = apptCalendar.getValue();
         apptStart = apptStartTimeCB.getValue();
         apptEnd = apptEndTimeCB.getValue();
     }
@@ -229,7 +229,7 @@ public class ScheduleAppointmentController implements Initializable {
         else {
             //Checks if there is any appointments that overlap and returns false if there are conflicting appointments.
             try {
-                if(!apptOverlap()){
+                if(!apptCollision()){
                     return false;
                 }
                 else {
@@ -249,7 +249,7 @@ public class ScheduleAppointmentController implements Initializable {
      * @return true if there are no conflicts with any existing appointments, false if there are.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    private boolean apptOverlap() throws SQLException {
+    private boolean apptCollision() throws SQLException {
         try{
             //establish the appointment start and end times for comparison.
             apptStartDateTime = LocalDateTime.of(apptDate, apptStart);

@@ -22,54 +22,56 @@ import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-/** This is the UserScheduleController class.
- * This class defines the methods to be used by the controller to display the User Schedule report.
+/** This is the ContactsReportController class.
+ * This class defines the methods used to display the Contact Schedule GUI report.
  */
-public class UserScheduleController implements Initializable {
-    private final ObservableList<Appointment> allAppts;
-
-    //GUI fx:id's
-    @FXML
-    private Button printReportBtn;
+public class ContactsReportController implements Initializable {
     @FXML
     private AnchorPane anchorPane;
     @FXML
+    private Button printReportBtn;
+    @FXML
     private TextField apptSearchBar;
     @FXML
-    private Button mainMenuButton;
-    @FXML
-    private TableColumn<Appointment, String> userNameCol;
-    @FXML
-    private TableColumn<Appointment, Integer> apptIDCol;
-    @FXML
-    private TableColumn<Appointment, String> titleCol;
-    @FXML
-    private TableColumn<Appointment, String> typeCol;
-    @FXML
-    private TableColumn<Appointment, String> descriptionCol;
-    @FXML
-    private TableColumn<Appointment, String> apptDateCol;
-    @FXML
-    private TableColumn<Appointment, String> startTimeCol;
-    @FXML
-    private TableColumn<Appointment, String> endTimeCol;
+    private Button mainMenuBtn;
     @FXML
     private TableColumn<Appointment, Integer> customerIDCol;
     @FXML
-    private TableView<Appointment> userScheduleTable;
+    private TableColumn<Appointment, LocalTime> endTimeCol;
+    @FXML
+    private TableColumn<Appointment, LocalTime> startTimeCol;
+    @FXML
+    private TableColumn<Appointment, String> apptDateCol;
+    @FXML
+    private TableColumn<Appointment, String> descriptionCol;
+    @FXML
+    private TableColumn<Appointment, String> typeCol;
+    @FXML
+    private TableColumn<Appointment, String> titleCol;
+    @FXML
+    private TableColumn<Appointment, Integer> apptIDCol;
+    @FXML
+    private TableColumn<Appointment, String> contactNameCol;
+    @FXML
+    private TableView<Appointment> contactsReportTable;
 
-    /** This is the constructor for the UserScheduleController.
+    private final AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+    private final ObservableList<Appointment> allAppts;
+
+
+
+    /** This is the ContactsReportController constructor.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public UserScheduleController() throws SQLException {
-        AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+    public ContactsReportController() throws SQLException{
         allAppts = apptDAO.getAllApptsFromDB();
     }
 
-    /** This method initializes the User Schedule screen.
+    /** This method initializes the Contact Schedule screen and loads the appointments for contacts.
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
      * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
      */
@@ -82,25 +84,27 @@ public class UserScheduleController implements Initializable {
         }
     }
 
-    /** This method views all appointments from the database.
-     * @throws SQLException Thrown if there is a MySQL database access error.
+    /** Gets all the appointments from the database.
+     * @throws SQLException Thrown if there is a database access error.
      */
     private void viewAllApptsFromDB() throws SQLException {
-        // Set up the sorted table view in ascending order by User Name
-        userScheduleTable.setItems(allAppts);
-        userNameCol.setCellValueFactory(new PropertyValueFactory<>("user"));
+
+        //Sets up the apptsTable columns with all the Appointment object parameters
+        contactsReportTable.setItems(allAppts);
+        contactNameCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         apptIDCol.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         titleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
-        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
+        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         apptDateCol.setCellValueFactory(new PropertyValueFactory<>("startDateFormatted"));
         startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTimeFormatted"));
         endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTimeFormatted"));
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        userScheduleTable.getSortOrder().add(userNameCol);
-        userNameCol.setSortType(TableColumn.SortType.ASCENDING);
-        userScheduleTable.sort();
-        userScheduleTable.getSelectionModel().selectFirst();
+        contactsReportTable.getSortOrder().add(contactNameCol);
+        contactNameCol.setSortType(TableColumn.SortType.ASCENDING);
+        contactsReportTable.sort();
+        contactsReportTable.getSelectionModel().selectFirst();
+
     }
 
     /** This method searches the table for any appointments that have either an Appointment ID, Title, Type, or Contact Name that match the text input.
@@ -111,7 +115,7 @@ public class UserScheduleController implements Initializable {
 
         //Get the search text input
         String searchInput = apptSearchBar.getText();
-        ObservableList<Appointment> appointments = searchByApptInfo(searchInput);
+        ObservableList<Appointment> appointments = searchByApptTitle(searchInput);
 
         try {
             int apptID = Integer.parseInt(searchInput);
@@ -122,7 +126,7 @@ public class UserScheduleController implements Initializable {
         } catch (NumberFormatException e) {
             //ignore
         }
-        userScheduleTable.setItems(appointments);
+        contactsReportTable.setItems(appointments);
 
         //If blank search, display all appointments to the table
         if(apptSearchBar.getText().isBlank()){
@@ -132,6 +136,7 @@ public class UserScheduleController implements Initializable {
                 e.printStackTrace();
             }
         }
+
         //If there are no matches and the list is empty display message.
         if(appointments.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -150,12 +155,12 @@ public class UserScheduleController implements Initializable {
             }
         }
     }
-    /** Searches for Appointments by Title, Type, or Contact name.
-     @param partialApptInfo The text input entered into the search field above the table.
+    /** Searches for Appointments by Title.
+     @param partialApptTitle The text input entered into the search field above the table.
      @return resultsSearch The search results to be displayed in the table.
      @throws SQLException Thrown if there is a database access error.
      */
-    private ObservableList<Appointment> searchByApptInfo(String partialApptInfo) throws SQLException {
+    private ObservableList<Appointment> searchByApptTitle(String partialApptTitle) throws SQLException {
         ObservableList<Appointment> resultsSearch = FXCollections.observableArrayList();
 
         try{
@@ -163,16 +168,15 @@ public class UserScheduleController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        ObservableList<Appointment> allAppts = userScheduleTable.getItems();
+        ObservableList<Appointment> allAppts = contactsReportTable.getItems();
 
         for(Appointment a : allAppts){
-            if(a.getApptTitle().equalsIgnoreCase(partialApptInfo) || a.getApptTitle().contains(partialApptInfo)
-                    || a.getApptTitle().toLowerCase().contains(partialApptInfo) || a.getApptTitle().toUpperCase().contains(partialApptInfo)
-                    || a.getApptType().equalsIgnoreCase(partialApptInfo) || a.getApptType().contains(partialApptInfo)
-                    || a.getApptType().toLowerCase().contains(partialApptInfo) || a.getApptType().toUpperCase().contains(partialApptInfo)
-                    || a.getContactName().toLowerCase().contains(partialApptInfo) || a.getContactName().toUpperCase().contains(partialApptInfo)
-                    || a.getContactName().equalsIgnoreCase(partialApptInfo) || a.getContactName().contains(partialApptInfo)
-                    )
+            if(a.getApptTitle().equalsIgnoreCase(partialApptTitle) || a.getApptTitle().contains(partialApptTitle)
+                    || a.getApptTitle().toLowerCase().contains(partialApptTitle) || a.getApptTitle().toUpperCase().contains(partialApptTitle)
+                    || a.getApptType().equalsIgnoreCase(partialApptTitle) || a.getApptType().contains(partialApptTitle)
+                    || a.getApptType().toLowerCase().contains(partialApptTitle) || a.getApptType().toUpperCase().contains(partialApptTitle)
+                    || a.getContactName().toLowerCase().contains(partialApptTitle) || a.getContactName().toUpperCase().contains(partialApptTitle)
+                    || a.getContactName().equalsIgnoreCase(partialApptTitle) || a.getContactName().contains(partialApptTitle))
                 resultsSearch.add(a);
         }
         return resultsSearch;
@@ -181,10 +185,9 @@ public class UserScheduleController implements Initializable {
     /**Searches Appointments by id.
      @param apptID The Appointment id that is searched.
      @return a, the appointment that matches the searched id.
-     @throws SQLException Thrown if there is a database error.
      */
-    private Appointment searchByApptID(int apptID) throws SQLException {
-        ObservableList<Appointment> allAppts = userScheduleTable.getItems();
+    private Appointment searchByApptID(int apptID) {
+        ObservableList<Appointment> allAppts = contactsReportTable.getItems();
         for (Appointment a : allAppts) {
             if (a.getApptID() == apptID) {
                 return a;
@@ -193,13 +196,13 @@ public class UserScheduleController implements Initializable {
         return null;
     }
 
-    /** Returns to the Main Menu screen when the Return to Main Menu button is activated.
-     * @param actionEvent When the Return to Main Menu Button is activated.
+    /** This method returns to the main menu if the Main Menu button gets selected.
+     * @param actionEvent When the Main Menu button is selected.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void toMainMenu(ActionEvent actionEvent) throws IOException {
+    public void toMainMenu(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainMenu.fxml")));
-        Stage stage = (Stage) (mainMenuButton.getScene().getWindow());
+        Stage stage = (Stage) (mainMenuBtn.getScene().getWindow());
         stage.setTitle("Appointment Scheduler Main Menu");
         stage.setScene(new Scene(root,1200 ,700));
         stage.show();
@@ -214,54 +217,63 @@ public class UserScheduleController implements Initializable {
         Printer printer = Printer.getDefaultPrinter();
         PageLayout pageLayout = printer.getDefaultPageLayout();
 
-        // Printable area
-        double pWidth = pageLayout.getPrintableWidth();
-        double pHeight = pageLayout.getPrintableHeight();
+        //Printable area
+        double printableWidth = pageLayout.getPrintableWidth();
+        double printableHeight = pageLayout.getPrintableHeight();
 
-        // Node's dimensions
-        double nWidth = node.getBoundsInParent().getWidth();
-        double nHeight = node.getBoundsInParent().getHeight();
+        //Node's dimensions
+        double nodeWidth = node.getBoundsInParent().getWidth();
+        double nodeHeight = node.getBoundsInParent().getHeight();
 
-        // Determines whether the image is larger than the printable width/height.
-        double widthLeft = pWidth - nWidth;
-        double heightLeft = pHeight - nHeight;
+        //Determines whether the image is larger than the printable width/height.
+        double widthRemaining = printableWidth - nodeWidth;
+        double heightRemaining = printableHeight - nodeHeight;
 
-        // Scale the node to fit the printable width and height
+        //Scale the node to fit the printable width and height
         double scale;
 
-        if (widthLeft < heightLeft) scale = pWidth / nWidth;
-        else scale = pHeight / nHeight;
+        if (widthRemaining < heightRemaining) scale = printableWidth / nodeWidth;
+        else scale = printableHeight / nodeHeight;
 
-        // preserve ratio (both values are the same)
+        //Scales the same for width and height
         node.getTransforms().add(new Scale(scale, scale));
 
         PrinterJob job = PrinterJob.createPrinterJob();
-
         if (job != null && job.showPrintDialog(node.getScene().getWindow())) {
 
             boolean success = job.printPage(node);
-
             //If job prints successfully, reloads the screen back to full size.
             if (success) {
-                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/UserSchedule.fxml")));
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByContactReport.fxml")));
                 Stage stage = (Stage) (printReportBtn.getScene().getWindow());
-                stage.setTitle("User Schedule");
+                stage.setTitle("Contact Schedule");
                 stage.setScene(new Scene(root,1200 ,700));
                 stage.show();
                 System.out.println("Report successfully printed!");
                 job.endJob();
             }
+            else {
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByContactReport.fxml")));
+                Stage stage = (Stage) (printReportBtn.getScene().getWindow());
+                stage.setTitle("Contact Schedule");
+                stage.setScene(new Scene(root,1200 ,700));
+                stage.show();
+                System.out.println("Printing was cancelled.");
+            }
         }
     }
+
     /** This method prints the report screen when the Print Report button is activated.
      * @param actionEvent When the printReportBtn is activated.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void printReport(ActionEvent actionEvent) throws IOException {
+        //Prints the node/screen
         printNode(anchorPane);
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/UserSchedule.fxml")));
+        //Reloads the screen even if print job gets cancelled
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByContactReport.fxml")));
         Stage stage = (Stage) (printReportBtn.getScene().getWindow());
-        stage.setTitle("User Schedule");
+        stage.setTitle("Contact Schedule");
         stage.setScene(new Scene(root,1200 ,700));
         stage.show();
     }

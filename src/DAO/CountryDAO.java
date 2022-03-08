@@ -12,13 +12,13 @@ public interface CountryDAO {
      * @return The ObservableList of all countries in the database.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public ObservableList<Country> getAllCountriesFromDB() throws SQLException;
+    ObservableList<Country> getAllCountriesFromDB() throws SQLException;
 
     /** Gets the Country from the database that has a matching ID number.
      * @param countryID The country's ID number.
      * @return The country that has a matching ID in the Database.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public Country getCountryByID(int countryID) throws SQLException;
+    Country getCountryByID(int countryID) throws SQLException;
 
     }

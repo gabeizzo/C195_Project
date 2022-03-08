@@ -12,13 +12,13 @@ public interface DivisionDAO {
      * @return An ObservableList of all Division objects from the database.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public ObservableList<Division> getAllFLDs() throws SQLException;
+    ObservableList<Division> getAllFLDs() throws SQLException;
 
     /** Gets a first level division based on its ID.
      * @param divisionID The first level division's ID.
      * @return The division that has a matching ID in the database.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public Division getFLDByID(int divisionID) throws SQLException;
+    Division getFLDByID(int divisionID) throws SQLException;
 }
 

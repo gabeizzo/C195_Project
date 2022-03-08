@@ -72,7 +72,7 @@ public class Customer {
      */
     @Override
     public String toString() {
-        return customerName + "[" + customerID + "]";
+        return customerName + " [" + customerID + "]";
     }
 
     /** Sets the name of the customer.

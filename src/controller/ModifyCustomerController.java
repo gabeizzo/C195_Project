@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
  * This class defines the methods used to modify customer data.
  */
 public class ModifyCustomerController implements Initializable {
+    //GUI fx:id's
     @FXML
     private TextField customerIDTxt;
     @FXML
@@ -121,7 +122,7 @@ public class ModifyCustomerController implements Initializable {
         return fldDAO.getFLDByID(divisionID);
     }
 
-    /** Gets the customer's data.
+    /** Gets the customer's form data.
      */
     private void getCustomerData(){
         customerName = customerNameTxt.getText().trim();

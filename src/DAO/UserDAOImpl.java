@@ -14,11 +14,10 @@ import java.time.LocalDateTime;
 public class UserDAOImpl implements UserDAO{
     //For database queries
     Connection connection = Main.connection;
-    private PreparedStatement pst;
-    private ResultSet rs;
+    private final ResultSet rs;
 
     //List of all users
-    private ObservableList<User> allUsers = FXCollections.observableArrayList();
+    private final ObservableList<User> allUsers = FXCollections.observableArrayList();
 
     /** This is the user data access object implementation constructor used to create instances of UserDAOImpl.
      * @throws SQLException throws SQLException in case a database error occurs.
@@ -26,7 +25,7 @@ public class UserDAOImpl implements UserDAO{
     public UserDAOImpl() throws SQLException {
         String selectAllUsers = "Select * FROM users";
         DBQuery.setPreparedStatement(connection, selectAllUsers);
-        pst = DBQuery.getPreparedStatement();
+        PreparedStatement pst = DBQuery.getPreparedStatement();
         rs = pst.executeQuery();
     }
     /** Gets all user data from the MySQL database.
@@ -56,7 +55,6 @@ public class UserDAOImpl implements UserDAO{
                 allUsers.add(user);
             }
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return allUsers;

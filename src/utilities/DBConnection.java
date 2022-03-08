@@ -21,7 +21,7 @@ public abstract class DBConnection {
     /** This method opens the connection to the database.
      * @return The established connection to the database.
      */
-    public static Connection getConnection()
+    public static Connection openConnection()
     {
         try {
             Class.forName(driver); // Locate Driver

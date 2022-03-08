@@ -18,7 +18,6 @@ public class DBQuery {
     public static void setPreparedStatement(Connection connection, String sqlStatement) throws SQLException{
             pst = connection.prepareStatement(sqlStatement);
     }
-
     /** Gets the prepared statement for querying the database.
      * @return The prepared SQL statement.
      */

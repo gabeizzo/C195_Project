@@ -14,21 +14,11 @@ import java.sql.SQLException;
  * This class implements the ContactDAO interface for accessing contact data from the database to be used in the application.
  */
 public class ContactDAOImpl {
-
     //For database queries
     Connection connection = Main.connection;
-    private PreparedStatement pst;
-    private ResultSet rs;
 
     //List of all contacts
     ObservableList<Contact> allContacts = FXCollections.observableArrayList();
-
-
-    /** This is the ContactDAOImpl constructor for Contact data access object implementations.
-     * @throws SQLException Thrown if there is a MySQL database access error.
-     */
-    public ContactDAOImpl() throws SQLException {
-    }
 
     /** Gets the ObservableList of all Contact objects.
      * @return All contacts in the database.
@@ -40,8 +30,8 @@ public class ContactDAOImpl {
 
         String allContactsFromDB = "SELECT * FROM contacts";
         DBQuery.setPreparedStatement(connection, allContactsFromDB);
-        pst = DBQuery.getPreparedStatement();
-        rs = pst.executeQuery();
+        PreparedStatement pst = DBQuery.getPreparedStatement();
+        ResultSet rs = pst.executeQuery();
 
         try {
             while(rs.next()) {
@@ -54,7 +44,6 @@ public class ContactDAOImpl {
             }
         }
         catch(SQLException e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return allContacts;

@@ -9,21 +9,15 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/** This is the DivisionDAOImpl class which implements the DivisionDAO interface and defines the methods for accessing First Level Division data stored in the database.
+ */
 public class DivisionDAOImpl implements DivisionDAO {
 
     //For queries
-    private Connection connection = Main.connection;
-    private PreparedStatement pst;
-    private ResultSet rs;
+    private final Connection connection = Main.connection;
 
     //List of all first level divisions
-    private ObservableList<Division> allFLDs = FXCollections.observableArrayList();
-
-    /** This is the DivisionDAOImpl constructor.
-     * @throws SQLException Thrown if there is a MySQL database access error.
-     */
-    public DivisionDAOImpl() throws SQLException {
-    }
+    private final ObservableList<Division> allFLDs = FXCollections.observableArrayList();
 
     /** This method gets all first level divisions from the database.
      * First, the method queries the database for all first_level_divisions.
@@ -36,8 +30,8 @@ public class DivisionDAOImpl implements DivisionDAO {
     public ObservableList<Division> getAllFLDs() throws SQLException {
         String getAllFLDsFromDB = "SELECT * FROM first_level_divisions";
         DBQuery.setPreparedStatement(connection, getAllFLDsFromDB);
-        pst = DBQuery.getPreparedStatement();
-        rs = pst.executeQuery();
+        PreparedStatement pst = DBQuery.getPreparedStatement();
+        ResultSet rs = pst.executeQuery();
 
         try {
             while(rs.next()) {

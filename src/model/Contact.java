@@ -49,12 +49,12 @@ public class Contact {
 
     /** This method is used to override the default Object class's toString method.
      * This resolves the display issues in the combo boxes when pulling up contact names.
-     * Instead of it displaying the package.class.hashcode it will display the contact name.
-     * @return The contact name.
+     * Instead of it displaying the package.class.hashcode it will display the contact name as well as their email address.
+     * @return The contact name and email address.
      */
     @Override
     public String toString() {
-        return this.getContactName();
+        return this.getContactName() + " ["+ this.contactEmail +"]";
     }
 
     /** Gets the contact's email address.

@@ -65,7 +65,7 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-            <DatePicker fx:id="apptDatePicker" />
+            <DatePicker fx:id="apptCalendar" />
             <Label layoutX="10.0" layoutY="335.0" prefHeight="46.0" prefWidth="114.0" text="Start Time" textFill="#f5f5f5">
                <font>
                   <Font name="System Bold" size="14.0" />

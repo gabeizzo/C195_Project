@@ -58,7 +58,7 @@
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="customersMenuButton" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" onAction="#toCustomersMenu" prefHeight="27.0" prefWidth="210.0" text="Customers Menu">
+                        <Button fx:id="customersMenuButton" layoutX="12.0" layoutY="319.0" mnemonicParsing="false" onAction="#toCustomersMenu" prefHeight="27.0" prefWidth="210.0" text="Customers Menu">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
@@ -74,7 +74,7 @@
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Label layoutX="14.0" layoutY="303.0" text="Customers" textFill="#f8f3f3">
+                        <Label layoutX="14.0" layoutY="284.0" text="Customers" textFill="#f8f3f3">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -90,12 +90,12 @@
                               <Glow />
                            </effect>
                         </Label>
-                        <Button fx:id="contactScheduleButton" layoutX="12.0" layoutY="496.0" mnemonicParsing="false" onAction="#toContactSchedule" prefHeight="27.0" prefWidth="210.0" text="Contact Schedule">
+                        <Button fx:id="contactScheduleButton" layoutX="12.0" layoutY="496.0" mnemonicParsing="false" onAction="#toContactSchedule" prefHeight="27.0" prefWidth="210.0" text="Contacts Report">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="userScheduleButton" layoutX="12.0" layoutY="539.0" mnemonicParsing="false" onAction="#toUserSchedule" prefHeight="27.0" prefWidth="210.0" text="User Schedule">
+                        <Button fx:id="userScheduleButton" layoutX="12.0" layoutY="539.0" mnemonicParsing="false" onAction="#toUserSchedule" prefHeight="27.0" prefWidth="210.0" text="Users Report">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>

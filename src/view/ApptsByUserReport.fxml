@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UserScheduleController">
+<AnchorPane fx:id="anchorPane" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UsersReportController">
     <children>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#007faa" height="700.0" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#005883" height="63.0" layoutY="24.0" stroke="BLACK" strokeType="INSIDE" width="1200.0" />
@@ -18,7 +18,7 @@
                 <Glow />
             </effect>
         </Label>
-        <TableView fx:id="userScheduleTable" layoutX="30.0" layoutY="142.0" prefHeight="478.0" prefWidth="1140.0">
+        <TableView fx:id="usersReportTable" layoutX="30.0" layoutY="142.0" prefHeight="478.0" prefWidth="1140.0">
             <columns>
                 <TableColumn fx:id="userNameCol" prefWidth="126.80000877380371" text="User Name" />
                 <TableColumn fx:id="apptIDCol" prefWidth="115.20001220703125" text="Appointment ID" />

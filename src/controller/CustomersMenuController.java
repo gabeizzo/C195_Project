@@ -1,6 +1,8 @@
 package controller;
 
+import DAO.AppointmentDAOImpl;
 import DAO.CustomerDAOImpl;
+import model.Appointment;
 import utilities.TimeZoneLambda;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -74,11 +76,17 @@ public class CustomersMenuController implements Initializable {
 
     private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
     public static Customer modifyCustomer;
+    public final ObservableList<Appointment> allAppts;
+    AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+
+
+
 
     /** This is the CustomersMenuController constructor.
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public CustomersMenuController() throws SQLException{
+        allAppts = apptDAO.getAllApptsFromDB();
     }
 
     /** This method initializes the Customers Menu and sets up the customerDataTable with database data.
@@ -89,9 +97,7 @@ public class CustomersMenuController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         //TimeZoneLambda changes the timeZoneLbl on the Main Menu screen based on the user's system default.
-        TimeZoneLambda getZone = () -> {
-            timeZoneLbl.setText(ZoneId.of(TimeZone.getDefault().getID()).toString());
-        };
+        TimeZoneLambda getZone = () -> timeZoneLbl.setText(ZoneId.of(TimeZone.getDefault().getID()).toString());
         getZone.showZone();
         displayClock();
         viewAllCustomerFromDB();
@@ -147,9 +153,14 @@ public class CustomersMenuController implements Initializable {
 
         Optional<ButtonType> result = deleteCustomer.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK) {
+
+            //Deletes the customer's appointments first
+            apptDAO.deleteCustomerAppts(delete.getCustomerID());
+            //After the customer's appointments are deleted, deletes the customer
             customerDAO.deleteCustomer(delete.getCustomerID());
 
-            //Reload the screen after the delete to re-initialize the Customers Menu, otherwise will get duplicates.
+
+            //Reload the screen after delete to re-initialize the Customers Menu, otherwise will get duplicates.
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/CustomersMenu.fxml")));
             Stage stage = (Stage) (deleteCustomerBtn.getScene().getWindow());
             stage.setTitle("Customers Menu");
@@ -199,9 +210,8 @@ public class CustomersMenuController implements Initializable {
 
     /** This method searches the Customer Data table for any customers that have either a Customer ID or Name that match the text input.
      * @param actionEvent When data is entered into the search bar on the main menu.
-     * @throws SQLException Thrown if there is a database access error.
      */
-    public void searchCustomers(ActionEvent actionEvent) throws SQLException {
+    public void searchCustomers(ActionEvent actionEvent) {
 
         String searchInput = customerSearchBar.getText();
 
@@ -239,9 +249,8 @@ public class CustomersMenuController implements Initializable {
     /** Searches for Customers by Name.
      @param partialCustomerName The text input entered into the search field above the Customer Data table.
      @return resultsSearch The search results to be displayed in the Customers table.
-     @throws SQLException Thrown if there is a database access error.
      */
-    private ObservableList<Customer> searchByCustomerName(String partialCustomerName) throws SQLException {
+    private ObservableList<Customer> searchByCustomerName(String partialCustomerName) {
         ObservableList<Customer> resultsSearch = FXCollections.observableArrayList();
 
         viewAllCustomerFromDB();
@@ -249,7 +258,7 @@ public class CustomersMenuController implements Initializable {
 
         for(Customer c : allCustomers){
             if(c.getCustomerName().equalsIgnoreCase(partialCustomerName) || c.getCustomerName().contains(partialCustomerName)
-                    || c.getCustomerName().toLowerCase().contains(partialCustomerName) || c.getCustomerName().toUpperCase().contains(partialCustomerName))
+                    || c.getCustomerName().toLowerCase().contains(partialCustomerName.toLowerCase()) || c.getCustomerName().toUpperCase().contains(partialCustomerName.toUpperCase()))
                 resultsSearch.add(c);
         }
         return resultsSearch;
@@ -258,9 +267,8 @@ public class CustomersMenuController implements Initializable {
     /** Searches customers by id.
      @param customerID The customer id that is searched.
      @return c, the customer that matches the searched id.
-     @throws SQLException Thrown if there is a database access error.
      */
-    private Customer searchByCustomerID(int customerID) throws SQLException {
+    private Customer searchByCustomerID(int customerID) {
         ObservableList<Customer> allCustomers = customerDataTable.getItems();
         for (Customer c : allCustomers) {
             if (c.getCustomerID() == customerID) {

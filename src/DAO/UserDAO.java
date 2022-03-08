@@ -12,20 +12,20 @@ import java.sql.SQLException;
         /** Gets all users from the database.
          * @return The list of all users.
          */
-        public ObservableList<User> getAllUsers();
+        ObservableList<User> getAllUsers();
 
         /** Gets a user from the database based on their user ID.
          * @param userID The ID of the user.
          * @return The user whose ID matches what is queried.
          * @throws SQLException Thrown if there is a database access error.
          */
-        public User getUserByID(int userID) throws SQLException;
+        User getUserByID(int userID) throws SQLException;
 
         /** Gets a user from the database based on their username.
          * @param userName the name of the user.
          * @return The name of the user whose name matches what is queried.
          * @throws SQLException Thrown if there is a database access error.
          */
-        public User getUserByName(String userName) throws SQLException;
+        User getUserByName(String userName) throws SQLException;
 
 }

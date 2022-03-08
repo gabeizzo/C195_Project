@@ -90,14 +90,12 @@ public class LoginScreenController implements Initializable {
         displayClock();
 
         //TimeZoneLambda getZone displays the time zone on the login screen based on the user's system default.
-        TimeZoneLambda getZone = () -> {
-            timeZoneLbl.setText(ZoneId.of(TimeZone.getDefault().getID()).toString());
-        };
+        TimeZoneLambda getZone = () -> timeZoneLbl.setText(ZoneId.of(TimeZone.getDefault().getID()).toString());
         getZone.showZone();
 
         // Translates login screen to French if the operating system's Language Pack is set to French
         try {
-            resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
+            resourceBundle = ResourceBundle.getBundle("utilities/Language", Locale.getDefault());
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 appTitleLabel.setText(resourceBundle.getString("appTitle"));
                 timeZoneTitle.setText(resourceBundle.getString("timeZoneTitle"));
@@ -119,8 +117,8 @@ public class LoginScreenController implements Initializable {
      */
     private void displayClock() {
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            dateTimeLbl.setText(LocalDateTime.now().format(formatter));
+            DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            dateTimeLbl.setText(LocalDateTime.now().format(DTF));
         }), new KeyFrame(javafx.util.Duration.seconds(1)));
         clock.setCycleCount(Animation.INDEFINITE);
         clock.play();
@@ -128,9 +126,8 @@ public class LoginScreenController implements Initializable {
 
     /** This method resets the Username and Password fields and clears any existing input.
      * @param actionEvent When the Reset button on the login screen is activated.
-     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void resetFields(ActionEvent actionEvent) throws IOException{
+    public void resetFields(ActionEvent actionEvent) {
         userNameTxt.clear();
         passwordTxt.clear();
     }
@@ -141,14 +138,14 @@ public class LoginScreenController implements Initializable {
      */
     private void testForApptsIn15mins(ActionEvent actionEvent) {
         try {
-            AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
-            UserDAOImpl userDAO = new UserDAOImpl();
-            ObservableList<Appointment> allAppts = apptDAO.getAllApptsFromDB();
             boolean apptWithin15mins = false;
             int apptID = -1;
             String apptDate ="";
             String apptTime = "";
             LocalTime currTime = LocalTime.now();
+            AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
+            ObservableList<Appointment> allAppts = apptDAO.getAllApptsFromDB();
+
 
             // search through all appointments in the database to see if an appointment is within 15 minutes
             for(Appointment a : allAppts) {
@@ -171,7 +168,7 @@ public class LoginScreenController implements Initializable {
 
                 //Checks if system is in French or not and displays alert notifying of upcoming appointment
                 try {
-                    ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
+                    ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Language", Locale.getDefault());
                     // If system is in French
                     if (Locale.getDefault().getLanguage().equals("fr")) {
                         Alert apptAlertFrench = new Alert(Alert.AlertType.INFORMATION);
@@ -190,7 +187,7 @@ public class LoginScreenController implements Initializable {
             else {
                 // checks if the system language is in French or English and displays a no upcoming appointments alert
                 try {
-                    ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
+                    ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Language", Locale.getDefault());
                     if (Locale.getDefault().getLanguage().equals("fr")) {
                         Alert apptAlertFrench = new Alert(Alert.AlertType.INFORMATION);
                         apptAlertFrench.setTitle(resourceBundle.getString("noApptsTitle"));
@@ -215,9 +212,9 @@ public class LoginScreenController implements Initializable {
      * If the system settings are set to French language pack, the error message will display in French, otherwise English.
      * @param  actionEvent The event of when a user enters a blank username.
      */
-    private void blankUsernameError(ActionEvent actionEvent) throws IOException {
+    private void blankUsernameError(ActionEvent actionEvent) {
         try {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Language", Locale.getDefault());
 
             // If system default is in French, alerts will appear in French
             if (Locale.getDefault().getLanguage().equals("fr")) {
@@ -240,9 +237,9 @@ public class LoginScreenController implements Initializable {
      * If the system settings are set to French language pack, the error message will display in French, otherwise English.
      * @param  actionEvent The event of when a user enters a blank password.
      */
-    private void blankPasswordError(ActionEvent actionEvent) throws IOException {
+    private void blankPasswordError(ActionEvent actionEvent) {
         try {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Language", Locale.getDefault());
             // If operating system is set to French language
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 System.out.println("| Erreur : Le mot de passe est vide. Veuillez saisir un mot de passe valide et réessayer. |");
@@ -266,10 +263,10 @@ public class LoginScreenController implements Initializable {
      * If the system settings are set to French language pack, the error message will display in French, otherwise English.
      * @param  actionEvent The event of when a user enters an invalid login.
      */
-    private void invalidLogin(ActionEvent actionEvent) throws IOException {
+    private void invalidLogin(ActionEvent actionEvent) {
         try {
             // If operating system is set to French language, displays error dialog in French.
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Language", Locale.getDefault());
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 System.out.println("| Erreur : Nom d'utilisateur/Mot de passe saisi incorrect. Veuillez saisir un nom d'utilisateur/mot de passe valide et réessayer. |");
                 Alert alertFrench = new Alert(Alert.AlertType.ERROR);
@@ -290,9 +287,8 @@ public class LoginScreenController implements Initializable {
 
     /** Validates the login info with what is in the database.
      * @return validLogin is true if login info is correct, false if incorrect.
-     * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    private boolean validLogin() throws SQLException{
+    private boolean validLogin() {
         String getUserNameAndPWFromDB = "SELECT User_Name, Password FROM users";
 
         //Checks to validate the entered username matches a username stored in the database.
@@ -306,7 +302,6 @@ public class LoginScreenController implements Initializable {
         }
         //If there is an error accessing the database prints error message to the console.
         catch (SQLException e) {
-            System.out.println("Error authenticating username: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -321,11 +316,9 @@ public class LoginScreenController implements Initializable {
         }
         //If there is an error accessing the database print error message to the console.
         catch (SQLException e) {
-            System.out.println("Error authenticating password: " + e.getMessage());
             e.printStackTrace();
         }
-
-        //Gathers the text input from the Username and Password text fields and trims off any additional blank space to prevent login issue.
+        //Gathers the text input from the Username and Password text fields, forces lowercase and trims off any additional blank space to prevent login issues.
         usernameInput = userNameTxt.getText().toLowerCase().trim();
         passwordInput = passwordTxt.getText().trim();
 
@@ -365,9 +358,8 @@ public class LoginScreenController implements Initializable {
     /** This method handles the login button and on successful login, then loads the Main Menu.
      * @param actionEvent The event where a user clicks on the Login button.
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
-     * @throws SQLException Thrown if there is a MySQL database access error.
      */
-    public void loginToMainMenu(ActionEvent actionEvent) throws IOException, SQLException{
+    public void loginToMainMenu(ActionEvent actionEvent) throws IOException {
 
         //Gets the username and password entered into the text-fields and trims any additional blank space off of the username to assist with validation.
         usernameInput = userNameTxt.getText().toLowerCase().trim();
@@ -415,12 +407,11 @@ public class LoginScreenController implements Initializable {
      * Otherwise, the confirmation pop-up will display in English.
      * If "OK" is selected, the application closes, if "Cancel/Annuler(if French)" the dialog box closes and application remains open.
      * @param actionEvent When the Exit/Sortir button is selected.
-     * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
-    public void exitApplication(ActionEvent actionEvent) throws IOException {
+    public void exitApplication(ActionEvent actionEvent) {
 
         try {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Nationality", Locale.getDefault());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("utilities/Language", Locale.getDefault());
 
             //Displays the Exit/Sortir confirmation box in French if operating system is set to French.
             if (Locale.getDefault().getLanguage().equals("fr")) {

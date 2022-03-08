@@ -9,20 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /** This is the MonthAndTypeReport class.
- * This class defines the methods for querying the database for appointments based on their month, type, and occurrence.
+ * This class defines the methods for querying the database for appointments based on their month, type, and number of occurrences.
  */
 public class MonthAndTypeReport {
-
-    //Database Connection and Query
-    private PreparedStatement pst;
-    private ResultSet rs;
     Connection connection = Main.connection;
-
-    /** This is the MonthAndTypeReport constructor used to initialize MonthAndTypeReport objects.
-     * @throws SQLException Thrown if there is a MySQL database access error.
-     */
-    public MonthAndTypeReport() throws SQLException {
-    }
 
     /** This method queries the MySQL database for appointments based on their month and type and returns an ObservabeList with the results.
      *  This list is then displayed in the Appointments By Month And Type screen's tableview.
@@ -35,9 +25,10 @@ public class MonthAndTypeReport {
 
         try {
             DBQuery.setPreparedStatement(connection, getApptTypeFromDB);
-            pst = DBQuery.getPreparedStatement();
+            //Database Connection and Query
+            PreparedStatement pst = DBQuery.getPreparedStatement();
             pst.setString(1, apptType);
-            rs = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
                 String apptMonth = rs.getString("MONTH");

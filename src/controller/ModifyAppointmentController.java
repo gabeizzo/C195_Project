@@ -265,8 +265,8 @@ public class ModifyAppointmentController implements Initializable {
                         );
                         apptCollision.showAndWait();
                         return false;
+                        }
                     }
-                }
                 }
             }
         }
