@@ -61,7 +61,6 @@ public class ContactsReportController implements Initializable {
     @FXML
     private TableView<Appointment> contactsReportTable;
 
-    private final AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
     private final ObservableList<Appointment> allAppts;
 
 
@@ -70,6 +69,7 @@ public class ContactsReportController implements Initializable {
      * @throws SQLException Thrown if there is a MySQL database access error.
      */
     public ContactsReportController() throws SQLException{
+        AppointmentDAOImpl apptDAO = new AppointmentDAOImpl();
         allAppts = apptDAO.getAllApptsFromDB();
     }
 
