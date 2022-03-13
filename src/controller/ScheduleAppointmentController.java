@@ -258,10 +258,11 @@ public class ScheduleAppointmentController implements Initializable {
 
             //Loop through the appointments and check if there are any with conflicting start and end times.
             for(Appointment a : appts){
+
                 if(a.getCustomerID() == customerName.getCustomerID()){
 
                     //Checks appointment start times for overlap.
-                    if(apptStartDateTime.isAfter(a.getStartDateTime().minusMinutes(1)) && apptStartDateTime.isBefore(a.getEndDateTime())){
+                    if((apptStartDateTime.isAfter(a.getStartDateTime()) || apptStartDateTime.isEqual(a.getStartDateTime())) && apptStartDateTime.isBefore(a.getEndDateTime())){
                         Alert apptCollision = new Alert(Alert.AlertType.ERROR);
                         apptCollision.setTitle("Appointment Conflict");
                         apptCollision.setContentText("This appointment's start/end times overlap with the following appointment:\n\n"
@@ -271,7 +272,16 @@ public class ScheduleAppointmentController implements Initializable {
                         return false;
                     }
                     //Checks appointment end times for overlap.
-                    else if (apptEndDateTime.isAfter(a.getStartDateTime().minusMinutes(1)) && apptEndDateTime.isBefore(a.getEndDateTime())) {
+                    else if (apptEndDateTime.isAfter(a.getStartDateTime()) && (apptEndDateTime.isBefore(a.getEndDateTime()) || apptEndDateTime.isEqual(a.getEndDateTime()))) {
+                        Alert apptCollision = new Alert(Alert.AlertType.ERROR);
+                        apptCollision.setTitle("Appointment Conflict");
+                        apptCollision.setContentText("This appointment's start/end times overlap with the following appointment:\n\n"
+                                + "Appointment ID: " + a.getApptID() + "\nAppointment Title: " + a.getApptTitle() + "\nDescription: "
+                                + a.getDescription() +"\nLocal Start Time:" + a.getStartTime() + "\nLocal End Time: " + a.getEndTime());
+                        apptCollision.showAndWait();
+                        return false;
+                    }
+                    else if ((apptStartDateTime.isBefore(a.getStartDateTime()) || apptStartDateTime.isEqual(a.getStartDateTime())) && (apptEndDateTime.isAfter(a.getEndDateTime()) || apptEndDateTime.isEqual(a.getEndDateTime()))) {
                         Alert apptCollision = new Alert(Alert.AlertType.ERROR);
                         apptCollision.setTitle("Appointment Conflict");
                         apptCollision.setContentText("This appointment's start/end times overlap with the following appointment:\n\n"

@@ -22,7 +22,7 @@ IDE including version number, full JDK of version used, and JavaFX version compa
 •JavaFX version used: JavaFX-SDK-17.0.1
 
 Directions for how to run the program:
-To run the program, please ensure JDK 17.0.1 is installed and configured for the project in the IDE as well as JavaFX-SDK-17.0.1, also MySQL Connector/J 8.0.28 will need to be downloaded and installed.
+To run the program, please ensure JDK 17.0.1 is installed and configured for the project in the IDE as well as JavaFX-SDK-17.0.1. Also, ensure MySQL Workbench database is set up using the C195_db_ddl.txt and C195_db_dml.txt files and MySQL Connector/J 8.0.28 driver will need to be downloaded and installed for database connectivity.
 The application can be run directly from IntelliJ's Java Runtime Environment by performing the following: 
 1)Opening the project in IntelliJ, accessing File>Settings and setting the path variable to JavaFX, by clicking on Path Variables, "+" symbol, add PATH_TO_FX and choose the directory that holds the javafx-sdk-17.0.1\lib.
 2)Next select File>Project Structure>Project Settings>Libraries>"+"> and add the javafx-sdk-17.0.1\lib directory.
