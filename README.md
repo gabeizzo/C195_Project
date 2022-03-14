@@ -19,11 +19,17 @@ The purpose of the application is for users to be able to perform the following:
 IDE including version number, full JDK of version used, and JavaFX version compatible with JDK version:  
 •IDE used to develop the application: IntelliJ 2021.3 Community Edition  
 •JDK version used: Java SE 17.0.1  
-•JavaFX version used: JavaFX-SDK-17.0.1  
+•JavaFX version used: JavaFX-SDK-17.0.1
 
+The MySQL Connector driver version number, including the update number:  
+•Connector/J 8.0.28  
+•Used with MySQL Workbench 8.0.28 Community Edition
+\
+\
+\
 Directions for how to run the program:
 
-To run the program, please ensure JDK 17.0.1 is installed and configured for the project in the IDE as well as JavaFX-SDK-17.0.1. Also, ensure MySQL Workbench database is set up using the C195_db_ddl.txt and C195_db_dml.txt files and MySQL Connector/J 8.0.28 driver will need to be downloaded and installed for database connectivity.    
+To run the program, please ensure JDK 17.0.1 is installed and configured for the project in the IDE as well as JavaFX-SDK-17.0.1. Also, ensure MySQL Workbench database is set up using the C195_db_ddl.txt and C195_db_dml.txt files and MySQL Connector/J 8.0.28 driver will also need to be downloaded and installed for database connectivity.    
 
 The application can be run directly from IntelliJ's Java Runtime Environment by performing the following:   
 
@@ -41,7 +47,9 @@ and locate the mysql-connector-java-8.0.28.jar file and add it to the dependenci
 6)In the Main Class field type main.Main and select Apply>OK.  
 
 7)Now from the IntelliJ IDE everything should be set up to run JavaFX and the MySQL database, and you can start the application by clicking the green Run/Play icon or from the debugger.  
-
+\
+\
+\
 Logging in to the application:  
 To login, please use either test/test or admin/admin default usernames and passwords to log in to the Main Menu.
 A welcome greeting will display depending on which user account logs in.  
@@ -55,16 +63,16 @@ To view the login screen in French, try changing your system language to French 
 All login attempts, whether successful or not, are recorded to login_activity.txt and all GUI reports are searchable and printable directly from the user interface.
 
 When the user wishes to exit the application, they can either simply close the application window or use the Log Out/Exit button from the Main Menu.
-
+\
+\
+\
 A description of the additional report of your choice:  
 In addition to being able to view appointments by month and type, there is also two additional reports.
 The first report provides the ability to view, search and print the application user's existing appointment schedule.
 There is also a second report that provides the ability to view, search and print the business contact's appointment schedule.
-
-The MySQL Connector driver version number, including the update number:  
--Connector/J 8.0.28  
--Used with MySQL Workbench 8.0.28 Community Edition
-
+\
+\
+\
 Please email the author at gizzo@wgu.edu if you encounter any issues with the application or discover bugs that require a patch. 
 
 Enjoy Appointment+!
