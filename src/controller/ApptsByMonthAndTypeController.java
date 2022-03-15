@@ -208,12 +208,17 @@ public class ApptsByMonthAndTypeController implements Initializable {
     public void printReport(ActionEvent actionEvent) throws IOException {
         //Prints the node/screen
         printNode(anchorPane);
+
         //Reloads the screen even if printing gets cancelled.
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByMonthAndTypeReport.fxml")));
-        Stage stage = (Stage) (printReportBtn.getScene().getWindow());
-        stage.setTitle("Appointments By Month and Type");
-        stage.setScene(new Scene(root,1200 ,700));
-        stage.show();
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByMonthAndTypeReport.fxml")));
+            Stage stage = (Stage) (printReportBtn.getScene().getWindow());
+            stage.setTitle("Appointments By Month and Type");
+            stage.setScene(new Scene(root, 1200, 700));
+            stage.show();
+        } catch (NullPointerException e) {
+            //Ignore
+        }
     }
 
 }

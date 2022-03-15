@@ -256,11 +256,18 @@ public class UsersReportController implements Initializable {
      * @throws IOException Thrown if there is a failure during reading, writing, and searching file or directory operations.
      */
     public void printReport(ActionEvent actionEvent) throws IOException {
+        //Print the report
         printNode(anchorPane);
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByUserReport.fxml")));
-        Stage stage = (Stage) (printReportBtn.getScene().getWindow());
-        stage.setTitle("User Schedule");
-        stage.setScene(new Scene(root,1200 ,700));
-        stage.show();
+
+        //If printing is cancelled, reload the scene back to full screen
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByUserReport.fxml")));
+            Stage stage = (Stage) (printReportBtn.getScene().getWindow());
+            stage.setTitle("User Schedule");
+            stage.setScene(new Scene(root, 1200, 700));
+            stage.show();
+        } catch (NullPointerException e) {
+            //Ignore
+        }
     }
 }

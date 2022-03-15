@@ -272,11 +272,17 @@ public class ContactsReportController implements Initializable {
     public void printReport(ActionEvent actionEvent) throws IOException {
         //Prints the node/screen
         printNode(anchorPane);
+
         //Reloads the screen even if print job gets cancelled
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByContactReport.fxml")));
-        Stage stage = (Stage) (printReportBtn.getScene().getWindow());
-        stage.setTitle("Contact Schedule");
-        stage.setScene(new Scene(root,1200 ,700));
-        stage.show();
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ApptsByContactReport.fxml")));
+            Stage stage = (Stage) (printReportBtn.getScene().getWindow());
+            stage.setTitle("Contact Schedule");
+            stage.setScene(new Scene(root, 1200, 700));
+            stage.show();
+        } catch (NullPointerException e) {
+        //Ignore
+        }
+
     }
 }
