@@ -72,7 +72,7 @@ There is also a second report that provides the ability to view, search and prin
 \
 \
 \
-Please email the author at gizzo@wgu.edu if you encounter any issues with the application or discover bugs that require a patch. 
+Video Demo of the application here: https://youtu.be/-FCrBBFEiFU
 
 Enjoy Appointment+!
 
