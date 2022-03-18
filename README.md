@@ -1,6 +1,5 @@
-# C195_Project
+Appointment+
 Gabriel Izzo
-gizzo@wgu.edu
 app version 1.0
 03/06/2022
 
